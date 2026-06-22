@@ -1,0 +1,16 @@
+name: Workspace Smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *' # daily at 03:00 UTC
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workspace meta
+        uses: actions/checkout@v4
+      - name: Run workspace smoke script
+        run: |
+          bash scripts/run-workspace-smoke.sh
