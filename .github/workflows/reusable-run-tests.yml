@@ -1,0 +1,24 @@
+name: Reusable Run Tests
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        type: string
+        required: true
+      test_commands:
+        type: string
+        required: true
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          eval "${{ inputs.test_commands }}"
