@@ -10,7 +10,7 @@ the seams are meant to stay.
 | `prism-spectra` | Orchestration, capability routing, governance, memory, execution provenance, adapter policy, and core safety rules. | ADHDashboard state, music CRM data, public press-kit publication, or front-end-only workflow state. | CLI, local API, typed adapters, execution logs, provenance records. |
 | `prism-focus` | Human operations UI, planning, task and review state, daily execution flows, and dashboard interactions. | Core model routing, adapter internals, approval policy enforcement, or external publishing logic. | Thin client calls into Prism Core, dashboard state, human approvals. |
 | `EPK` | Public-facing press-kit publication, artist content, and browser-side presentation of the brand payload. | The whole music business, private ops queues, core orchestration, or dashboard state. | Static/public pages, structured JSON, limited publish bridge. |
-| `prism-beam` | Workspace coordination docs, scripts, templates, repo contracts, and cross-repo guidance. | Runtime behavior, business data, application state, or production feature execution. | Documentation, helper scripts, smoke checks, governance notes. |
+| `prism-beam` | Workspace coordination docs, reusable support patterns, scripts, templates, repo contracts, and cross-repo guidance. | Runtime behavior, business data, application state, or production feature execution. | Documentation, helper scripts, smoke checks, governance notes, patterns, and templates. |
 
 ## Specific Rules
 
@@ -19,7 +19,8 @@ the seams are meant to stay.
 - `prism-focus` owns human operations UI and workflow state, not model routing
   or external publishing logic.
 - `EPK` owns public press-kit publication, not the whole music business.
-- `prism-beam` owns coordination docs and scripts, not runtime behavior.
+- `prism-beam` owns coordination docs, patterns, templates, and scripts, not
+  runtime behavior.
 
 ## Shared Contract
 

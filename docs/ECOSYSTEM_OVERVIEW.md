@@ -9,7 +9,7 @@ aligned across repos, roles, and data ownership.
 |---|---|---|---|
 | `prism-spectra` | AI-Forge / Prism Core / executive forge | Local-first orchestration, routing, capability execution, memory, safety, and execution provenance live here. | ADHDashboard state, music CRM state, public press-kit publication |
 | `prism-focus` | ADHDashboard / operations dashboard | Human-facing planning, review, task execution, and dashboard UI live here. | Core model routing, adapter policy, external publishing logic |
-| `prism-beam` | Workspace/meta coordination repo | Docs, scripts, templates, and workspace-level conventions live here. | Runtime behavior, app state, feature execution |
+| `prism-beam` | Workspace/meta coordination and support spine repo | Docs, scripts, templates, reusable patterns, and workspace-level conventions live here. | Runtime behavior, app state, feature execution |
 | `EPK` | Public-facing artist surface | Public press-kit content and browser-facing publication live here. | The whole music business, internal orchestration, or dashboard state |
 
 ## Long-Term Layer Model
@@ -26,7 +26,7 @@ The current four-repo shape maps cleanly to three long-term layers:
 
 - `prism-spectra` is the executive brain and engineering forge.
 - `prism-focus` is the human operations company and dashboard.
-- `prism-beam` is the coordination and documentation layer.
+- `prism-beam` is the coordination, documentation, and reusable support layer.
 - `prism-music` is the Prism-named music management layer.
 - `EPK` is a public surface of `prism-music`, not the whole layer.
 

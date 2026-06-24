@@ -1,50 +1,42 @@
-# Sprint 003 — Boundary-Locked Implementation Contracts
+# Sprint 026 — Prism Beam Support Spine
 
-Goal: create reusable implementation contracts and Codex prompt templates so
-future work can begin without crossing repo boundaries or confusing current
-state with future direction.
+Goal: turn `prism-beam` into the reusable support/library/guidance repo for the
+Prism ecosystem without changing runtime behavior.
+
+## Current State
+
+- The draft Beam foundation docs are preserved in the branch history.
+- `origin/main` has been merged into the local feature branch.
+- Beam now has a role doc, reusable patterns, templates, checklists, and an
+  extraction index.
+- The support spine remains documentation-first and does not move Spectra code.
 
 ## Scope
 
-- Read the current alignment docs and repo READMEs
-- Create AI session contracts, boundary checklist, repo contracts, and prompt
-  templates
-- Update coordination docs and README pointers where clearly useful
-- Keep changes documentation-only and boundary-safe
+- Organise Beam as the reusable source for stable patterns, prompts, templates,
+  guides, and later shared packages.
+- Keep the existing support docs readable and linkable from the README.
+- Avoid product runtime changes and avoid dependency additions.
 
 ## Out of Scope
 
 - Runtime feature implementation
 - Dependency additions
 - Database schemas
-- Docker setup
 - Public behavior changes
 - Cross-repo runtime implementation
 - Mass renaming
 
-## Success Criteria
-
-- Each repo has an explicit implementation contract
-- AI session types and boundary checks are reusable
-- Prompt templates are ready for future Codex sessions
-- prism-beam remains the coordination and control point
-- No runtime code changes are needed for the sprint to succeed
-
 ## Validation Checklist
 
-- [ ] `docs/AI_SESSION_CONTRACTS.md` created
-- [ ] `docs/CHANGE_BOUNDARY_CHECKLIST.md` created
-- [ ] `docs/contracts/` populated with repo contracts
-- [ ] `docs/prompts/` populated with prompt templates
-- [ ] `docs/COORDINATION.md` links updated
-- [ ] `README.md` pointer section updated if useful
-- [ ] `git status` reviewed for docs-only changes
-- [ ] No package manifests or lockfiles changed
+- [ ] `git status --short` reviewed
+- [ ] `git diff --stat` reviewed
+- [ ] Beam role and pattern docs added
+- [ ] README navigation updated
 - [ ] No runtime source files changed
+- [ ] No package manifests or lockfiles changed
 
 ## Next Proposed Sprint
 
-Sprint 004 — Single-Repo Implementation Launch
-
-Goal: begin implementation in exactly one runtime repo using the new contracts
-and prompt templates as the gating layer.
+Sprint 027 — first tiny shared helper only if a reusable pattern is stable
+enough to justify extraction.
