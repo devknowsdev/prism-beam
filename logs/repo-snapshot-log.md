@@ -69,3 +69,19 @@ Concise Beam snapshots for future AI session orientation.
 - Next Beam extraction need: Beam-004 reusable pattern cards for public/admin
   separation, no fake auth, browser-only exports, Focus local-first patterns,
   and Spectra approval/sidecar patterns.
+
+## 2026-06-24 — Suite-Setup-001 setup/readiness audit
+
+- Repo modified: `prism-beam` only.
+- Evidence used: Beam README/start/review guides, workspace/app context packs,
+  integration and schema registries, smoke script, EPK README/public/publisher
+  files, Focus README/web README/root entry point, and Spectra README,
+  `package.json`, CLI, daemon, build notes, and workbench shell docs.
+- New setup audit files: `docs/setup/SUITE_USABILITY_READINESS_AUDIT.md`,
+  `docs/setup/APP_SETUP_MATRIX.md`, and `docs/setup/SCHEMA_UX_PLAN.md`.
+- Caveats: connector-only audit; shell commands and browser launches were not
+  executed, so app usability is evidence-based but not runtime-verified.
+- Next extraction/setup need: app-specific setup PRs for EPK publisher first-run,
+  Focus first-run/backup/PWA path, Spectra `doctor`/setup wizard, and Beam
+  schema cards/setup landing page before resuming broader Beam-004 pattern-card
+  work.
