@@ -2,8 +2,8 @@
 
 Last-Updated: 2026-06-22
 
-This meta-repo coordinates `prism-focus`, `prism-spectra`, and the workspace
-helper layer by providing:
+This meta-repo coordinates `prism-focus`, `prism-spectra`, the current `EPK`
+surface, and the workspace helper layer by providing:
 
 - `docs/` — guidance and onboarding for contributors.
 - `.github/workflows/` — reusable workflows that can be referenced via `uses:`.
@@ -12,11 +12,24 @@ helper layer by providing:
 
 Structure:
 
-- `docs/CHANGE_GUIDE.md` — high-level instructions for the workspace.
+- `docs/ECOSYSTEM_OVERVIEW.md` — current repo map and long-term layer model.
+- `docs/REPO_BOUNDARIES.md` — repo ownership and seams.
+- `docs/SHARED_VOCABULARY.md` — shared terms.
+- `docs/LOCAL_FIRST_STACK.md` — local stack guidance.
+- `docs/IMPLEMENTATION_ROADMAP.md` — phased roadmap from the research.
+- `docs/CURRENT_SPRINT.md` — the active sprint and its validation checklist.
+- `docs/AI_SESSION_CONTRACTS.md` — session types and edit rules.
+- `docs/CHANGE_BOUNDARY_CHECKLIST.md` — pre-edit checklist for agents.
+- `docs/contracts/` — repo-specific implementation contracts.
+- `docs/prompts/` — reusable Codex prompt templates.
 - `scripts/run-workspace-smoke.sh` — runs both repo tests.
 - `scripts/install-templates.sh` — copies PR template and CODEOWNERS into each repo.
 
 Repository layout recommendation:
 
 - Keep `prism-focus/` and `prism-spectra/` as separate repos.
-- Add `prism-beam/` as the orchestration / coordination repo (this folder) in the same workspace or local sibling. It does not need code, only infra, docs, and workflows.
+- Treat `EPK/` as an evolving public surface that may later be absorbed into
+  `prism-music`.
+- Keep `prism-beam/` as the orchestration / coordination repo (this folder) in
+  the same workspace or local sibling. It does not need code, only infra, docs,
+  and workflows.
