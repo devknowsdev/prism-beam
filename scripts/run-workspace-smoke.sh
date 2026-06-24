@@ -17,6 +17,13 @@ required_files=(
   "context-packs/prism-spectra/current-surface.md"
   "app-guides/prism-focus/session-start.md"
   "app-guides/prism-spectra/session-start.md"
+  "integrations/registry.md"
+  "integrations/epk-to-focus.event-packet.md"
+  "integrations/epk-to-spectra.adapter-contract.md"
+  "integrations/approval-posture.md"
+  "schemas/registry.json"
+  "schemas/epk-to-focus.event-packet.schema.json"
+  "schemas/approval-request.schema.json"
 )
 
 for file in "${required_files[@]}"; do

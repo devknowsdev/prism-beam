@@ -34,6 +34,8 @@ Low-token current-state pack for EPK public and publisher surfaces.
   user action.
 - Hosted publisher is not private until protected by platform auth such as
   Cloudflare Access.
+- EPK-to-Focus and EPK-to-Spectra boundaries are documented under
+  `integrations/`.
 
 ## Safe Assumptions
 
@@ -61,6 +63,8 @@ Low-token current-state pack for EPK public and publisher surfaces.
 - `EPK/EPK/public/data/epk.json`
 - `EPK/EPK/public/app.js`
 - `EPK/EPK/public/publisher/publisher.js`
+- `integrations/epk-to-focus.event-packet.md`
+- `integrations/epk-to-spectra.adapter-contract.md`
 
 ## Validation Hints
 
@@ -71,8 +75,8 @@ Low-token current-state pack for EPK public and publisher surfaces.
 ## Future prompts can omit
 
 Future prompts can omit the public deploy root, publisher route, public/private
-chrome split, media preview hierarchy, contact limitation, poster boundary, and
-Cloudflare Access privacy caveat.
+chrome split, media preview hierarchy, contact limitation, poster boundary,
+Cloudflare Access privacy caveat, and first contract entry points.
 
 ## Update Rules
 

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/approval-request.schema.json",
+  "title": "Suite Approval Request",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "sourceSystem",
+    "targetSystem",
+    "riskClass",
+    "action",
+    "summary",
+    "reason",
+    "expectedEffects",
+    "rollbackPlan",
+    "createdAt",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceSystem": {
+      "type": "string",
+      "minLength": 1
+    },
+    "targetSystem": {
+      "type": "string",
+      "minLength": 1
+    },
+    "riskClass": {
+      "type": "string",
+      "enum": ["read-only", "local-draft", "local-write", "external-draft", "external-write", "destructive"]
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "expectedEffects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollbackPlan": {
+      "type": "string",
+      "minLength": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "expired", "cancelled", "completed"]
+    }
+  }
+}
