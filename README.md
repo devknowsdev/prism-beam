@@ -53,6 +53,13 @@ Future AI sessions should read [`ai-guides/START_HERE.md`](ai-guides/START_HERE.
 first, then follow its reading order for any relevant context packs, app guides,
 patterns, schemas, integration contracts, or build-method guides.
 
+Current low-token entry packs:
+
+- [`context-packs/workspace/current-state.md`](context-packs/workspace/current-state.md)
+- [`context-packs/epk/current-surface.md`](context-packs/epk/current-surface.md)
+- [`context-packs/prism-focus/current-surface.md`](context-packs/prism-focus/current-surface.md)
+- [`context-packs/prism-spectra/current-surface.md`](context-packs/prism-spectra/current-surface.md)
+
 ## How App Repos Should Use Beam
 
 App repos should treat Beam as a reference and coordination source. Before a

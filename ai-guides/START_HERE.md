@@ -16,9 +16,10 @@ implementation code.
 4. Relevant pattern, schema, or integration contract
 5. Relevant build-method guide
 
-Most context packs, app guides, patterns, schemas, integration contracts, and
-build-method guides are planned Beam-002+ structure. If a referenced guide does
-not exist yet, say so briefly, then inspect the target repo directly.
+Beam-002 adds the first workspace, EPK, Focus, and Spectra context packs and
+app guides. Patterns, schemas, integration contracts, and build-method guides
+remain planned Beam-003+ structure. If a referenced guide does not exist yet,
+say so briefly, then inspect the target repo directly.
 
 ## Suite Map
 
@@ -68,6 +69,19 @@ When context packs exist, use them to reduce token load before opening large app
 repos. When app guides exist, read the guide first, then verify against current
 repo files. When patterns, schemas, or integration contracts exist, treat them
 as the expected interface and call out any mismatch found in source.
+
+Current context packs:
+
+- `context-packs/workspace/current-state.md`
+- `context-packs/epk/current-surface.md`
+- `context-packs/prism-focus/current-surface.md`
+- `context-packs/prism-spectra/current-surface.md`
+
+Current app guides:
+
+- `app-guides/epk/session-start.md`
+- `app-guides/prism-focus/session-start.md`
+- `app-guides/prism-spectra/session-start.md`
 
 ## Final Work Reports
 
