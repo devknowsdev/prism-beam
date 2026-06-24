@@ -85,3 +85,20 @@ Concise Beam snapshots for future AI session orientation.
   Focus first-run/backup/PWA path, Spectra `doctor`/setup wizard, and Beam
   schema cards/setup landing page before resuming broader Beam-004 pattern-card
   work.
+
+## 2026-06-24 — Suite setup/readiness completion
+
+- Repos updated: `prism-beam`, `prism-focus`, `prism-spectra`, and `EPK`.
+- Beam setup audit merge commit: `736073fd1c44a41bc533f3dc0aec575b9206cee7`.
+- Focus first-run setup merge commit: `c1e4d31a8aef7f0c38ae50fdb0a79fe5e562bd6f`.
+- Spectra doctor/setup merge commit: `d2956e614cdfe4b4fdb0caecfd907a29e4c9f236`.
+- EPK first-run setup merge commit: `5656a4df1c86b9aa64e23359023cf681e61c5a60`.
+- New Beam wrap-up file: `docs/setup/SUITE_SETUP_COMPLETION_SUMMARY.md`.
+- Current setup coverage: Beam has suite setup docs, Focus has first-run guide
+  and modal, Spectra has read-only `doctor/setup/workbench`, and EPK has a
+  first-run setup guide plus publisher checklist page.
+- Caveats: Focus and EPK browser flows still need manual browser verification;
+  Spectra full daemon e2e test appeared to hang in CI and should be handled in a
+  separate stabilization PR.
+- Recommended next: `Beam-UX-001` setup landing page/schema cards, then
+  `Spectra-Stabilization-001` for the hanging daemon e2e path.
