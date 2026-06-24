@@ -60,10 +60,19 @@ Current low-token entry packs:
 - [`context-packs/prism-focus/current-surface.md`](context-packs/prism-focus/current-surface.md)
 - [`context-packs/prism-spectra/current-surface.md`](context-packs/prism-spectra/current-surface.md)
 
+Current setup/readiness entry point:
+
+- [`docs/setup/README.md`](docs/setup/README.md)
+
 Current contract and schema registries:
 
 - [`integrations/registry.md`](integrations/registry.md)
 - [`schemas/registry.json`](schemas/registry.json)
+
+Current schema cards:
+
+- [`docs/schema-cards/EPK_TO_FOCUS_EVENT_PACKET.md`](docs/schema-cards/EPK_TO_FOCUS_EVENT_PACKET.md)
+- [`docs/schema-cards/APPROVAL_REQUEST.md`](docs/schema-cards/APPROVAL_REQUEST.md)
 
 ## Support Spine Reference Index
 
