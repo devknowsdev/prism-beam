@@ -6,9 +6,9 @@ Prism suite repo map and AI session orientation.
 
 ## Last Verified
 
-2026-06-24 against Beam files from Beam-001 through setup/readiness completion, plus app-specific setup PRs in `EPK`, `prism-focus`, and `prism-spectra`.
+2026-06-24 against Beam files from Beam-001 through setup/readiness completion, schema-card/setup landing work, EPK -> Focus smoke material, EPK packet export, and Focus interaction/keyboard stabilization.
 
-Suite-Setup-001 added the first connector-evidence setup/readiness map for app launch, installability, and schema UX. App-specific setup passes have now landed for Focus, Spectra, and EPK.
+Suite-Setup-001 added the first connector-evidence setup/readiness map for app launch, installability, and schema UX. App-specific setup passes have now landed for Focus, Spectra, and EPK. Post-setup integration/stabilization passes have also landed for the EPK -> Focus review-first packet loop and Focus browser interaction repair.
 
 ## Evidence Used
 
@@ -21,6 +21,10 @@ Suite-Setup-001 added the first connector-evidence setup/readiness map for app l
 - `docs/setup/APP_SETUP_MATRIX.md`
 - `docs/setup/SCHEMA_UX_PLAN.md`
 - `docs/setup/SUITE_SETUP_COMPLETION_SUMMARY.md`
+- `docs/setup/SPECTRA_TEST_SURFACE_UPDATE.md`
+- `docs/integrations/EPK_FOCUS_LOOP_SMOKE.md`
+- `fixtures/epk-to-focus.sample-event-packet.json`
+- `docs/app-cards/FOCUS_INTERACTION_STABILIZATION.md`
 
 ## Current Truths
 
@@ -32,20 +36,25 @@ Suite-Setup-001 added the first connector-evidence setup/readiness map for app l
 - Work one repo per sprint and one PR per sprint unless explicitly approved.
 - Suite setup/readiness docs live under `docs/setup/` so future sessions can quickly find app launch paths, setup gaps, and schema UX needs before adding more pattern cards.
 - All four active repos now have setup/readiness coverage:
-  - Beam: suite readiness audit and setup matrix.
-  - Focus: first-run setup guide/modal.
-  - Spectra: read-only `doctor`, `setup`, and `workbench` path.
-  - EPK: first-run setup guide and publisher checklist.
+  - Beam: suite readiness audit, setup matrix, setup landing page, and schema cards.
+  - Focus: first-run setup guide/modal plus post-setup EPK import and browser interaction stabilization.
+  - Spectra: read-only `doctor`, `setup`, and `workbench` path, plus setup-safe test command split.
+  - EPK: first-run setup guide, publisher checklist, and Focus packet export panel.
+- EPK can generate an `epk-to-focus.event-packet` JSON payload from the publisher, but it only proposes tasks; it does not send, sync, publish, or directly create Focus tasks.
+- Focus has a review-first EPK packet importer: paste JSON, review packet, select proposed tasks, and import selected tasks only.
+- Focus skips already-imported EPK task source IDs instead of creating duplicate task rows.
+- Focus has a browser interaction repair layer for task-row drag grip behavior, planner month hover previews, planner no-clobber repaint traps, robust delete, and robust timer save.
+- Focus has a keyboard command runtime for visible-task navigation, selected-task activation/timer actions, confirmed delete, and in-memory undo/redo snapshots. It must not run while the user is typing in inputs, textareas, selects, or contenteditable areas.
 
 ## Future AI Reading Order
 
 1. `ai-guides/START_HERE.md`
 2. Relevant suite or workspace context pack
 3. Relevant app guide
-4. Relevant setup/readiness doc, pattern, schema, or integration contract
+4. Relevant setup/readiness doc, app card, pattern, schema, or integration contract
 5. Relevant build-method guide
 
-Integration contracts and first schemas now live under `integrations/` and `schemas/`. Setup/readiness docs live under `docs/setup/`. Patterns and build-method guides are still Beam-004+ work.
+Integration contracts and first schemas now live under `integrations/` and `schemas/`. Setup/readiness docs live under `docs/setup/`. App cards live under `docs/app-cards/`. Patterns and build-method guides are still Beam-004+ work.
 
 ## Safe Assumptions
 
@@ -54,6 +63,8 @@ Integration contracts and first schemas now live under `integrations/` and `sche
 - Keep app implementation in the owning app repo.
 - Use the setup/readiness docs before starting app setup or schema UX work.
 - Treat setup guides as usability and safety surfaces, not as proof of runtime coupling.
+- Treat the EPK -> Focus packet loop as manual and review-first until Beam records a later explicit automation contract.
+- Treat Focus keyboard undo/redo as a local in-memory session safety net, not a persistent event log.
 
 ## Do Not Infer
 
@@ -62,6 +73,8 @@ Integration contracts and first schemas now live under `integrations/` and `sche
 - Do not let historical names override current repo names.
 - Do not infer that schema validation permits hidden imports or app mutation.
 - Do not infer that an app-specific setup checklist means browser/manual launch was verified unless that verification is explicitly recorded.
+- Do not infer that the EPK -> Focus smoke fixture means Spectra should automate the loop.
+- Do not infer that Focus keyboard commands are allowed to override typing targets.
 
 ## Useful Entry Points
 
@@ -73,6 +86,9 @@ Integration contracts and first schemas now live under `integrations/` and `sche
 - Setup/readiness audit at `docs/setup/SUITE_USABILITY_READINESS_AUDIT.md`
 - App setup matrix at `docs/setup/APP_SETUP_MATRIX.md`
 - Setup completion summary at `docs/setup/SUITE_SETUP_COMPLETION_SUMMARY.md`
+- Spectra test surface update at `docs/setup/SPECTRA_TEST_SURFACE_UPDATE.md`
+- Focus interaction stabilization card at `docs/app-cards/FOCUS_INTERACTION_STABILIZATION.md`
+- EPK -> Focus loop smoke test at `docs/integrations/EPK_FOCUS_LOOP_SMOKE.md`
 - Schema UX plan at `docs/setup/SCHEMA_UX_PLAN.md`
 - Contract registry at `integrations/registry.md`
 - Schema registry at `schemas/registry.json`
@@ -83,13 +99,14 @@ Integration contracts and first schemas now live under `integrations/` and `sche
 - `bash scripts/run-workspace-smoke.sh`
 - Search for stale names when changing repo identity or suite topology.
 - Run app-local launch/test commands before claiming an app is usable in a browser or shell.
+- For EPK -> Focus, use `fixtures/epk-to-focus.sample-event-packet.json` and the manual smoke checklist before adding automation.
 
 ## Future prompts can omit
 
-Future prompts can omit the suite ownership map, Beam's non-runtime role, the one-repo/one-PR sprint rule, the default AI reading order, the location of the first contract/schema registries, and the existence/location of the suite setup/readiness docs.
+Future prompts can omit the suite ownership map, Beam's non-runtime role, the one-repo/one-PR sprint rule, the default AI reading order, the location of the first contract/schema registries, the existence/location of the suite setup/readiness docs, and the review-first EPK -> Focus packet safety boundary.
 
-Future prompts can also assume that first-run setup coverage exists for Beam, Focus, Spectra, and EPK, but must still verify app source before code changes.
+Future prompts can also assume that first-run setup coverage exists for Beam, Focus, Spectra, and EPK, that EPK packet export and Focus packet import exist, and that Focus has the browser interaction/keyboard command stabilization layer. They must still verify app source before code changes.
 
 ## Update Rules
 
-Refresh this pack when repo ownership changes, a new app joins the suite, Beam adds schemas/contracts that change the default reading order, or setup/readiness status changes after app-specific setup PRs.
+Refresh this pack when repo ownership changes, a new app joins the suite, Beam adds schemas/contracts that change the default reading order, app-specific setup/readiness status changes, or an app stabilization pass changes safety-critical operating assumptions.

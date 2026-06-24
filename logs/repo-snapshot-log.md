@@ -102,3 +102,43 @@ Concise Beam snapshots for future AI session orientation.
   separate stabilization PR.
 - Recommended next: `Beam-UX-001` setup landing page/schema cards, then
   `Spectra-Stabilization-001` for the hanging daemon e2e path.
+
+## 2026-06-24 — Post-setup Beam/EPK/Focus/Spectra stabilization refresh
+
+- Repos updated by recent merged PRs: `prism-beam`, `EPK`, `prism-focus`, and
+  `prism-spectra`.
+- Beam PR #9 merge commit `d651958447f08255915ba7f7f0a6b4dd1f87cbf3`: suite
+  setup wrap-up and current-state/setup/snapshot refresh.
+- Beam PR #10 merge commit `81dc802534559396f1da81ea6c42bc61fd4084d4`:
+  `docs/setup/SPECTRA_TEST_SURFACE_UPDATE.md`.
+- Beam PR #11 merge commit `159e736eed4295c8ddc42fd25aeda03b2a801683`:
+  setup README and human-readable schema cards.
+- Beam PR #12 merge commit `149c3178976522870d64bd8a7e4dbb8f96961f61`:
+  `fixtures/epk-to-focus.sample-event-packet.json` and
+  `docs/integrations/EPK_FOCUS_LOOP_SMOKE.md`.
+- EPK PR #11 merge commit `35329b3f365ee26724845dae490285bfc9486d40`: publisher
+  can generate/copy/download `epk-to-focus.event-packet` JSON. Safety boundary:
+  EPK proposes; it does not send, sync, publish, or directly create Focus tasks.
+- Focus PR #13 merge commit `318aaf5914a708369d1eb3bda901952ab5d1554e`:
+  review-first packet import screen in `src/actions_import.js` and
+  `src/render_import.js`.
+- Focus PR #14 merge commit `2fcc1bd0e13e99bdacf0cfdc0d2b2fa2f7e218e3` and PR
+  #15 merge commit `c9a3c3edd89934e5d10712ceb8b451324a91c39a`: browser action
+  shim load, task delete behavior, drag-grip repair, planner hover previews,
+  no-clobber navigation repaint repair, and timer save repair.
+- Focus PR #16 merge commit `6c1d0e783debdef20424303b1a59a62ce43c7efc`:
+  keyboard command runtime for visible-task navigation, selected-task activation,
+  stopwatch/timer, confirmed delete, and in-memory undo/redo snapshots.
+- Spectra PR #18 merge commit `f6d883f59e12c1dea15b71801101bf3c5aa838e7`:
+  setup-safe `test:setup` and explicit `test:full`.
+- Spectra PR #19 merge commit `1886993ec38f92e1622c66e5789a52b4e26bc4d0`:
+  manual daemon e2e workflow.
+- New Beam context need completed in this refresh: update workspace current state,
+  setup matrix, integration registry, EPK -> Focus contract, and add the Focus
+  interaction stabilization app card.
+- Caveats: connector evidence was inspected, but no local shell/browser smoke was
+  run in this Beam-only documentation refresh. Manual EPK -> Focus smoke should
+  still be run before adding importer tests or Spectra automation.
+- Recommended next: `Beam-Patterns-001` to extract reusable patterns for
+  review-first imports, browser interaction repair layers, and local undo/redo
+  boundaries; `Spectra-Stabilization-003` remains the next Spectra code target.

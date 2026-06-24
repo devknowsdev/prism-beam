@@ -74,6 +74,10 @@ Current schema cards:
 - [`docs/schema-cards/EPK_TO_FOCUS_EVENT_PACKET.md`](docs/schema-cards/EPK_TO_FOCUS_EVENT_PACKET.md)
 - [`docs/schema-cards/APPROVAL_REQUEST.md`](docs/schema-cards/APPROVAL_REQUEST.md)
 
+Current app cards:
+
+- [`docs/app-cards/FOCUS_INTERACTION_STABILIZATION.md`](docs/app-cards/FOCUS_INTERACTION_STABILIZATION.md)
+
 ## Support Spine Reference Index
 
 These Beam support-spine references preserve the useful material from the older
