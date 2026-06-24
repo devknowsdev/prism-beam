@@ -65,6 +65,53 @@ Current contract and schema registries:
 - [`integrations/registry.md`](integrations/registry.md)
 - [`schemas/registry.json`](schemas/registry.json)
 
+## Support Spine Reference Index
+
+These Beam support-spine references preserve the useful material from the older
+`sprint-026-beam-support-spine` branch while keeping the current Prism Beam
+identity from Beam-001 through Beam-003.
+
+### Core orientation
+
+- [Beam role](docs/PRISM_BEAM_ROLE.md)
+- [Ecosystem overview](docs/ECOSYSTEM_OVERVIEW.md)
+- [Current sprint](docs/CURRENT_SPRINT.md)
+- [Beam extraction index](docs/BEAM_EXTRACTION_INDEX.md)
+- [Repository boundaries](docs/REPO_BOUNDARIES.md)
+- [Shared vocabulary](docs/SHARED_VOCABULARY.md)
+
+### Build method and session safety
+
+- [AI session contracts](docs/AI_SESSION_CONTRACTS.md)
+- [Build method standards](docs/BUILD_METHOD_STANDARDS.md)
+- [Change boundary checklist](docs/CHANGE_BOUNDARY_CHECKLIST.md)
+
+### Patterns
+
+- [Capability manifest pattern](docs/patterns/CAPABILITY_MANIFEST_PATTERN.md)
+- [Event ledger pattern](docs/patterns/EVENT_LEDGER_PATTERN.md)
+- [Approval queue pattern](docs/patterns/APPROVAL_QUEUE_PATTERN.md)
+- [Workbench data spine pattern](docs/patterns/WORKBENCH_DATA_SPINE_PATTERN.md)
+
+### Checklists
+
+- [Repo hygiene checklist](docs/checklists/REPO_HYGIENE_CHECKLIST.md)
+- [Safe capability integration checklist](docs/checklists/SAFE_CAPABILITY_INTEGRATION_CHECKLIST.md)
+
+### Templates
+
+- [Sprint prompt template](docs/templates/SPRINT_PROMPT_TEMPLATE.md)
+- [Handover report template](docs/templates/HANDOVER_REPORT_TEMPLATE.md)
+
+### Contracts and prompt starters
+
+- `docs/contracts/` — app-specific support-spine contract notes.
+- `docs/prompts/` — reusable Codex prompt starters.
+
+### Research
+
+- [Deep research report](docs/research/deep-research-report.md)
+
 ## How App Repos Should Use Beam
 
 App repos should treat Beam as a reference and coordination source. Before a
