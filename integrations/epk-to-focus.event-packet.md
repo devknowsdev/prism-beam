@@ -2,7 +2,8 @@
 
 ## Status
 
-Draft reference contract.
+Draft reference contract. App-side manual implementation now exists in EPK and
+Focus, but Beam remains the contract/reference owner only.
 
 ## Source App
 
@@ -22,6 +23,26 @@ repos.
 Move event and promo planning context from EPK into Focus as a review-first
 packet. The packet proposes tasks and schedule windows; it does not mutate Focus
 state by itself.
+
+## Current App-Side Implementation Evidence
+
+- EPK PR #11 added publisher-side packet export in
+  `EPK/public/publisher/publisher-focus-packet.js` and documented it in
+  `EPK/docs/FOCUS_PACKET_EXPORT.md`.
+- Focus PR #13 added the review/import screen in `src/actions_import.js` and
+  `src/render_import.js`.
+- Beam PR #12 added `fixtures/epk-to-focus.sample-event-packet.json` and
+  `docs/integrations/EPK_FOCUS_LOOP_SMOKE.md`.
+
+Current loop:
+
+```text
+EPK publisher event details -> Focus packet JSON -> prism-focus review screen -> selected Focus tasks
+```
+
+This is still a manual review-first loop. It is not background sync and it is
+not a Spectra automation target until the manual loop is stable and explicitly
+contracted.
 
 ## What Crosses The Boundary
 
@@ -53,6 +74,8 @@ state by itself.
 - Automatic calendar, email, social posting, or publishing actions.
 - Private publisher state that was not intentionally exported into the packet.
 - Hidden task creation or scheduling.
+- Spectra automation of EPK -> Focus task creation before the manual loop is
+  stable, comfortable, and explicitly approved by a later contract.
 
 ## Data Shape / Schema Reference
 
@@ -77,12 +100,31 @@ Only Focus may mutate Focus state, and only after user approval in the review
 screen. Imported tasks should retain source metadata for duplicate detection and
 rollback notes.
 
+EPK may generate, copy, or download packet JSON. It must not send the packet to
+Focus or create Focus tasks itself.
+
 ## Failure/Rollback Notes
 
 If validation fails, show a non-mutating error and leave Focus state unchanged.
-If duplicate source records are detected, offer update/skip/create-copy choices.
+If duplicate source records are detected, skip duplicates or offer explicit
+update/skip/create-copy choices.
+
 If a task import is approved, record enough source metadata to identify and undo
 the imported batch manually or through a future rollback tool.
+
+## Manual Smoke Fixture
+
+Use:
+
+```text
+fixtures/epk-to-focus.sample-event-packet.json
+```
+
+Smoke checklist:
+
+```text
+docs/integrations/EPK_FOCUS_LOOP_SMOKE.md
+```
 
 ## Sample Packet
 
@@ -149,16 +191,19 @@ the imported batch manually or through a future rollback tool.
 
 - Parse `schemas/registry.json`.
 - Parse `schemas/epk-to-focus.event-packet.schema.json`.
+- Use `fixtures/epk-to-focus.sample-event-packet.json` for manual loop smoke.
 - Future app implementation should validate packet JSON before showing import
   review.
 
 ## Future prompts can omit
 
 Future prompts can omit the rule that EPK packets propose Focus tasks but never
-mutate Focus directly, the duplicate-detection requirement, and the first packet
-field list.
+mutate Focus directly, the duplicate-detection requirement, the first packet
+field list, the location of the first EPK exporter, the location of the Focus
+review/import screen, and the location of the Beam smoke fixture/checklist.
 
 ## Update Rules
 
-Update this contract when EPK adds event records, Focus adds an import UI, or
-the packet schema changes.
+Update this contract when EPK changes event packet fields, Focus changes the
+import UI or duplicate handling, Spectra adds any automation around this loop,
+or the packet schema changes.
