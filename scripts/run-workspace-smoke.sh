@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run smoke tests for both repos. Assumes repos are siblings of this directory.
+# Run lightweight Beam reference checks. If sibling app repos are available,
+# report their presence without treating Beam as their runtime owner.
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${BASE_DIR}"
+ROOT_DIR="$(cd "${BASE_DIR}/.." && pwd)"
 
-# Prefer parent of workspace-meta when running from a sibling folder layout
-if [ -d "${ROOT_DIR}/../ADHDashboard-git" ]; then
-  ROOT_DIR="${ROOT_DIR}/.."
-fi
+required_files=(
+  "README.md"
+  "docs/COORDINATION.md"
+  "ai-guides/START_HERE.md"
+  "ai-guides/REVIEW_FIRST.md"
+)
 
-echo "Running ADHDashboard tests..."
-if [ -d "${ROOT_DIR}/ADHDashboard-git" ]; then
-  (cd "${ROOT_DIR}/ADHDashboard-git" && node src/test_workflows.js)
-else
-  echo "ADHDashboard-git repo not found at ${ROOT_DIR}/ADHDashboard-git" >&2
-  exit 1
-fi
+for file in "${required_files[@]}"; do
+  test -f "${BASE_DIR}/${file}"
+  echo "Found ${file}"
+done
 
-echo "Running AI-Forge tests..."
-if [ -d "${ROOT_DIR}/AI-Forge" ]; then
-  (cd "${ROOT_DIR}/AI-Forge" && npm test --silent)
-else
-  echo "AI-Forge repo not found at ${ROOT_DIR}/AI-Forge" >&2
-  exit 1
-fi
+for repo in "EPK" "prism-focus" "prism-spectra" "prism-beam"; do
+  if [ -d "${ROOT_DIR}/${repo}" ]; then
+    echo "Sibling repo present: ${repo}"
+  else
+    echo "Sibling repo not present: ${repo}"
+  fi
+done
 
-echo "All workspace smoke tests completed."
+echo "Beam reference smoke check completed."

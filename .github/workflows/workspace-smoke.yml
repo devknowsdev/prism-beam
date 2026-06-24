@@ -9,8 +9,8 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout workspace meta
+      - name: Checkout Beam
         uses: actions/checkout@v4
-      - name: Run workspace smoke script
+      - name: Run Beam reference smoke script
         run: |
           bash scripts/run-workspace-smoke.sh
