@@ -42,6 +42,8 @@ boundaries.
 - Required scripts:
 - Required docs:
 - Required checks:
+- When a sprint changes build method, read `docs/BUILD_METHOD_STANDARDS.md` and
+  report the concrete stability, efficiency, or token-cost gain.
 
 ## Tests
 
