@@ -17,9 +17,10 @@ implementation code.
 5. Relevant build-method guide
 
 Beam-002 adds the first workspace, EPK, Focus, and Spectra context packs and
-app guides. Patterns, schemas, integration contracts, and build-method guides
-remain planned Beam-003+ structure. If a referenced guide does not exist yet,
-say so briefly, then inspect the target repo directly.
+app guides. Beam-003 adds the first integration contracts and schemas.
+Patterns, reusable pattern cards, and build-method guides remain planned
+Beam-004+ structure. If a referenced guide does not exist yet, say so briefly,
+then inspect the target repo directly.
 
 ## Suite Map
 
@@ -82,6 +83,11 @@ Current app guides:
 - `app-guides/epk/session-start.md`
 - `app-guides/prism-focus/session-start.md`
 - `app-guides/prism-spectra/session-start.md`
+
+Current registries:
+
+- `integrations/registry.md`
+- `schemas/registry.json`
 
 ## Final Work Reports
 

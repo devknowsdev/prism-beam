@@ -36,6 +36,8 @@ workbench docs/source.
   scanning, file watching, media processing, external APIs, and database writes.
 - Workbench shell/data spine is currently read-oriented and manifest/daemon
   summary driven.
+- The EPK-to-Spectra adapter/read-order contract is documented in Beam and
+  should be treated as reference context.
 
 ## Safe Assumptions
 
@@ -70,6 +72,8 @@ workbench docs/source.
 - `prism-spectra/docs/ADAPTER_CONTRACTS.md`
 - `prism-spectra/docs/LOCAL_FILE_INGEST_PLANNING.md`
 - `prism-spectra/docs/SPECTRA_WORKBENCH_DATA_SPINE.md`
+- `integrations/epk-to-spectra.adapter-contract.md`
+- `integrations/approval-posture.md`
 
 ## Validation Hints
 
@@ -81,7 +85,7 @@ workbench docs/source.
 
 Future prompts can omit Spectra's current role, key surfaces, approval boundary
 cautions, sidecar explicit-file rule, workbench read-oriented status, and
-Beam-as-reference usage.
+Beam-as-reference usage, plus the first EPK read-order contract location.
 
 ## Update Rules
 

@@ -23,8 +23,8 @@ Prism suite repo map and AI session orientation.
 - `prism-focus` owns daily planning, tasks, and personal execution state.
 - `prism-spectra` owns orchestration, adapters, approvals, and safe execution
   boundaries.
-- `prism-beam` owns AI-readable guidance, context packs, patterns, schemas,
-  logs, prompt packs, and anti-drift rules.
+- `prism-beam` owns AI-readable guidance, context packs, integration
+  contracts, schemas, logs, prompt packs, and anti-drift rules.
 - Beam is not a monorepo and not a runtime dependency.
 - Work one repo per sprint and one PR per sprint unless explicitly approved.
 
@@ -36,8 +36,8 @@ Prism suite repo map and AI session orientation.
 4. Relevant pattern, schema, or integration contract
 5. Relevant build-method guide
 
-Patterns, schemas, integration contracts, and build-method guides are still
-Beam-003+ work.
+Integration contracts and first schemas now live under `integrations/` and
+`schemas/`. Patterns and build-method guides are still Beam-004+ work.
 
 ## Safe Assumptions
 
@@ -59,6 +59,8 @@ Beam-003+ work.
 - `docs/COORDINATION.md`
 - App context packs under `context-packs/`
 - App guides under `app-guides/`
+- Contract registry at `integrations/registry.md`
+- Schema registry at `schemas/registry.json`
 
 ## Validation Hints
 
@@ -69,7 +71,8 @@ Beam-003+ work.
 ## Future prompts can omit
 
 Future prompts can omit the suite ownership map, Beam's non-runtime role, the
-one-repo/one-PR sprint rule, and the default AI reading order.
+one-repo/one-PR sprint rule, the default AI reading order, and the location of
+the first contract/schema registries.
 
 ## Update Rules
 

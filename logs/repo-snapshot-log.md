@@ -52,3 +52,20 @@ Concise Beam snapshots for future AI session orientation.
   lineage history; mocks/contracts do not imply live external integrations.
 - Next Beam extraction need: future Spectra adapter/approval/context contracts
   when Beam-003+ starts contract work.
+
+## 2026-06-24 — prism-beam after Beam-003
+
+- Evidence used: Beam README/start/review guides, workspace/app context packs,
+  app session-start guides, repo snapshot log, local EPK README/public adapter
+  surfaces, local Focus task/storage docs/source, and local Spectra adapter,
+  approval, sidecar, and workbench docs/source.
+- New contracts/schemas: `integrations/epk-to-focus.event-packet.md`,
+  `schemas/epk-to-focus.event-packet.schema.json`,
+  `integrations/epk-to-spectra.adapter-contract.md`,
+  `integrations/approval-posture.md`, and
+  `schemas/approval-request.schema.json`.
+- Caveats: contracts are reference material only; no app-side import/export
+  implementation, runtime dependency, or cross-repo mutation was added.
+- Next Beam extraction need: Beam-004 reusable pattern cards for public/admin
+  separation, no fake auth, browser-only exports, Focus local-first patterns,
+  and Spectra approval/sidecar patterns.

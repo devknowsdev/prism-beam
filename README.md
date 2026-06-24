@@ -60,6 +60,11 @@ Current low-token entry packs:
 - [`context-packs/prism-focus/current-surface.md`](context-packs/prism-focus/current-surface.md)
 - [`context-packs/prism-spectra/current-surface.md`](context-packs/prism-spectra/current-surface.md)
 
+Current contract and schema registries:
+
+- [`integrations/registry.md`](integrations/registry.md)
+- [`schemas/registry.json`](schemas/registry.json)
+
 ## How App Repos Should Use Beam
 
 App repos should treat Beam as a reference and coordination source. Before a

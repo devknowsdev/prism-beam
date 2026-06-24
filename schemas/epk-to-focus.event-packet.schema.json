@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/epk-to-focus.event-packet.schema.json",
+  "title": "EPK to Focus Event Packet",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schemaVersion", "packetType", "source", "review", "event", "tasks"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packetType": {
+      "const": "epk-to-focus.event-packet"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["system", "recordId"],
+      "properties": {
+        "system": {
+          "const": "EPK"
+        },
+        "recordId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordUrl": {
+          "type": "string"
+        },
+        "publisherUrl": {
+          "type": "string"
+        },
+        "exportedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "imported", "skipped"]
+        },
+        "required": {
+          "type": "boolean",
+          "default": true
+        },
+        "reviewedBy": {
+          "type": "string"
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["title", "date", "timezone"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "act": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "venue": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "doors": {
+          "type": "string"
+        },
+        "setTime": {
+          "type": "string"
+        },
+        "loadIn": {
+          "type": "string"
+        },
+        "soundcheck": {
+          "type": "string"
+        },
+        "ctaUrl": {
+          "type": "string"
+        },
+        "sourceLink": {
+          "type": "string"
+        }
+      }
+    },
+    "deadlines": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "poster": {
+          "type": "string",
+          "format": "date"
+        },
+        "press": {
+          "type": "string",
+          "format": "date"
+        },
+        "socialAnnouncement": {
+          "type": "string",
+          "format": "date"
+        },
+        "postGigFollowUp": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "travelAdminWindows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "start": {
+            "type": "string"
+          },
+          "durationMins": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["title"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["prep", "admin", "travel", "promo", "poster", "press", "social", "follow-up", "custom"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "enum": ["day", "project", "fixed"]
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "ts": {
+            "type": "string"
+          },
+          "durationMins": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "estimatedMinutes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "category": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

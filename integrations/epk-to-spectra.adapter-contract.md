@@ -1,0 +1,101 @@
+# EPK -> Spectra Adapter/Read-Order Contract
+
+## Status
+
+Draft reference contract.
+
+## Source App
+
+EPK owns public/promotional content, publisher exports, and published snapshots.
+
+## Target App
+
+prism-spectra owns orchestration, adapters, approvals, and safe execution
+boundaries.
+
+## Contract Owner
+
+prism-beam owns this reference contract. App implementation stays in EPK or
+Spectra.
+
+## Purpose
+
+Define how Spectra should read EPK data without scraping prematurely, inventing
+publisher state, or turning read operations into hidden writes.
+
+## Read Order
+
+1. `window.EPKAdapter` when running in the public or publisher browser context.
+2. `EPK/public/data/epk.json` when working from repo/source files.
+3. Published snapshot JSON when working with immutable published versions.
+4. DOM scraping only as a last-resort fallback and only for read-only
+   inspection.
+
+## Safe Read Examples
+
+- Browser context: call `window.EPKAdapter.getData()` or
+  `window.EPKAdapter.buildGigPromoBrief(...)`.
+- Repo context: read `EPK/public/data/epk.json` explicitly.
+- Published context: read `EPK/public/published/<id>/epk.json` or the matching
+  hosted snapshot JSON.
+
+## What Must Not Cross The Boundary
+
+- Unpublished/private publisher state inferred from public HTML.
+- Assumed authentication from `/publisher/`.
+- External posting, email sending, or GitHub publication without explicit
+  approval.
+- Beam files as runtime imports.
+
+## Forbidden Assumptions
+
+- Do not infer `/publisher/` is private unless real platform auth is configured.
+- Do not scrape public DOM if structured data or `window.EPKAdapter` is
+  available.
+- Do not treat `mailto:` contact as a backend email service.
+- Do not treat browser-only poster generation as a publishing backend.
+
+## Review And Approval Rule
+
+Reading EPK structured data is read-only. Publishing, snapshot creation,
+external posting, email sending, or GitHub/public-data mutation are external
+writes and require explicit approval. Deleting or overwriting canonical public
+data is destructive unless protected by backup/rollback.
+
+## Safe Write Path
+
+No write path is implemented by this contract. Future Spectra adapters must
+classify actions before execution and route external writes through an approval
+request.
+
+## Failure/Rollback Notes
+
+If structured reads fail, stop with a clear error or fall back to read-only DOM
+inspection. Do not synthesize missing event facts. For approved writes in future
+app work, require preview, checkpoint/backup, and rollback notes.
+
+## Future App-Side Implementation Notes
+
+- Add a Spectra EPK read adapter that prefers `window.EPKAdapter` when a browser
+  context exists.
+- Add explicit file-read support for `EPK/public/data/epk.json`.
+- Treat published snapshot reads as immutable reference reads.
+- Keep poster export and contact behavior local/export-only until a real backend
+  sprint is approved.
+
+## Validation
+
+- Confirm EPK still exposes `window.EPKAdapter` before relying on it.
+- Confirm `EPK/public/data/epk.json` parses before using repo data.
+- Confirm any write-like action maps to `integrations/approval-posture.md`.
+
+## Future prompts can omit
+
+Future prompts can omit the EPK read order, forbidden assumptions about
+publisher privacy/contact/poster publishing, and the rule that Beam is reference
+context rather than a runtime dependency.
+
+## Update Rules
+
+Update this contract when EPK adapter methods change, Spectra implements an EPK
+adapter, or EPK gains a real backend/form/publish service.

@@ -29,6 +29,8 @@ uncommitted/ahead changes.
 - Current key surfaces include Focus Board, Tasks, Planner, Day Wizard, Dump,
   Daily Check-in, Day Log, Habits, Music Tools, and optional AI.
 - Optional AI supports Ollama or Claude and must remain graceful when disabled.
+- The EPK-to-Focus packet is a review/import contract, not direct localStorage
+  mutation.
 
 ## Safe Assumptions
 
@@ -59,6 +61,8 @@ uncommitted/ahead changes.
 - `prism-focus/src/ARCHITECTURE.md`
 - `prism-focus/src/storage.js`
 - `prism-focus/docs/AI_API.md`
+- `integrations/epk-to-focus.event-packet.md`
+- `schemas/epk-to-focus.event-packet.schema.json`
 
 ## Validation Hints
 
@@ -69,8 +73,8 @@ uncommitted/ahead changes.
 ## Future prompts can omit
 
 Future prompts can omit Focus's current role, local-first/no-build shape,
-primary surfaces, AI caution, localStorage caution, and future EPK review/import
-direction.
+primary surfaces, AI caution, localStorage caution, and the EPK review/import
+packet boundary.
 
 ## Update Rules
 

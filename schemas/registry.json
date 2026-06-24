@@ -1,0 +1,26 @@
+{
+  "schemas": [
+    {
+      "id": "epk-to-focus.event-packet",
+      "title": "EPK to Focus Event Packet",
+      "status": "draft",
+      "schemaFile": "schemas/epk-to-focus.event-packet.schema.json",
+      "contractFile": "integrations/epk-to-focus.event-packet.md",
+      "owner": "prism-beam",
+      "consumers": ["EPK", "prism-focus"],
+      "version": "1.0.0",
+      "notes": "Review-first packet for proposing Focus tasks from EPK event/promo truth."
+    },
+    {
+      "id": "approval-request",
+      "title": "Suite Approval Request",
+      "status": "draft",
+      "schemaFile": "schemas/approval-request.schema.json",
+      "contractFile": "integrations/approval-posture.md",
+      "owner": "prism-beam",
+      "consumers": ["EPK", "prism-focus", "prism-spectra", "prism-beam"],
+      "version": "1.0.0",
+      "notes": "Portable request shape for review-first local/external/destructive actions."
+    }
+  ]
+}
