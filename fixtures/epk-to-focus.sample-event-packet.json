@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.0.0",
+  "packetType": "epk-to-focus.event-packet",
+  "source": {
+    "system": "EPK",
+    "recordId": "duif-live-at-test-venue-2026-07-12",
+    "recordUrl": "https://example.com/venue",
+    "exportedAt": "2026-06-24T18:00:00.000Z"
+  },
+  "review": {
+    "status": "pending",
+    "required": true,
+    "notes": "Smoke-test fixture. Import through prism-focus review only."
+  },
+  "event": {
+    "title": "DU!F live at Test Venue",
+    "act": "Dave Knowles",
+    "project": "Genre-fluid live-loop performance",
+    "status": "draft",
+    "date": "2026-07-12",
+    "timezone": "Africa/Johannesburg",
+    "venue": "Test Venue",
+    "city": "Makhanda",
+    "ctaUrl": "https://example.com/tickets",
+    "sourceLink": "https://example.com/venue"
+  },
+  "deadlines": {
+    "poster": "2026-06-28",
+    "press": "2026-07-02",
+    "socialAnnouncement": "2026-07-05",
+    "postGigFollowUp": "2026-07-13"
+  },
+  "travelAdminWindows": [],
+  "tasks": [
+    {
+      "kind": "poster",
+      "title": "Create poster for DU!F live at Test Venue",
+      "scope": "project",
+      "dueDate": "2026-06-28",
+      "estimatedMinutes": 45,
+      "category": "Music admin",
+      "notes": "Prepare visual promo asset from EPK event details.",
+      "sourceId": "duif-live-at-test-venue-2026-07-12:poster"
+    },
+    {
+      "kind": "social",
+      "title": "Announce DU!F live at Test Venue",
+      "scope": "project",
+      "dueDate": "2026-07-05",
+      "estimatedMinutes": 25,
+      "category": "Music admin",
+      "notes": "Include CTA: https://example.com/tickets",
+      "sourceId": "duif-live-at-test-venue-2026-07-12:announce"
+    },
+    {
+      "kind": "press",
+      "title": "Send press/venue blurb for DU!F live at Test Venue",
+      "scope": "project",
+      "dueDate": "2026-07-02",
+      "estimatedMinutes": 30,
+      "category": "Music admin",
+      "notes": "Use EPK promo brief and audience route as source material.",
+      "sourceId": "duif-live-at-test-venue-2026-07-12:press"
+    },
+    {
+      "kind": "admin",
+      "title": "Confirm details for DU!F live at Test Venue",
+      "scope": "project",
+      "dueDate": "2026-07-12",
+      "estimatedMinutes": 20,
+      "category": "Music admin",
+      "notes": "Test Venue, Makhanda",
+      "sourceId": "duif-live-at-test-venue-2026-07-12:confirm"
+    },
+    {
+      "kind": "follow-up",
+      "title": "Post-gig follow-up for DU!F live at Test Venue",
+      "scope": "project",
+      "dueDate": "2026-07-13",
+      "estimatedMinutes": 20,
+      "category": "Music admin",
+      "notes": "Thank venue/audience, save useful assets, and note what worked.",
+      "sourceId": "duif-live-at-test-venue-2026-07-12:follow-up"
+    }
+  ]
+}
