@@ -40,6 +40,6 @@ Commands, checks, or manual review steps expected after changes.
 
 When and how this guide should be refreshed.
 
-## Future Prompts Can Omit
+## Future prompts can omit
 
 Context this guide now stores so future prompts can stay shorter.

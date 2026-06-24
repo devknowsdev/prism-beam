@@ -11,6 +11,12 @@ required_files=(
   "docs/COORDINATION.md"
   "ai-guides/START_HERE.md"
   "ai-guides/REVIEW_FIRST.md"
+  "context-packs/workspace/current-state.md"
+  "context-packs/epk/current-surface.md"
+  "context-packs/prism-focus/current-surface.md"
+  "context-packs/prism-spectra/current-surface.md"
+  "app-guides/prism-focus/session-start.md"
+  "app-guides/prism-spectra/session-start.md"
 )
 
 for file in "${required_files[@]}"; do
