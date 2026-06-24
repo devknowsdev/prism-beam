@@ -21,8 +21,9 @@ behavior, or runtime state.
   contracts, and coordination notes.
 - Forbidden changes: runtime code, dependency files, schemas, behavior,
   deployment config, or external actions.
-- Required reading: current prism-beam ecosystem docs, repo alignment audit, and
-  the target repo README if a pointer is being updated.
+- Required reading: current prism-beam ecosystem docs, repo alignment audit,
+  `docs/BUILD_METHOD_STANDARDS.md`, and the target repo README if a pointer is
+  being updated.
 - Required validation: `git status`, `git diff --stat`, and link sanity checks
   if available.
 - Required final report: files created, files modified, repos touched, runtime
@@ -147,7 +148,8 @@ behavior, or runtime state.
 - Forbidden changes: runtime feature implementation unless the sprint was
   explicitly approved as a cross-repo implementation effort.
 - Required reading: all affected READMEs, boundary docs, session contracts, and
-  the current sprint note.
+  the current sprint note plus `docs/BUILD_METHOD_STANDARDS.md` when the sprint
+  is making build-method or process changes.
 - Required validation: `git status`, `git diff --stat`, and repo-local checks
   only where safe.
 - Required final report: affected repos, exact cross-repo reason, files changed,

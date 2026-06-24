@@ -32,6 +32,7 @@ reusable prompts, checklists, patterns, and helper scripts.
 ## Contracts
 
 - `docs/AI_SESSION_CONTRACTS.md` — standard session types and safety rules.
+- `docs/BUILD_METHOD_STANDARDS.md` — canonical sprint build-method rule.
 - `docs/CHANGE_BOUNDARY_CHECKLIST.md` — pre-edit boundary checklist.
 - `docs/contracts/` — repo-specific implementation contracts.
 - `docs/prompts/` — reusable Codex prompt templates.
