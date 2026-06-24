@@ -13,7 +13,7 @@ copy_file() {
   fi
 }
 
-for repo in "${ROOT}/../ADHDashboard-git" "${ROOT}/../AI-Forge"; do
+for repo in "${ROOT}/../EPK" "${ROOT}/../prism-focus" "${ROOT}/../prism-spectra"; do
   if [ -d "$repo" ]; then
     echo "Installing templates into $repo"
     mkdir -p "$repo/.github"
