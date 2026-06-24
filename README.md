@@ -69,6 +69,10 @@ Current contract and schema registries:
 - [`integrations/registry.md`](integrations/registry.md)
 - [`schemas/registry.json`](schemas/registry.json)
 
+Current boundary contracts:
+
+- [`docs/contracts/SUITE_AI_ENGINE_BOUNDARY.md`](docs/contracts/SUITE_AI_ENGINE_BOUNDARY.md)
+
 Current schema cards:
 
 - [`docs/schema-cards/EPK_TO_FOCUS_EVENT_PACKET.md`](docs/schema-cards/EPK_TO_FOCUS_EVENT_PACKET.md)
@@ -77,6 +81,7 @@ Current schema cards:
 Current app cards:
 
 - [`docs/app-cards/FOCUS_INTERACTION_STABILIZATION.md`](docs/app-cards/FOCUS_INTERACTION_STABILIZATION.md)
+- [`docs/app-cards/SPECTRA_AS_SUITE_AI_ENGINE.md`](docs/app-cards/SPECTRA_AS_SUITE_AI_ENGINE.md)
 
 ## Support Spine Reference Index
 
