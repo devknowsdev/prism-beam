@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/routing-modes.schema.json",
+  "title": "Prism Spectra Routing Mode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mode", "cloudAllowed", "allowedRuntimes", "approvalRules"],
+  "properties": {
+    "mode": { "enum": ["local-only", "local-first", "balanced", "cloud-allowed"] },
+    "cloudAllowed": { "type": "boolean" },
+    "allowedRuntimes": { "type": "array", "items": { "type": "string" } },
+    "blockedProviders": { "type": "array", "items": { "type": "string" } },
+    "approvalRules": { "type": "array", "items": { "type": "string" } },
+    "requiredWarnings": { "type": "array", "items": { "type": "string" } },
+    "provenanceFields": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" }
+  }
+}
