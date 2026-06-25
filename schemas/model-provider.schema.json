@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/model-provider.schema.json",
+  "title": "Prism Model Provider",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "providerType", "requiresApiKey", "allowedModes"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "providerType": { "enum": ["local-runtime", "external-gateway", "direct-cloud", "local-endpoint"] },
+    "baseUrl": { "type": "string" },
+    "requiresApiKey": { "type": "boolean" },
+    "allowedModes": { "type": "array", "items": { "enum": ["local-only", "local-first", "balanced", "cloud-allowed"] } },
+    "blockedModes": { "type": "array", "items": { "enum": ["local-only", "local-first", "balanced", "cloud-allowed"] } },
+    "dataBoundary": { "enum": ["local", "external", "mixed"] },
+    "supportsOpenAICompatibleApi": { "type": "boolean" },
+    "supportsModelCatalogueApi": { "type": "boolean" },
+    "supportsZdrControls": { "type": "boolean" },
+    "policyNotes": { "type": "string" },
+    "risks": { "type": "array", "items": { "type": "string" } }
+  }
+}
