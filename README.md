@@ -50,9 +50,16 @@ token cost and lowers architectural drift by storing the durable context once.
 ## Start Here For AI Sessions
 
 For the lowest-token path, future AI sessions should read
-[`ai-guides/TINY_BOOT.md`](ai-guides/TINY_BOOT.md) first, then follow
-[`ai-guides/AI_SESSION_LOADING_POLICY.md`](ai-guides/AI_SESSION_LOADING_POLICY.md).
-Free or usage-limited sessions should use [`ai-guides/FREE_AI_MODE.md`](ai-guides/FREE_AI_MODE.md).
+[`AI_LOAD_ME_FIRST.md`](AI_LOAD_ME_FIRST.md) first. That file points the AI to the
+correct model profile, prompt router, and task-specific packs.
+
+Core routing files:
+
+- [`AI_LOAD_ME_FIRST.md`](AI_LOAD_ME_FIRST.md)
+- [`ai-guides/TINY_BOOT.md`](ai-guides/TINY_BOOT.md)
+- [`ai-guides/AI_PROMPT_ROUTER.md`](ai-guides/AI_PROMPT_ROUTER.md)
+- [`ai-guides/AI_SESSION_LOADING_POLICY.md`](ai-guides/AI_SESSION_LOADING_POLICY.md)
+- [`ai-guides/FREE_AI_MODE.md`](ai-guides/FREE_AI_MODE.md)
 
 The older full start guide remains available at [`ai-guides/START_HERE.md`](ai-guides/START_HERE.md).
 
@@ -71,6 +78,14 @@ Model-specific prompt profiles:
 - [`ai-guides/model-profiles/GPT.md`](ai-guides/model-profiles/GPT.md)
 - [`ai-guides/model-profiles/GEMINI.md`](ai-guides/model-profiles/GEMINI.md)
 - [`ai-guides/model-profiles/LOCAL_SMALL_MODEL.md`](ai-guides/model-profiles/LOCAL_SMALL_MODEL.md)
+
+Model-specific prompt wrappers:
+
+- [`templates/model-specific/CLAUDE_FREE_REVIEW.md`](templates/model-specific/CLAUDE_FREE_REVIEW.md)
+- [`templates/model-specific/CODEX_SAFE_IMPLEMENTATION.md`](templates/model-specific/CODEX_SAFE_IMPLEMENTATION.md)
+- [`templates/model-specific/GPT_HANDOVER_SYNTHESIS.md`](templates/model-specific/GPT_HANDOVER_SYNTHESIS.md)
+- [`templates/model-specific/GEMINI_DELTA_REVIEW.md`](templates/model-specific/GEMINI_DELTA_REVIEW.md)
+- [`templates/model-specific/LOCAL_MODEL_CHECKLIST.md`](templates/model-specific/LOCAL_MODEL_CHECKLIST.md)
 
 Full current-surface packs:
 
