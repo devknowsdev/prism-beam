@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/openrouter-policy.schema.json",
+  "title": "Prism OpenRouter Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mode", "allowed", "approvalRequired"],
+  "properties": {
+    "mode": { "enum": ["local-only", "local-first", "balanced", "cloud-allowed"] },
+    "allowed": { "type": "boolean" },
+    "approvalRequired": { "type": "boolean" },
+    "requireZdr": { "type": "boolean" },
+    "dataCollection": { "enum": ["deny", "allow", "unknown"] },
+    "allowProviders": { "type": "array", "items": { "type": "string" } },
+    "denyProviders": { "type": "array", "items": { "type": "string" } },
+    "maxPriceUsd": { "type": "number" },
+    "allowAutoRouter": { "type": "boolean" },
+    "warning": { "type": "string" },
+    "provenanceRequired": { "type": "boolean" }
+  }
+}
