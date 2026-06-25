@@ -12,7 +12,15 @@ Beam is the orientation and reference layer for the Prism suite. Use it before r
 
 Do not load every Beam file. Do not read every repo just to orient. Pick the smallest correct path for your model and task.
 
-## Step 1 — Choose your session profile
+## Step 1 — Read the current progress handover
+
+Read:
+
+- `AI_PROGRESS_LOG.md`
+
+Use it to see what the previous AI session changed, what remains open, and what the next suggested step is.
+
+## Step 2 — Choose your session profile
 
 | Session type | Read profile |
 |---|---|
@@ -23,20 +31,21 @@ Do not load every Beam file. Do not read every repo just to orient. Pick the sma
 | Local, small, or free model | `ai-guides/model-profiles/LOCAL_SMALL_MODEL.md` |
 | Unsure | `ai-guides/MODEL_SPECIFIC_PROMPTING.md` |
 
-## Step 2 — Read the universal minimum
+## Step 3 — Read the universal minimum
 
 Read these first:
 
 1. `ai-guides/TINY_BOOT.md`
 2. `ai-guides/AI_PROMPT_ROUTER.md`
-3. your selected model profile
-4. `context-packs/workspace/current-state.min.md`
+3. `ai-guides/AI_PROGRESS_PROTOCOL.md`
+4. your selected model profile
+5. `context-packs/workspace/current-state.min.md`
 
 For free or usage-limited sessions, also read:
 
 - `ai-guides/FREE_AI_MODE.md`
 
-## Step 3 — Choose the task route
+## Step 4 — Choose the task route
 
 Use `ai-guides/AI_PROMPT_ROUTER.md` to choose one route:
 
@@ -44,13 +53,14 @@ Use `ai-guides/AI_PROMPT_ROUTER.md` to choose one route:
 - research or audit,
 - handover,
 - prompt generation,
+- progress/changelog update,
 - Spectra model routing,
 - open-source harvest,
 - Focus integration,
 - EPK integration,
 - free or low-context review.
 
-## Step 4 — Load only task-relevant context
+## Step 5 — Load only task-relevant context
 
 Examples:
 
@@ -60,8 +70,9 @@ Examples:
 - OpenRouter/model-routing work: `context-packs/prism-spectra/model-routing-current.md`
 - Open-source harvest work: `context-packs/prism-spectra/harvest-current.md`
 - Token-efficiency work: `docs/token-efficiency/CONTEXT_BUDGETS.md`
+- Progress/handover work: `AI_PROGRESS_LOG.md` and `ai-guides/AI_PROGRESS_PROTOCOL.md`
 
-## Step 5 — Source escalation
+## Step 6 — Source escalation
 
 Source code overrides Beam. Read source only when it is needed for a specific implementation or verification question.
 
@@ -72,6 +83,10 @@ Before reading source, state:
 - reason,
 - question it answers.
 
+## Step 7 — End-of-session update
+
+If you changed files, confirmed decisions, found mismatches, or left work partially complete, update `AI_PROGRESS_LOG.md` using `templates/AI_PROGRESS_ENTRY.md`.
+
 ## Hard rules
 
 - Beam is reference, not runtime code.
@@ -80,6 +95,7 @@ Before reading source, state:
 - Preview/propose before execute/apply.
 - State uncertainty rather than inventing repo facts.
 - Compress important new findings back into Beam.
+- Leave a compact progress entry for the next AI.
 
 ## First response expected
 
@@ -87,7 +103,8 @@ Start by stating:
 
 1. selected model profile,
 2. selected task route,
-3. packs read,
-4. whether source escalation is needed.
+3. progress log status,
+4. packs read,
+5. whether source escalation is needed.
 
 Then proceed with the task.
