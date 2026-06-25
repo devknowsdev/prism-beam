@@ -63,6 +63,15 @@ Current low-token entry packs:
 - [`context-packs/prism-focus/current-surface.min.md`](context-packs/prism-focus/current-surface.min.md)
 - [`context-packs/epk/current-surface.min.md`](context-packs/epk/current-surface.min.md)
 
+Model-specific prompt profiles:
+
+- [`ai-guides/MODEL_SPECIFIC_PROMPTING.md`](ai-guides/MODEL_SPECIFIC_PROMPTING.md)
+- [`ai-guides/model-profiles/CLAUDE.md`](ai-guides/model-profiles/CLAUDE.md)
+- [`ai-guides/model-profiles/CODEX.md`](ai-guides/model-profiles/CODEX.md)
+- [`ai-guides/model-profiles/GPT.md`](ai-guides/model-profiles/GPT.md)
+- [`ai-guides/model-profiles/GEMINI.md`](ai-guides/model-profiles/GEMINI.md)
+- [`ai-guides/model-profiles/LOCAL_SMALL_MODEL.md`](ai-guides/model-profiles/LOCAL_SMALL_MODEL.md)
+
 Full current-surface packs:
 
 - [`context-packs/workspace/current-state.md`](context-packs/workspace/current-state.md)
@@ -76,7 +85,7 @@ Token-efficiency controls:
 - [`docs/token-efficiency/CONTEXT_BUDGETS.md`](docs/token-efficiency/CONTEXT_BUDGETS.md)
 - [`docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md`](docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md)
 
-Spectra model/havest entry packs:
+Spectra model/harvest entry packs:
 
 - [`context-packs/prism-spectra/harvest-current.md`](context-packs/prism-spectra/harvest-current.md)
 - [`context-packs/prism-spectra/model-routing-current.md`](context-packs/prism-spectra/model-routing-current.md)
