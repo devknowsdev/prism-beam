@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/ai-progress-entry.schema.json",
+  "title": "Prism AI Progress Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["date", "aiSession", "task", "outcome", "nextSuggestedStep"],
+  "properties": {
+    "date": { "type": "string" },
+    "aiSession": { "type": "string" },
+    "task": { "type": "string" },
+    "filesChangedOrReviewed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "reason"],
+        "properties": {
+          "path": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "outcome": { "type": "string" },
+    "validation": { "type": "string" },
+    "sourceBeamMismatches": { "type": "string" },
+    "risksOrCautions": { "type": "string" },
+    "nextSuggestedStep": { "type": "string" },
+    "nextAiShouldRead": { "type": "array", "items": { "type": "string" } }
+  }
+}
