@@ -28,6 +28,7 @@ Use it to see what the previous AI session changed, what remains open, and what 
 | Codex / coding agent | `ai-guides/model-profiles/CODEX.md` |
 | GPT / planner or synthesiser | `ai-guides/model-profiles/GPT.md` |
 | Gemini / second-opinion reviewer | `ai-guides/model-profiles/GEMINI.md` |
+| DeepSeek-style or focused technical reviewer | `ai-guides/model-profiles/TECHNICAL_REVIEW.md` |
 | Local, small, or free model | `ai-guides/model-profiles/LOCAL_SMALL_MODEL.md` |
 | Unsure | `ai-guides/MODEL_SPECIFIC_PROMPTING.md` |
 
