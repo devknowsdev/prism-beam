@@ -39,14 +39,26 @@ Read these first:
 1. `ai-guides/TINY_BOOT.md`
 2. `ai-guides/AI_PROMPT_ROUTER.md`
 3. `ai-guides/AI_PROGRESS_PROTOCOL.md`
-4. your selected model profile
-5. `context-packs/workspace/current-state.min.md`
+4. `ai-guides/AI_DELEGATION_PROTOCOL.md`
+5. `ai-guides/AI_USAGE_LIMITS.md`
+6. your selected model profile
+7. `context-packs/workspace/current-state.min.md`
 
 For free or usage-limited sessions, also read:
 
 - `ai-guides/FREE_AI_MODE.md`
 
-## Step 4 — Choose the task route
+## Step 4 — Check delegation and usage risk
+
+Before expanding context or starting work, decide:
+
+- Am I the right profile for this task?
+- Is the task small, medium, large, or unsafe to continue here?
+- Should I produce a delegation prompt for another AI/profile?
+
+If another profile is better suited, use `templates/AI_DELEGATION_PROMPT.md`.
+
+## Step 5 — Choose the task route
 
 Use `ai-guides/AI_PROMPT_ROUTER.md` to choose one route:
 
@@ -54,6 +66,7 @@ Use `ai-guides/AI_PROMPT_ROUTER.md` to choose one route:
 - research or audit,
 - handover,
 - prompt generation,
+- delegation recommendation,
 - progress/changelog update,
 - Spectra model routing,
 - open-source harvest,
@@ -61,7 +74,7 @@ Use `ai-guides/AI_PROMPT_ROUTER.md` to choose one route:
 - EPK integration,
 - free or low-context review.
 
-## Step 5 — Load only task-relevant context
+## Step 6 — Load only task-relevant context
 
 Examples:
 
@@ -72,8 +85,9 @@ Examples:
 - Open-source harvest work: `context-packs/prism-spectra/harvest-current.md`
 - Token-efficiency work: `docs/token-efficiency/CONTEXT_BUDGETS.md`
 - Progress/handover work: `AI_PROGRESS_LOG.md` and `ai-guides/AI_PROGRESS_PROTOCOL.md`
+- Delegation work: `ai-guides/AI_DELEGATION_PROTOCOL.md` and `templates/AI_DELEGATION_PROMPT.md`
 
-## Step 6 — Source escalation
+## Step 7 — Source escalation
 
 Source code overrides Beam. Read source only when it is needed for a specific implementation or verification question.
 
@@ -84,9 +98,9 @@ Before reading source, state:
 - reason,
 - question it answers.
 
-## Step 7 — End-of-session update
+## Step 8 — End-of-session update
 
-If you changed files, confirmed decisions, found mismatches, or left work partially complete, update `AI_PROGRESS_LOG.md` using `templates/AI_PROGRESS_ENTRY.md`.
+If you changed files, confirmed decisions, recommended delegation, found mismatches, or left work partially complete, update `AI_PROGRESS_LOG.md` using `templates/AI_PROGRESS_ENTRY.md`.
 
 ## Hard rules
 
@@ -95,6 +109,8 @@ If you changed files, confirmed decisions, found mismatches, or left work partia
 - Do not make unreviewed file changes, external calls, publishing actions, or destructive changes.
 - Preview/propose before execute/apply.
 - State uncertainty rather than inventing repo facts.
+- Do not claim exact remaining usage/quota unless the platform exposes it.
+- Delegate when another profile is clearly safer or more efficient.
 - Compress important new findings back into Beam.
 - Leave a compact progress entry for the next AI.
 
@@ -105,7 +121,10 @@ Start by stating:
 1. selected model profile,
 2. selected task route,
 3. progress log status,
-4. packs read,
-5. whether source escalation is needed.
+4. task size estimate,
+5. usage risk,
+6. delegation needed: yes/no,
+7. packs read,
+8. whether source escalation is needed.
 
-Then proceed with the task.
+Then proceed with the task or provide a delegation prompt.
