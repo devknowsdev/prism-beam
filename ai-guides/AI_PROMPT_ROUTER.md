@@ -10,6 +10,11 @@
 
 Choose one model profile and one task route. Load only the files in that route unless source verification is needed.
 
+Before expanding context, check delegation and usage risk using:
+
+- `ai-guides/AI_DELEGATION_PROTOCOL.md`
+- `ai-guides/AI_USAGE_LIMITS.md`
+
 ## Model profile selection
 
 | Situation | Profile |
@@ -29,8 +34,10 @@ Always begin with:
 1. `AI_LOAD_ME_FIRST.md`
 2. `AI_PROGRESS_LOG.md`
 3. `ai-guides/TINY_BOOT.md`
-4. selected model profile
-5. `context-packs/workspace/current-state.min.md`
+4. `ai-guides/AI_DELEGATION_PROTOCOL.md`
+5. `ai-guides/AI_USAGE_LIMITS.md`
+6. selected model profile
+7. `context-packs/workspace/current-state.min.md`
 
 ## Task routes
 
@@ -58,7 +65,18 @@ Read:
 
 Use this route when continuing work from another AI session or when updating the shared AI-to-AI handover state.
 
-### 3. Spectra implementation or architecture work
+### 3. Delegation recommendation
+
+Read:
+
+- `ai-guides/AI_DELEGATION_PROTOCOL.md`
+- `ai-guides/AI_USAGE_LIMITS.md`
+- `templates/AI_DELEGATION_PROMPT.md`
+- `schemas/ai-delegation.schema.json`
+
+Use this route when another AI/profile is better suited or the current session is at risk of cutting off.
+
+### 4. Spectra implementation or architecture work
 
 Read:
 
@@ -71,7 +89,7 @@ Optional, depending on task:
 - `context-packs/prism-spectra/model-routing-current.md`
 - relevant pattern docs under `docs/patterns/`
 
-### 4. Spectra model routing / OpenRouter work
+### 5. Spectra model routing / OpenRouter work
 
 Read:
 
@@ -84,7 +102,7 @@ Read:
 - `harvest/spectra/openrouter.json`
 - `harvest/spectra/openrouter-policies.json`
 
-### 5. Open-source harvest work
+### 6. Open-source harvest work
 
 Read:
 
@@ -93,7 +111,7 @@ Read:
 - `schemas/harvest-entry.schema.json`
 - `harvest/spectra/tools-harvest-current.json`
 
-### 6. Focus integration work
+### 7. Focus integration work
 
 Read:
 
@@ -103,7 +121,7 @@ Read:
 
 Then inspect exact Focus source files only if needed.
 
-### 7. EPK integration work
+### 8. EPK integration work
 
 Read:
 
@@ -113,7 +131,7 @@ Read:
 
 Then inspect exact EPK source files only if needed.
 
-### 8. Prompt or handover generation
+### 9. Prompt or handover generation
 
 Read:
 
@@ -122,7 +140,7 @@ Read:
 - `templates/HANDOVER_MINI.md` or `templates/CODEX_PROMPT_MINI.md`
 - relevant app mini-pack
 
-### 9. Free/low-context review
+### 10. Free/low-context review
 
 Read:
 
@@ -148,6 +166,9 @@ Limit: [max files/snippets]
 Selected profile: [profile]
 Selected route: [route]
 Progress log status: [read/current/stale/not found]
+Estimated task size: [small/medium/large/unsafe-to-continue]
+Usage risk: [low/medium/high]
+Delegation needed: yes/no
 Beam files read: [list]
 Source escalation needed: yes/no
 Next action: [one sentence]
