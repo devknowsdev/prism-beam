@@ -1,0 +1,55 @@
+{
+  "verificationDate": "2026-06-25",
+  "provider": "openrouter",
+  "decision": "optional external provider adapter and model-catalogue source; not Spectra primary router",
+  "policies": [
+    {
+      "mode": "local-only",
+      "allowed": false,
+      "approvalRequired": false,
+      "requireZdr": true,
+      "dataCollection": "deny",
+      "allowAutoRouter": false,
+      "warning": "Blocked: local-only mode does not allow external model gateways.",
+      "provenanceRequired": true
+    },
+    {
+      "mode": "local-first",
+      "allowed": true,
+      "approvalRequired": true,
+      "requireZdr": true,
+      "dataCollection": "deny",
+      "allowAutoRouter": false,
+      "warning": "Cloud fallback will send data to OpenRouter/provider. Use only after explicit approval.",
+      "provenanceRequired": true
+    },
+    {
+      "mode": "balanced",
+      "allowed": true,
+      "approvalRequired": true,
+      "requireZdr": false,
+      "dataCollection": "deny",
+      "allowAutoRouter": false,
+      "warning": "External model gateway allowed with visible provider/model/cost/data-boundary controls.",
+      "provenanceRequired": true
+    },
+    {
+      "mode": "cloud-allowed",
+      "allowed": true,
+      "approvalRequired": false,
+      "requireZdr": false,
+      "dataCollection": "unknown",
+      "allowAutoRouter": false,
+      "warning": "Cloud calls allowed, but provider/model/cost/provenance must remain visible.",
+      "provenanceRequired": true
+    }
+  ],
+  "hardRules": [
+    "No OpenRouter in local-only mode.",
+    "No API keys committed to repo files.",
+    "Avoid openrouter/auto by default.",
+    "Use explicit model slugs first.",
+    "Spectra owns routing policy and approval gates.",
+    "Log provider, model, usage/cost, data-boundary, and approval provenance."
+  ]
+}
