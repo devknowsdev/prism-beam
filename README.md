@@ -49,16 +49,42 @@ token cost and lowers architectural drift by storing the durable context once.
 
 ## Start Here For AI Sessions
 
-Future AI sessions should read [`ai-guides/START_HERE.md`](ai-guides/START_HERE.md)
-first, then follow its reading order for any relevant context packs, app guides,
-patterns, schemas, integration contracts, or build-method guides.
+For the lowest-token path, future AI sessions should read
+[`ai-guides/TINY_BOOT.md`](ai-guides/TINY_BOOT.md) first, then follow
+[`ai-guides/AI_SESSION_LOADING_POLICY.md`](ai-guides/AI_SESSION_LOADING_POLICY.md).
+Free or usage-limited sessions should use [`ai-guides/FREE_AI_MODE.md`](ai-guides/FREE_AI_MODE.md).
+
+The older full start guide remains available at [`ai-guides/START_HERE.md`](ai-guides/START_HERE.md).
 
 Current low-token entry packs:
+
+- [`context-packs/workspace/current-state.min.md`](context-packs/workspace/current-state.min.md)
+- [`context-packs/prism-spectra/current-surface.min.md`](context-packs/prism-spectra/current-surface.min.md)
+- [`context-packs/prism-focus/current-surface.min.md`](context-packs/prism-focus/current-surface.min.md)
+- [`context-packs/epk/current-surface.min.md`](context-packs/epk/current-surface.min.md)
+
+Full current-surface packs:
 
 - [`context-packs/workspace/current-state.md`](context-packs/workspace/current-state.md)
 - [`context-packs/epk/current-surface.md`](context-packs/epk/current-surface.md)
 - [`context-packs/prism-focus/current-surface.md`](context-packs/prism-focus/current-surface.md)
 - [`context-packs/prism-spectra/current-surface.md`](context-packs/prism-spectra/current-surface.md)
+
+Token-efficiency controls:
+
+- [`docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md`](docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md)
+- [`docs/token-efficiency/CONTEXT_BUDGETS.md`](docs/token-efficiency/CONTEXT_BUDGETS.md)
+- [`docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md`](docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md)
+
+Spectra model/havest entry packs:
+
+- [`context-packs/prism-spectra/harvest-current.md`](context-packs/prism-spectra/harvest-current.md)
+- [`context-packs/prism-spectra/model-routing-current.md`](context-packs/prism-spectra/model-routing-current.md)
+- [`docs/research/spectra-openrouter-audit.md`](docs/research/spectra-openrouter-audit.md)
+- [`docs/research/spectra-open-source-harvest.md`](docs/research/spectra-open-source-harvest.md)
+- [`docs/research/spectra-model-runtime-audit.md`](docs/research/spectra-model-runtime-audit.md)
+- [`docs/research/spectra-workbench-ui-harvest.md`](docs/research/spectra-workbench-ui-harvest.md)
+- [`docs/research/spectra-security-approval-sandbox-audit.md`](docs/research/spectra-security-approval-sandbox-audit.md)
 
 Current setup/readiness entry point:
 
@@ -120,6 +146,10 @@ identity from Beam-001 through Beam-003.
 
 - [Sprint prompt template](docs/templates/SPRINT_PROMPT_TEMPLATE.md)
 - [Handover report template](docs/templates/HANDOVER_REPORT_TEMPLATE.md)
+- [Mini handover template](templates/HANDOVER_MINI.md)
+- [Mini Codex prompt template](templates/CODEX_PROMPT_MINI.md)
+- [Free Claude Beam insight prompt](templates/FREE_CLAUDE_BEAM_INSIGHT_PROMPT.md)
+- [Next continuation prompt](templates/NEXT_CONTINUATION_PROMPT.md)
 
 ### Contracts and prompt starters
 
@@ -129,6 +159,11 @@ identity from Beam-001 through Beam-003.
 ### Research
 
 - [Deep research report](docs/research/deep-research-report.md)
+- [Spectra OpenRouter audit](docs/research/spectra-openrouter-audit.md)
+- [Spectra open-source harvest summary](docs/research/spectra-open-source-harvest.md)
+- [Spectra model runtime audit](docs/research/spectra-model-runtime-audit.md)
+- [Spectra workbench UI harvest](docs/research/spectra-workbench-ui-harvest.md)
+- [Spectra security/approval/sandbox audit](docs/research/spectra-security-approval-sandbox-audit.md)
 
 ## How App Repos Should Use Beam
 
