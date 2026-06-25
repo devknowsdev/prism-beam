@@ -24,15 +24,35 @@
 
 ## Current active handover
 
-**Status:** New EPK console-error triage task introduced for Beam-routed fresh GPT test.
+**Status:** EPK publisher `innerHTML` runtime error was narrowed and patched on `devknowsdev/EPK` main.
 
-**Most recent completed work:** Beam now includes delegation and usage-limit awareness so an AI can recommend another model/profile before widening context or risking cutoff.
+**Most recent completed work:** EPK publisher page now includes the missing `mode-links` mount, and publisher JS now guards `renderModeLinks()` if the mount is absent.
 
-**Current next priority:** Route a fresh GPT session through Beam to triage the EPK console log. The likely first hypothesis is browser-extension noise because the messages reference `contentscript.js`, `content_scripts.js`, ObjectMultiplex streams, phishing/time-tracker checks, and `ERR_BLOCKED_BY_CLIENT`. The fresh GPT should verify with a clean browser/profile before assuming EPK source is faulty.
+**Current next priority:** Verify deployed `/publisher/` after Cloudflare redeploy/cache refresh. If `Cannot set properties of undefined (setting 'innerHTML')` persists, collect the exact stack trace and line number before further source changes.
 
-**Known caution:** Several files were written directly to `main` through the GitHub connector because the requested new branch did not exist. Changes were documentation/schema/template only.
+**Known caution:** Several files were written directly to `main` through the GitHub connector because a requested new branch did not exist in an earlier session. In this session, two EPK runtime-fix commits and one Beam progress-log commit were also written directly to `main` at the user's request to implement the fix.
 
 ## Recent session entries
+
+### 2026-06-25 — GPT — EPK publisher innerHTML runtime fix
+
+**Task:** Implement the fix for `Cannot set properties of undefined (setting 'innerHTML')` on the EPK publisher page.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/EPK:EPK/public/publisher/index.html` — added `<div id="mode-links" class="mode-links"></div>` below the audience preview selector.
+- `devknowsdev/EPK:EPK/public/publisher/publisher.js` — added a guard in `renderModeLinks()` so missing HTML drift does not crash the publisher.
+- `AI_PROGRESS_LOG.md` — updated this handover entry.
+
+**Outcome:** The likely `els['mode-links'].innerHTML` crash path is patched. The public homepage/published shells already had `#app`; the concrete mismatch was in publisher HTML versus publisher JS.
+
+**Validation:** Connector verified the new `mode-links` element in `publisher/index.html` and the guard in `publisher.js`. Browser/runtime testing was not run in this session.
+
+**Source/Beam mismatches:** None; Beam correctly required source escalation only after the report changed from extension-console noise to an app-origin `innerHTML` error.
+
+**Risks / cautions:** Deployment/cache may lag. If the error persists, inspect the browser stack trace and deployed file line numbers before changing more code.
+
+**Next suggested step:** Hard-refresh `/publisher/` after Cloudflare redeploy, then confirm whether the publisher loads live `/data/epk.json` and renders dashboard metrics/routes without console errors.
 
 ### 2026-06-25 — GPT — EPK console-error triage prompt handoff
 
