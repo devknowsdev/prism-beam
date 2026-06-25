@@ -1,0 +1,30 @@
+{
+  "id": "openrouter",
+  "name": "OpenRouter",
+  "category": "external-model-gateway",
+  "url": "https://openrouter.ai",
+  "license": "external-service",
+  "verificationDate": "2026-06-25",
+  "reuseMode": "provider-adapter",
+  "copyPolicy": "Do not copy platform code. Use API integration only and harvest catalogue/routing-policy patterns.",
+  "harvestTypes": [
+    "model-catalogue",
+    "provider-routing-metadata",
+    "pricing-metadata",
+    "external-cloud-provider-adapter"
+  ],
+  "prismTargets": [
+    "prism-spectra",
+    "prism-beam"
+  ],
+  "risks": [
+    "external-cloud-boundary",
+    "provider-policy-variance",
+    "pricing-volatility",
+    "model-slug-volatility",
+    "opaque-auto-routing",
+    "prompt-cache-or-retention-uncertainty"
+  ],
+  "attributionRequired": false,
+  "implementationNotes": "Treat as optional external provider adapter and dynamic model-catalogue source. Block in local-only mode. Avoid openrouter/auto by default. Spectra must retain policy control and log provider/model/cost/data-boundary provenance."
+}
