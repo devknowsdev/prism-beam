@@ -51,13 +51,15 @@ token cost and lowers architectural drift by storing the durable context once.
 
 For the lowest-token path, future AI sessions should read
 [`AI_LOAD_ME_FIRST.md`](AI_LOAD_ME_FIRST.md) first. That file points the AI to the
-correct model profile, prompt router, and task-specific packs.
+current progress log, correct model profile, prompt router, and task-specific packs.
 
-Core routing files:
+Core routing and handover files:
 
 - [`AI_LOAD_ME_FIRST.md`](AI_LOAD_ME_FIRST.md)
+- [`AI_PROGRESS_LOG.md`](AI_PROGRESS_LOG.md)
 - [`ai-guides/TINY_BOOT.md`](ai-guides/TINY_BOOT.md)
 - [`ai-guides/AI_PROMPT_ROUTER.md`](ai-guides/AI_PROMPT_ROUTER.md)
+- [`ai-guides/AI_PROGRESS_PROTOCOL.md`](ai-guides/AI_PROGRESS_PROTOCOL.md)
 - [`ai-guides/AI_SESSION_LOADING_POLICY.md`](ai-guides/AI_SESSION_LOADING_POLICY.md)
 - [`ai-guides/FREE_AI_MODE.md`](ai-guides/FREE_AI_MODE.md)
 
@@ -86,6 +88,11 @@ Model-specific prompt wrappers:
 - [`templates/model-specific/GPT_HANDOVER_SYNTHESIS.md`](templates/model-specific/GPT_HANDOVER_SYNTHESIS.md)
 - [`templates/model-specific/GEMINI_DELTA_REVIEW.md`](templates/model-specific/GEMINI_DELTA_REVIEW.md)
 - [`templates/model-specific/LOCAL_MODEL_CHECKLIST.md`](templates/model-specific/LOCAL_MODEL_CHECKLIST.md)
+
+Progress/changelog templates and schemas:
+
+- [`templates/AI_PROGRESS_ENTRY.md`](templates/AI_PROGRESS_ENTRY.md)
+- [`schemas/ai-progress-entry.schema.json`](schemas/ai-progress-entry.schema.json)
 
 Full current-surface packs:
 
