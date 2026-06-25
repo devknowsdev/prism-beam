@@ -24,15 +24,41 @@
 
 ## Current active handover
 
-**Status:** Beam has been upgraded into a low-token AI orientation/router layer.
+**Status:** Beam now has a repo-based AI-to-AI progress/handover mechanism.
 
-**Most recent completed work:** Added universal AI entry/router files, model-specific prompt profiles, low-token mini-packs, OpenRouter/model-routing research summaries, harvest schemas, and model-specific wrapper templates.
+**Most recent completed work:** Added `AI_PROGRESS_LOG.md`, `ai-guides/AI_PROGRESS_PROTOCOL.md`, an entry template, progress-entry schema, and wired the progress log into `AI_LOAD_ME_FIRST.md` and `AI_PROMPT_ROUTER.md`.
 
-**Current next priority:** Add and enforce a progress/changelog protocol so every AI reads this file early and updates it at the end of a session.
+**Current next priority:** Run a validation pass over the new Markdown/JSON paths, update README indexing for the technical-review profile if desired, and validate all schema/harvest JSON files.
 
 **Known caution:** Several files were written directly to `main` through the GitHub connector because the requested new branch did not exist. Changes were documentation/schema/template only.
 
 ## Recent session entries
+
+### 2026-06-25 — GPT — AI-to-AI progress and handover protocol
+
+**Task:** Add a singular changelog/progress/handover guide so GPT, Claude, DeepSeek-style reviewers, Codex, and other AIs can continue each other's work through the repo without the user re-prompting orientation.
+
+**Files changed or reviewed:**
+
+- `AI_PROGRESS_LOG.md` — created shared current handover/changelog file.
+- `ai-guides/AI_PROGRESS_PROTOCOL.md` — created protocol for reading/updating the progress log.
+- `templates/AI_PROGRESS_ENTRY.md` — created compact session-entry template.
+- `schemas/ai-progress-entry.schema.json` — created structured progress-entry schema.
+- `AI_LOAD_ME_FIRST.md` — updated to require reading the progress log and updating it at session end.
+- `ai-guides/AI_PROMPT_ROUTER.md` — added progress/changelog route and progress status to first-response format.
+- `README.md` — indexed core progress files and progress template/schema.
+- `ai-guides/model-profiles/TECHNICAL_REVIEW.md` — added neutral profile for DeepSeek-style/focused technical review sessions after the connector blocked a more explicit filename/content.
+- `templates/model-specific/TECHNICAL_REVIEW.md` — added wrapper for focused technical review sessions.
+
+**Outcome:** Beam now has a shared repo handover bus. A new AI should read `AI_LOAD_ME_FIRST.md`, then `AI_PROGRESS_LOG.md`, then choose a model profile and task route. Any AI that changes files or decisions should leave a compact entry for the next AI.
+
+**Validation:** Fetched `AI_PROGRESS_LOG.md`, `AI_LOAD_ME_FIRST.md`, and `AI_PROMPT_ROUTER.md` during the session. Full JSON validation and complete link validation were not run through a local checkout.
+
+**Source/Beam mismatches:** None found in source; this was a Beam docs/schema/template update.
+
+**Risks / cautions:** Progress log can grow too large if AIs paste long reports. Protocol says archive old entries when the log exceeds 5,000 tokens.
+
+**Next suggested step:** Validate all JSON files under `schemas/` and `harvest/spectra/`, then check README links and add the technical-review profile/wrapper to README if still missing.
 
 ### 2026-06-25 — GPT — Beam AI router and model profile layer
 
