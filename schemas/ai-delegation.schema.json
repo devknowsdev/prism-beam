@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/ai-delegation.schema.json",
+  "title": "Prism AI Delegation Recommendation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["fromProfile", "targetProfile", "reason", "task", "readFirst", "expectedOutput"],
+  "properties": {
+    "fromProfile": { "type": "string" },
+    "targetProfile": { "enum": ["CLAUDE", "CODEX", "GPT", "GEMINI", "TECHNICAL_REVIEW", "LOCAL_SMALL_MODEL"] },
+    "reason": { "type": "string" },
+    "taskSize": { "enum": ["small", "medium", "large", "unsafe-to-continue"] },
+    "usageRisk": { "enum": ["low", "medium", "high"] },
+    "task": { "type": "string" },
+    "readFirst": { "type": "array", "items": { "type": "string" } },
+    "alreadyKnown": { "type": "array", "items": { "type": "string" } },
+    "filesAlreadyRead": { "type": "array", "items": { "type": "string" } },
+    "sourceFilesToInspect": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "expectedOutput": { "type": "array", "items": { "type": "string" } },
+    "progressLogUpdateRequired": { "type": "boolean" }
+  }
+}
