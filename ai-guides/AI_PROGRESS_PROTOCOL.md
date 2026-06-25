@@ -32,6 +32,28 @@ If the work is large, also create or update a detailed report under:
 
 - `docs/progress/`
 
+## Append-only rule
+
+`AI_PROGRESS_LOG.md` is an append-only log with one exception.
+
+**The only section AIs may overwrite:** `## Current active handover` — replace its content
+entirely to reflect the new current state after each session.
+
+**All other edits are additive only:**
+
+- New session entries are always prepended inside `## Recent session entries` (newest at top).
+- Previous session entries must never be edited or deleted by a subsequent AI.
+- If a previous entry is found to be incorrect, append a correction note as a new entry:
+
+```markdown
+### YYYY-MM-DD — [AI type] — Correction to [date] entry
+
+**Correction:** [what was wrong in the earlier entry and what is accurate]
+```
+
+This rule exists because future AI sessions read previous entries as verified history.
+Errors that compound across sessions are harder to detect than a logged correction.
+
 ## What belongs in `AI_PROGRESS_LOG.md`
 
 Keep it compact:
@@ -67,6 +89,13 @@ Each session entry must include:
 - validation,
 - risks/mismatches,
 - next suggested step.
+
+`Validation: not run` alone is not an acceptable entry. An AI that cannot run validation must
+still list:
+
+- what specific checks were skipped,
+- why they were skipped,
+- and what a future AI or human should verify before treating the session's changes as confirmed.
 
 ## Multi-AI continuation workflow
 
