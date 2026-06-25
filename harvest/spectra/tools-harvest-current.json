@@ -1,0 +1,62 @@
+{
+  "verificationDate": "2026-06-25",
+  "scope": "Compact Spectra open-source harvest posture. Verify current licenses before copying code.",
+  "entries": [
+    {
+      "id": "aider",
+      "name": "Aider",
+      "category": "coding-agent",
+      "url": "https://github.com/Aider-AI/aider",
+      "license": "Apache-2.0",
+      "reuseMode": "reimplement-pattern",
+      "copyPolicy": "Do not copy wholesale. Harvest repo-map, git-native diff, test-loop, and commit/undo patterns.",
+      "harvestTypes": ["repo-map", "diff-review", "git-workflow", "test-loop"],
+      "prismTargets": ["prism-spectra", "prism-beam"],
+      "risks": ["dependency-sprawl", "architecture-mismatch"],
+      "attributionRequired": true,
+      "implementationNotes": "Potential sidecar later; not core dependency for MVP."
+    },
+    {
+      "id": "cline",
+      "name": "Cline",
+      "category": "coding-agent",
+      "url": "https://github.com/cline/cline",
+      "license": "Apache-2.0",
+      "reuseMode": "reimplement-pattern",
+      "copyPolicy": "Harvest Plan/Act UX, approval gating, visible tool calls, and diff review patterns; do not clone the app.",
+      "harvestTypes": ["plan-act", "approval-gating", "tool-visibility", "diff-review"],
+      "prismTargets": ["prism-spectra"],
+      "risks": ["monolith-drift", "extension-architecture-mismatch"],
+      "attributionRequired": true,
+      "implementationNotes": "Key UX reference for Spectra coding cockpit."
+    },
+    {
+      "id": "openhands",
+      "name": "OpenHands",
+      "category": "agent-platform",
+      "url": "https://github.com/All-Hands-AI/OpenHands",
+      "license": "MIT / verify current repo terms before reuse",
+      "reuseMode": "reference-only",
+      "copyPolicy": "Do not embed or copy platform architecture wholesale. Study sandbox and agent-canvas ideas only.",
+      "harvestTypes": ["agent-canvas", "sandbox-warning", "task-visibility"],
+      "prismTargets": ["prism-spectra"],
+      "risks": ["heavy-platform", "always-on-service", "filesystem-safety"],
+      "attributionRequired": true,
+      "implementationNotes": "Too heavy for M1 16GB MVP."
+    },
+    {
+      "id": "comfyui",
+      "name": "ComfyUI",
+      "category": "creative-node-workflow",
+      "url": "https://github.com/comfyanonymous/ComfyUI",
+      "license": "GPL-3.0 / verify current repo terms",
+      "reuseMode": "avoid",
+      "copyPolicy": "Do not import GPL code into Spectra core. Reference node/workflow UX only if useful.",
+      "harvestTypes": ["node-workflow-ux"],
+      "prismTargets": ["prism-spectra"],
+      "risks": ["GPL-core-contamination", "heavy-runtime"],
+      "attributionRequired": true,
+      "implementationNotes": "Possible sidecar/reference later; avoid core dependency."
+    }
+  ]
+}
