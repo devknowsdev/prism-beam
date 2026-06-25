@@ -18,6 +18,7 @@ Choose one model profile and one task route. Load only the files in that route u
 | You are Codex or a coding agent that can edit/test files | `ai-guides/model-profiles/CODEX.md` |
 | You are GPT/ChatGPT-style and doing planning, synthesis, prompts, or schemas | `ai-guides/model-profiles/GPT.md` |
 | You are Gemini-style and doing second-opinion or large-context review | `ai-guides/model-profiles/GEMINI.md` |
+| You are DeepSeek-style or acting mainly as a focused technical reviewer | `ai-guides/model-profiles/TECHNICAL_REVIEW.md` |
 | You are local, small, free, or low-context | `ai-guides/model-profiles/LOCAL_SMALL_MODEL.md` |
 | Unsure | `ai-guides/MODEL_SPECIFIC_PROMPTING.md`, then behave conservatively |
 
