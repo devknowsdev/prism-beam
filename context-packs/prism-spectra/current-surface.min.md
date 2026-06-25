@@ -2,7 +2,8 @@
 
 **Purpose:** Tier-1 app card for low-token Spectra sessions.
 
-**Last verified:** 2026-06-25
+**Last verified:** 2026-06-25  
+**Verified against:** prism-spectra current direction captured in Beam context packs as of 2026-06-25
 **Scope:** `prism-spectra`. Verify source before implementation.
 
 ## Role
