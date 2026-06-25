@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devknowsdev/prism-beam/schemas/model-catalog-entry.schema.json",
+  "title": "Prism Model Catalogue Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "provider", "modelSlug", "verificationDate"],
+  "properties": {
+    "id": { "type": "string" },
+    "provider": { "type": "string" },
+    "modelSlug": { "type": "string" },
+    "displayName": { "type": "string" },
+    "verificationDate": { "type": "string" },
+    "contextLength": { "type": "integer" },
+    "inputModalities": { "type": "array", "items": { "type": "string" } },
+    "outputModalities": { "type": "array", "items": { "type": "string" } },
+    "license": { "type": "string" },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "prompt": { "type": "number" },
+        "completion": { "type": "number" },
+        "cacheRead": { "type": "number" },
+        "cacheWrite": { "type": "number" }
+      }
+    },
+    "recommendedUse": { "type": "array", "items": { "type": "string" } },
+    "riskNotes": { "type": "array", "items": { "type": "string" } },
+    "source": { "type": "string" }
+  }
+}
