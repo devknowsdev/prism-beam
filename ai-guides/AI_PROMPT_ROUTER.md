@@ -26,9 +26,10 @@ Choose one model profile and one task route. Load only the files in that route u
 Always begin with:
 
 1. `AI_LOAD_ME_FIRST.md`
-2. `ai-guides/TINY_BOOT.md`
-3. selected model profile
-4. `context-packs/workspace/current-state.min.md`
+2. `AI_PROGRESS_LOG.md`
+3. `ai-guides/TINY_BOOT.md`
+4. selected model profile
+5. `context-packs/workspace/current-state.min.md`
 
 ## Task routes
 
@@ -45,7 +46,18 @@ Optional:
 
 - `docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md`
 
-### 2. Spectra implementation or architecture work
+### 2. Progress / changelog / handover work
+
+Read:
+
+- `AI_PROGRESS_LOG.md`
+- `ai-guides/AI_PROGRESS_PROTOCOL.md`
+- `templates/AI_PROGRESS_ENTRY.md`
+- `schemas/ai-progress-entry.schema.json`
+
+Use this route when continuing work from another AI session or when updating the shared AI-to-AI handover state.
+
+### 3. Spectra implementation or architecture work
 
 Read:
 
@@ -58,7 +70,7 @@ Optional, depending on task:
 - `context-packs/prism-spectra/model-routing-current.md`
 - relevant pattern docs under `docs/patterns/`
 
-### 3. Spectra model routing / OpenRouter work
+### 4. Spectra model routing / OpenRouter work
 
 Read:
 
@@ -71,7 +83,7 @@ Read:
 - `harvest/spectra/openrouter.json`
 - `harvest/spectra/openrouter-policies.json`
 
-### 4. Open-source harvest work
+### 5. Open-source harvest work
 
 Read:
 
@@ -80,7 +92,7 @@ Read:
 - `schemas/harvest-entry.schema.json`
 - `harvest/spectra/tools-harvest-current.json`
 
-### 5. Focus integration work
+### 6. Focus integration work
 
 Read:
 
@@ -90,7 +102,7 @@ Read:
 
 Then inspect exact Focus source files only if needed.
 
-### 6. EPK integration work
+### 7. EPK integration work
 
 Read:
 
@@ -100,19 +112,21 @@ Read:
 
 Then inspect exact EPK source files only if needed.
 
-### 7. Prompt or handover generation
+### 8. Prompt or handover generation
 
 Read:
 
 - selected model profile
+- `AI_PROGRESS_LOG.md`
 - `templates/HANDOVER_MINI.md` or `templates/CODEX_PROMPT_MINI.md`
 - relevant app mini-pack
 
-### 8. Free/low-context review
+### 9. Free/low-context review
 
 Read:
 
 - `ai-guides/FREE_AI_MODE.md`
+- `AI_PROGRESS_LOG.md`
 - `templates/FREE_CLAUDE_BEAM_INSIGHT_PROMPT.md` if Claude-like
 - one relevant mini-pack only
 
@@ -132,6 +146,7 @@ Limit: [max files/snippets]
 ```text
 Selected profile: [profile]
 Selected route: [route]
+Progress log status: [read/current/stale/not found]
 Beam files read: [list]
 Source escalation needed: yes/no
 Next action: [one sentence]
