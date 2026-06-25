@@ -26,11 +26,11 @@
 
 **Status:** EPK publisher `innerHTML` runtime error was narrowed and patched on `devknowsdev/EPK` main.
 
-**Most recent completed work:** EPK publisher page now includes the missing `mode-links` mount, and publisher JS now guards `renderModeLinks()` if the mount is absent.
+**Most recent completed work:** EPK publisher page now includes the missing `mode-links` mount used by `publisher.js`.
 
 **Current next priority:** Verify deployed `/publisher/` after Cloudflare redeploy/cache refresh. If `Cannot set properties of undefined (setting 'innerHTML')` persists, collect the exact stack trace and line number before further source changes.
 
-**Known caution:** Several files were written directly to `main` through the GitHub connector because a requested new branch did not exist in an earlier session. In this session, two EPK runtime-fix commits and one Beam progress-log commit were also written directly to `main` at the user's request to implement the fix.
+**Known caution:** Several files were written directly to `main` through the GitHub connector because a requested new branch did not exist in an earlier session. In this session, the final EPK main state was force-reset to the clean HTML-fix commit after a non-minimal JS guard attempt; `publisher.js` is intentionally back at its prior blob, and the HTML mount fix remains. A temporary `AI_PROGRESS_LOG.md.tmp` was accidentally created and then removed from Beam.
 
 ## Recent session entries
 
@@ -41,12 +41,12 @@
 **Files changed or reviewed:**
 
 - `devknowsdev/EPK:EPK/public/publisher/index.html` — added `<div id="mode-links" class="mode-links"></div>` below the audience preview selector.
-- `devknowsdev/EPK:EPK/public/publisher/publisher.js` — added a guard in `renderModeLinks()` so missing HTML drift does not crash the publisher.
+- `devknowsdev/EPK:EPK/public/publisher/publisher.js` — reviewed; no final JS change remains on EPK main after reverting a non-minimal guard attempt.
 - `AI_PROGRESS_LOG.md` — updated this handover entry.
 
-**Outcome:** The likely `els['mode-links'].innerHTML` crash path is patched. The public homepage/published shells already had `#app`; the concrete mismatch was in publisher HTML versus publisher JS.
+**Outcome:** The likely `els['mode-links'].innerHTML` crash path is patched by restoring the missing HTML mount. The public homepage/published shells already had `#app`; the concrete mismatch was in publisher HTML versus publisher JS.
 
-**Validation:** Connector verified the new `mode-links` element in `publisher/index.html` and the guard in `publisher.js`. Browser/runtime testing was not run in this session.
+**Validation:** Connector verified the new `mode-links` element in `publisher/index.html` and verified `publisher.js` is back to the prior blob. Browser/runtime testing was not run in this session.
 
 **Source/Beam mismatches:** None; Beam correctly required source escalation only after the report changed from extension-console noise to an app-origin `innerHTML` error.
 
