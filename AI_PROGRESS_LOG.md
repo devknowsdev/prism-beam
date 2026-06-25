@@ -24,15 +24,33 @@
 
 ## Current active handover
 
-**Status:** Beam now includes delegation and usage-limit awareness so an AI can recommend another model/profile before widening context or risking cutoff.
+**Status:** New EPK console-error triage task introduced for Beam-routed fresh GPT test.
 
-**Most recent completed work:** Added delegation protocol, usage-limit guide, delegation prompt template/schema, and wired delegation checks into `AI_LOAD_ME_FIRST.md`, `AI_PROMPT_ROUTER.md`, and README.
+**Most recent completed work:** Beam now includes delegation and usage-limit awareness so an AI can recommend another model/profile before widening context or risking cutoff.
 
-**Current next priority:** Run a validation pass over all JSON files under `schemas/` and `harvest/spectra/`, then check README links and route paths.
+**Current next priority:** Route a fresh GPT session through Beam to triage the EPK console log. The likely first hypothesis is browser-extension noise because the messages reference `contentscript.js`, `content_scripts.js`, ObjectMultiplex streams, phishing/time-tracker checks, and `ERR_BLOCKED_BY_CLIENT`. The fresh GPT should verify with a clean browser/profile before assuming EPK source is faulty.
 
 **Known caution:** Several files were written directly to `main` through the GitHub connector because the requested new branch did not exist. Changes were documentation/schema/template only.
 
 ## Recent session entries
+
+### 2026-06-25 — GPT — EPK console-error triage prompt handoff
+
+**Task:** Prepare a fresh GPT handoff for an EPK issue using Beam orientation. User reported console messages including `contentscript.js MaxListenersExceededWarning`, `ObjectMultiplex - orphaned data`, `ObjectMultiplex - malformed chunk`, `ERR_BLOCKED_BY_CLIENT`, phishing URL check passed, and Time Tracker browsing notifications.
+
+**Files changed or reviewed:**
+
+- `AI_PROGRESS_LOG.md` — updated active handover so a fresh GPT can see the EPK triage task without the user repeating it.
+
+**Outcome:** Fresh GPT should use the EPK integration route, treat the task as small/medium with low-to-medium usage risk, and first distinguish browser extension/content-script noise from a real EPK app error.
+
+**Validation:** No EPK source inspected yet. No local browser reproduction yet.
+
+**Source/Beam mismatches:** None checked.
+
+**Risks / cautions:** Do not assume the EPK code is leaking listeners until reproduced in a clean browser/incognito profile with extensions disabled. `ERR_BLOCKED_BY_CLIENT` commonly indicates a client-side blocker, and `content_scripts.js` / `contentscript.js` usually points to extensions rather than app code.
+
+**Next suggested step:** Give fresh GPT the Beam-routed prompt and ask it to produce a triage plan plus exact EPK files to inspect only if clean-browser reproduction still shows an app-origin error.
 
 ### 2026-06-25 — GPT — Delegation and usage-limit awareness
 
@@ -83,34 +101,6 @@
 **Risks / cautions:** Progress log can grow too large if AIs paste long reports. Protocol says archive old entries when the log exceeds 5,000 tokens.
 
 **Next suggested step:** Validate all JSON files under `schemas/` and `harvest/spectra/`, then check README links and add the technical-review profile/wrapper to README if still missing.
-
-### 2026-06-25 — GPT — Beam AI router and model profile layer
-
-**Task:** Make Beam serve as total direction for any AI by selecting a model-specific profile and relevant documents.
-
-**Files added/updated:**
-
-- `AI_LOAD_ME_FIRST.md`
-- `ai-guides/AI_PROMPT_ROUTER.md`
-- `ai-guides/MODEL_SPECIFIC_PROMPTING.md`
-- `ai-guides/model-profiles/CLAUDE.md`
-- `ai-guides/model-profiles/CODEX.md`
-- `ai-guides/model-profiles/GPT.md`
-- `ai-guides/model-profiles/GEMINI.md`
-- `ai-guides/model-profiles/LOCAL_SMALL_MODEL.md`
-- `templates/model-specific/CLAUDE_FREE_REVIEW.md`
-- `templates/model-specific/CODEX_SAFE_IMPLEMENTATION.md`
-- `templates/model-specific/GPT_HANDOVER_SYNTHESIS.md`
-- `templates/model-specific/GEMINI_DELTA_REVIEW.md`
-- `templates/model-specific/LOCAL_MODEL_CHECKLIST.md`
-- `README.md`
-- `ai-guides/START_HERE.md`
-
-**Outcome:** Any AI should now start with `AI_LOAD_ME_FIRST.md`, select a model profile, choose a task route, read only relevant packs, and report what it read.
-
-**Validation:** Fetched `AI_LOAD_ME_FIRST.md`, `AI_PROMPT_ROUTER.md`, and README excerpts after writing. Full link/path validation and JSON validation remain for a later pass.
-
-**Next suggested step:** Finish this progress/changelog protocol and ensure `AI_LOAD_ME_FIRST.md` requires reading `AI_PROGRESS_LOG.md`.
 
 ## How to add the next entry
 
