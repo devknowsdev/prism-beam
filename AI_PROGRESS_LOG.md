@@ -24,15 +24,39 @@
 
 ## Current active handover
 
-**Status:** Beam now has a repo-based AI-to-AI progress/handover mechanism.
+**Status:** Beam now includes delegation and usage-limit awareness so an AI can recommend another model/profile before widening context or risking cutoff.
 
-**Most recent completed work:** Added `AI_PROGRESS_LOG.md`, `ai-guides/AI_PROGRESS_PROTOCOL.md`, an entry template, progress-entry schema, and wired the progress log into `AI_LOAD_ME_FIRST.md` and `AI_PROMPT_ROUTER.md`.
+**Most recent completed work:** Added delegation protocol, usage-limit guide, delegation prompt template/schema, and wired delegation checks into `AI_LOAD_ME_FIRST.md`, `AI_PROMPT_ROUTER.md`, and README.
 
-**Current next priority:** Run a validation pass over the new Markdown/JSON paths, update README indexing for the technical-review profile if desired, and validate all schema/harvest JSON files.
+**Current next priority:** Run a validation pass over all JSON files under `schemas/` and `harvest/spectra/`, then check README links and route paths.
 
 **Known caution:** Several files were written directly to `main` through the GitHub connector because the requested new branch did not exist. Changes were documentation/schema/template only.
 
 ## Recent session entries
+
+### 2026-06-25 — GPT — Delegation and usage-limit awareness
+
+**Task:** Add Beam rules so an AI can recommend a better-suited model/profile and avoid session cutoffs or usage drain.
+
+**Files changed or reviewed:**
+
+- `ai-guides/AI_DELEGATION_PROTOCOL.md` — added delegation triggers, target-profile matrix, and handoff behavior.
+- `ai-guides/AI_USAGE_LIMITS.md` — added task-size and usage-risk self-checks.
+- `templates/AI_DELEGATION_PROMPT.md` — added ready-to-use prompt for handing work to another AI/profile.
+- `schemas/ai-delegation.schema.json` — added structured delegation recommendation schema.
+- `AI_LOAD_ME_FIRST.md` — added delegation/usage check before route selection and context expansion.
+- `ai-guides/AI_PROMPT_ROUTER.md` — added delegation route and first-response fields for task size, usage risk, and delegation need.
+- `README.md` — indexed delegation and usage-limit files, templates, and schema.
+
+**Outcome:** If GPT receives a task better suited to Claude, Codex, Gemini, technical review, or a local/small model, it should now say so and produce a compact handoff prompt instead of continuing inefficiently. AIs must not claim exact remaining quota unless exposed by the platform; they should classify risk as small/medium/large/unsafe-to-continue.
+
+**Validation:** GitHub connector writes succeeded. Full local JSON validation and link/path validation were not run.
+
+**Source/Beam mismatches:** None found; this was a Beam docs/schema/template update.
+
+**Risks / cautions:** Delegation prompts must stay compact. If they include long repo context or research archives, they will recreate the usage problem.
+
+**Next suggested step:** Validate JSON schemas and harvest files locally, then run a link/path check over the Beam routing files.
 
 ### 2026-06-25 — GPT — AI-to-AI progress and handover protocol
 
@@ -87,35 +111,6 @@
 **Validation:** Fetched `AI_LOAD_ME_FIRST.md`, `AI_PROMPT_ROUTER.md`, and README excerpts after writing. Full link/path validation and JSON validation remain for a later pass.
 
 **Next suggested step:** Finish this progress/changelog protocol and ensure `AI_LOAD_ME_FIRST.md` requires reading `AI_PROGRESS_LOG.md`.
-
-### 2026-06-25 — GPT — Beam token-efficiency and OpenRouter research compression
-
-**Task:** Compress deep research outputs into Beam so future AI sessions do not reload long reports.
-
-**Files added/updated included:**
-
-- `ai-guides/TINY_BOOT.md`
-- `ai-guides/AI_SESSION_LOADING_POLICY.md`
-- `ai-guides/FREE_AI_MODE.md`
-- `context-packs/workspace/current-state.min.md`
-- `context-packs/prism-spectra/current-surface.min.md`
-- `context-packs/prism-focus/current-surface.min.md`
-- `context-packs/epk/current-surface.min.md`
-- `docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md`
-- `docs/token-efficiency/CONTEXT_BUDGETS.md`
-- `docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md`
-- `docs/research/spectra-openrouter-audit.md`
-- `docs/research/spectra-open-source-harvest.md`
-- `docs/research/spectra-model-runtime-audit.md`
-- `docs/research/spectra-workbench-ui-harvest.md`
-- `docs/research/spectra-security-approval-sandbox-audit.md`
-- `context-packs/prism-spectra/harvest-current.md`
-- `context-packs/prism-spectra/model-routing-current.md`
-- schemas and harvest JSON files under `schemas/` and `harvest/spectra/`
-
-**Outcome:** Beam now has compact token-efficiency, OpenRouter, model-routing, harvest, safety, and UI direction.
-
-**Next suggested step:** Validate JSON files and check README/start-guide links.
 
 ## How to add the next entry
 
