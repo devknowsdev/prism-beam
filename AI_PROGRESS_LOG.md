@@ -24,11 +24,11 @@
 
 ## Current active handover
 
-**Status:** Beam `main` now includes the Focus and EPK surface-hardening compression-back updates.
+**Status:** Beam `main` now includes the Focus and EPK surface-hardening compression-back updates. A clean review branch, `beam/ai-change-review-queue-v3`, was created from current `main` after the older v2 branch became historically divergent.
 
-**Most recent completed work:** Added `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`, added `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`, refreshed `context-packs/prism-focus/current-surface.min.md`, refreshed `context-packs/epk/current-surface.min.md`, and prepended this progress entry. Focus now has planner helper functions, day-scheduler cursor click-create, safer persistence/factory reset, and grouped header controls. EPK now has public/private redaction behavior, a public empty-shell CTA wizard, and simplified publisher chrome.
+**Most recent completed work:** Added `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`, added `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`, refreshed `context-packs/prism-focus/current-surface.min.md`, refreshed `context-packs/epk/current-surface.min.md`, updated the review-queue guide to v3, and prepended this progress entry. Focus now has planner helper functions, day-scheduler cursor click-create, safer persistence/factory reset, and grouped header controls. EPK now has public/private redaction behavior, a public empty-shell CTA wizard, and simplified publisher chrome.
 
-**Current next priority:** Browser-test Focus and hosting-test EPK. If Beam branch hygiene matters, reset or retire `beam/ai-change-review-queue-v2` because its content has now been landed directly to `main` in separate commits.
+**Current next priority:** Browser-test Focus and hosting-test EPK. Future Beam staged updates should use `beam/ai-change-review-queue-v3`.
 
 **Known caution:** Browser/runtime and hosting redeploy tests were not run in this assistant environment. EPK private behavior depends on hosting environment configuration. Focus data should persist on normal refresh and reset only through the backup-gated factory reset path.
 
@@ -55,9 +55,10 @@
 - `context-packs/epk/current-surface.min.md` — refreshed on Beam `main`.
 - `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` — added detailed compression-back note.
 - `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` — added EPK admin/export/contact compression-back note.
+- `docs/progress/AI_CHANGE_REVIEW_QUEUE.md`, `AI_LOAD_ME_FIRST.md`, and `ai-guides/AI_PROGRESS_PROTOCOL.md` — now point future staged Beam updates at `beam/ai-change-review-queue-v3`.
 - `AI_PROGRESS_LOG.md` — updated this handover entry.
 
-**Outcome:** Focus top-level UI is calmer and better grouped; planner day scheduling and reset/persistence behavior are safer. EPK can expose a useful public outreach/profile shell while protecting/redacting private content, and publisher controls are less cluttered.
+**Outcome:** Focus top-level UI is calmer and better grouped; planner day scheduling and reset/persistence behavior are safer. EPK can expose a useful public outreach/profile shell while protecting/redacting private content, and publisher controls are less cluttered. Beam `main` is current and the new queue branch is cleanly based on it.
 
 **Validation:** GitHub connector verified current app repo `main` status: Focus was ahead of the pre-session base by 16 commits and behind by 0; EPK was ahead of the pre-session base by 14 commits and behind by 0. Connector verified key files and script order. Browser/runtime tests, hosting redeploy tests, Beam token-budget checks, and Beam link/path checks were not run.
 
@@ -65,7 +66,7 @@
 
 **Risks / cautions:** Keep EPK private configuration outside repo files. Keep protected EPK surfaces behind hosting-layer controls. Do not return Focus to a dense icon-only header. Keep Focus AI use routed through Spectra rather than expanding direct provider ownership.
 
-**Next suggested step:** Browser-test Focus and hosting-test EPK. Then decide whether to reset/retire `beam/ai-change-review-queue-v2` after confirming no unique content remains there.
+**Next suggested step:** Browser-test Focus and hosting-test EPK. Future Beam review-queue work should use `beam/ai-change-review-queue-v3`.
 
 **Next AI should read:**
 
@@ -85,7 +86,7 @@
 
 **Outcome:** Beam records that `devknowsdev/EPK@main` is canonical for the block-canvas admin upgrade; earlier generated ZIPs and chat-local files are historical.
 
-**Validation:** Connector verified this note on Beam `main` and copied a safer summary to the review queue branch.
+**Validation:** Connector verified this note on Beam `main` and copied a safer summary to the review queue branch before v3 was created cleanly from main.
 
 **Next suggested step:** Browser/live verification after the public host refreshes.
 
