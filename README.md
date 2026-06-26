@@ -51,8 +51,8 @@ token cost and lowers architectural drift by storing the durable context once.
 
 For the lowest-token path, future AI sessions should read
 [`AI_LOAD_ME_FIRST.md`](AI_LOAD_ME_FIRST.md) first. That file points the AI to the
-current progress log, correct model profile, prompt router, delegation/usage checks,
-and task-specific packs.
+current progress log, low-token multi-AI coordination protocol, correct model
+profile, prompt router, delegation/usage checks, and task-specific packs.
 
 Core routing and handover files:
 
@@ -61,6 +61,8 @@ Core routing and handover files:
 - [`ai-guides/TINY_BOOT.md`](ai-guides/TINY_BOOT.md)
 - [`ai-guides/AI_PROMPT_ROUTER.md`](ai-guides/AI_PROMPT_ROUTER.md)
 - [`ai-guides/AI_PROGRESS_PROTOCOL.md`](ai-guides/AI_PROGRESS_PROTOCOL.md)
+- [`ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md`](ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md)
+- [`docs/progress/AI_CHANGE_REVIEW_QUEUE.md`](docs/progress/AI_CHANGE_REVIEW_QUEUE.md)
 - [`ai-guides/AI_DELEGATION_PROTOCOL.md`](ai-guides/AI_DELEGATION_PROTOCOL.md)
 - [`ai-guides/AI_USAGE_LIMITS.md`](ai-guides/AI_USAGE_LIMITS.md)
 - [`ai-guides/AI_SESSION_LOADING_POLICY.md`](ai-guides/AI_SESSION_LOADING_POLICY.md)
@@ -113,6 +115,7 @@ Token-efficiency controls:
 - [`docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md`](docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md)
 - [`docs/token-efficiency/CONTEXT_BUDGETS.md`](docs/token-efficiency/CONTEXT_BUDGETS.md)
 - [`docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md`](docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md)
+- [`ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md`](ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md)
 
 Spectra model/harvest entry packs:
 
@@ -210,6 +213,10 @@ sprint, read the relevant Beam guide, then inspect the target app repo directly
 and let current source files override stale documentation. Implementation code
 stays in the owning app repo unless a small stable reference pattern clearly
 belongs in Beam.
+
+For Beam maintenance, foundational instruction edits should normally be staged on
+`beam/ai-change-review-queue` and reviewed before protected `main`, unless the
+maintainer has explicitly opened `main` for a short instruction-update window.
 
 ## Local Helpers
 
