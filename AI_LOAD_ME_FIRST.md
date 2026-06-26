@@ -2,7 +2,7 @@
 
 **Purpose:** One safe entry file for any AI session using Prism Beam.
 
-**Last verified:** 2026-06-25
+**Last verified:** 2026-06-26
 **Target budget:** 800-1,200 tokens
 **Hard max:** 1,500 tokens
 
@@ -72,10 +72,38 @@ Examples:
 - Open-source harvest work: `context-packs/prism-spectra/harvest-current.md`
 - Token-efficiency work: `docs/token-efficiency/CONTEXT_BUDGETS.md`
 - Beam structural maintenance: `ai-guides/AI_SESSION_LOADING_POLICY.md`
-- Progress/handover work: `AI_PROGRESS_LOG.md` and `ai-guides/AI_PROGRESS_PROTOCOL.md`
+- Progress/handover work: `AI_PROGRESS_LOG.md`, `ai-guides/AI_PROGRESS_PROTOCOL.md`, and `ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md`
 - Delegation work: `ai-guides/AI_DELEGATION_PROTOCOL.md` and `templates/AI_DELEGATION_PROMPT.md`
 
-## Step 6 — Source escalation
+## Step 6 — Low-token multi-AI coordination
+
+Read and follow:
+
+- `ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md`
+
+Do not re-read the whole progress log, rescan repos, or poll live status before every write. That wastes the token budget Beam exists to protect.
+
+Instead:
+
+1. At session start, orient once from Beam and the current progress log.
+2. During the session, maintain a compact chat-side session delta after meaningful work.
+3. Before writing a file, verify only the exact target file/ref/SHA and directly adjacent files required for a safe write.
+4. Re-check broader live status only if the user says another AI changed the same repo, the write fails because the SHA/ref is stale, the task scope changes, the session has been idle long enough that another AI may have continued, or the path is known to be high-conflict.
+5. When the session is done, ask the user whether to commit the session log to Beam.
+6. After confirmation, update Beam progress once, preferably through the `beam/ai-change-review-queue` branch for review before protected `main`.
+
+Session delta format:
+
+```text
+Session delta:
+- Changed: <repo:path or none>
+- Decision: <one-line decision or none>
+- Validation: <done/not done>
+- Open: <next exact step>
+- Commit prompt: Tell me when to commit this session log to Beam.
+```
+
+## Step 7 — Source escalation
 
 Source code overrides Beam. Read source only when it is needed for a specific implementation or verification question.
 
@@ -86,9 +114,11 @@ Before reading source, state:
 - reason,
 - question it answers.
 
-## Step 7 — End-of-session update
+## Step 8 — End-of-session update
 
-If you changed files, confirmed decisions, recommended delegation, found mismatches, or left work partially complete, update `AI_PROGRESS_LOG.md` using `templates/AI_PROGRESS_ENTRY.md`.
+If you changed files, confirmed decisions, recommended delegation, found mismatches, or left work partially complete, update `AI_PROGRESS_LOG.md` using `templates/AI_PROGRESS_ENTRY.md` when the user confirms the session log should be committed.
+
+For Beam foundational files, prefer staging updates on `beam/ai-change-review-queue` and reviewing them through its PR before merging to protected `main`.
 
 ## Hard rules
 
@@ -108,7 +138,8 @@ Most rules below are currently `[BEHAVIORAL]`. This is intentional transparency,
 - [BEHAVIORAL] Do not claim exact remaining usage/quota unless the platform exposes it.
 - [BEHAVIORAL] Delegate when another profile is clearly safer or more efficient.
 - [BEHAVIORAL] Compress important new findings back into Beam.
-- [BEHAVIORAL] Leave a compact progress entry for the next AI.
+- [BEHAVIORAL] Leave a compact progress entry for the next AI when the user confirms the session log should be committed.
+- [BEHAVIORAL] Do not create a high-token coordination loop by polling live repo status before every write.
 
 Update this table when Spectra implements enforcement for specific actions.
 
@@ -123,6 +154,7 @@ Start by stating:
 5. usage risk,
 6. delegation needed: yes/no,
 7. packs read,
-8. whether source escalation is needed.
+8. whether source escalation is needed,
+9. whether a compact session delta will be maintained.
 
 Then proceed with the task or provide a delegation prompt.
