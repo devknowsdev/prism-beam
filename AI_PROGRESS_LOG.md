@@ -24,152 +24,100 @@
 
 ## Current active handover
 
-**Status:** Beam main now directly triggers the low-token multi-AI orientation workflow. The stale `beam/ai-change-review-queue` PR was closed unmerged, and the fresh staging branch is `beam/ai-change-review-queue-v2`.
+**Status:** Beam `main` now includes the Focus and EPK surface-hardening compression-back updates.
 
-**Most recent completed work:** Updated `AI_LOAD_ME_FIRST.md`, `ai-guides/AI_PROGRESS_PROTOCOL.md`, `docs/progress/AI_CHANGE_REVIEW_QUEUE.md`, and `README.md` on `main`; created and fast-forwarded `beam/ai-change-review-queue-v2` so it is identical to current `main`; closed PR #17 as superseded rather than merging stale branch content.
+**Most recent completed work:** Added `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`, added `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`, refreshed `context-packs/prism-focus/current-surface.min.md`, refreshed `context-packs/epk/current-surface.min.md`, and prepended this progress entry. Focus now has planner helper functions, day-scheduler cursor click-create, safer persistence/factory reset, and grouped header controls. EPK now has public/private redaction behavior, a public empty-shell CTA wizard, and simplified publisher chrome.
 
-**Current next priority:** Re-enable branch protection on `main`. Future Beam maintenance should stage compact logs/rule/context-pack edits on `beam/ai-change-review-queue-v2`, then open a new review PR into `main`.
+**Current next priority:** Browser-test Focus and hosting-test EPK. If Beam branch hygiene matters, reset or retire `beam/ai-change-review-queue-v2` because its content has now been landed directly to `main` in separate commits.
 
-**Known caution:** PR #15 and PR #16 were merged before all follow-up workflow steps were complete, but the missing wiring has now been completed on `main`. Full local link validation and token-budget script validation should still be run from a local checkout.
+**Known caution:** Browser/runtime and hosting redeploy tests were not run in this assistant environment. EPK private behavior depends on hosting environment configuration. Focus data should persist on normal refresh and reset only through the backup-gated factory reset path.
 
 ## Recent session entries
 
-### 2026-06-26 — GPT — Beam orientation and review-queue cleanup
+### 2026-06-26 — GPT — Focus + EPK surface hardening compressed to Beam main
 
-**Task:** Fix Beam's AI orientation behavior so future AIs use low-token multi-AI coordination and avoid stale review-queue branches.
-
-**Files changed or reviewed:**
-
-- `AI_LOAD_ME_FIRST.md` — now requires low-token coordination behavior, compact session deltas, exact-file freshness checks, and use of `beam/ai-change-review-queue-v2` for staged Beam updates.
-- `ai-guides/AI_PROGRESS_PROTOCOL.md` — now requires reading `LOW_TOKEN_MULTI_AI_COORDINATION.md`, maintaining a compact chat-side session delta, and asking before committing the session log.
-- `ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md` — confirmed present on `main` after PR #16 merge.
-- `docs/progress/AI_CHANGE_REVIEW_QUEUE.md` — added/updated to document `beam/ai-change-review-queue-v2` as the active staging branch and mark the old queue branch as superseded.
-- `README.md` — indexed the low-token coordination guide and review-queue guide, and points Beam maintenance toward `beam/ai-change-review-queue-v2`.
-- PR #17 — closed without merge as superseded by direct `main` updates.
-- Branch `beam/ai-change-review-queue-v2` — created from `main` and fast-forwarded to match current `main`.
-
-**Outcome:** Beam's canonical entry path now triggers the intended behavior: orient once, read the current progress log, avoid polling/re-scanning before every write, keep compact session deltas, verify exact target files before writes, and commit Beam logs only when the user confirms.
-
-**Validation:** Connector verified `main` copies of `AI_LOAD_ME_FIRST.md`, `AI_PROGRESS_PROTOCOL.md`, `docs/progress/AI_CHANGE_REVIEW_QUEUE.md`, and `README.md`; connector compare confirmed `beam/ai-change-review-queue-v2` is identical to `main` with 0 ahead/behind commits. Local shell validation and full link crawl were not run because this was connector-only.
-
-**Source/Beam mismatches:** The old review queue branch name remained in some docs after the first direct-main update; this entry records that it was corrected to `beam/ai-change-review-queue-v2`.
-
-**Risks / cautions:** Re-enable branch protection on `main`. The old `beam/ai-change-review-queue` branch still exists but should not be used unless manually reset/deleted; use `beam/ai-change-review-queue-v2` instead.
-
-**Next suggested step:** Re-enable `main` branch protection, then run `bash scripts/check-token-budgets.sh` locally and consider wiring it into GitHub Actions as a required status check.
-
-**Next AI should read:**
-
-- `AI_LOAD_ME_FIRST.md`
-- `AI_PROGRESS_LOG.md`
-- `ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md`
-- `docs/progress/AI_CHANGE_REVIEW_QUEUE.md`
-
-### 2026-06-25 — GPT — Beam structural audit implementation
-
-**Task:** Implement Claude structural audit recommendations across `prism-beam`.
+**Task:** Record completed Focus planner/header/persistence updates and EPK redacted-shell/CTA/publisher-control updates in Beam for future low-token orientation.
 
 **Files changed or reviewed:**
 
-- `AI_LOAD_ME_FIRST.md` — fixed step order so `TINY_BOOT.md` is Step 1, removed the loader/router loop, and added rule-status tags to hard rules.
-- `ai-guides/AI_PROMPT_ROUTER.md` — removed the competing universal first-load section, added entry-point guidance, added user-specified model profile selection guidance, and added Route 11 for Beam structural maintenance.
-- `context-packs/workspace/current-state.min.md` — added `Verified against` field.
-- `context-packs/prism-spectra/current-surface.min.md` — added `Verified against` field.
-- `context-packs/prism-focus/current-surface.min.md` — added `Verified against` field.
-- `context-packs/epk/current-surface.min.md` — added `Verified against` field.
-- `ai-guides/AI_SESSION_LOADING_POLICY.md` — added `Verified against` requirement to the staleness rule and linked the compression-back template.
-- `ai-guides/AI_PROGRESS_PROTOCOL.md` — added append-only rule and tightened validation-field expectations.
-- `templates/AI_PROGRESS_ENTRY.md` — replaced bare `not run` validation wording with explicit skipped-check requirements.
-- `scripts/check-token-budgets.sh` — created token budget enforcement script.
-- `docs/token-efficiency/CONTEXT_BUDGETS.md` — added enforcement note referencing the script.
-- `templates/COMPRESSION_BACK_ENTRY.md` — created compression-back template.
-- `AI_PROGRESS_LOG.md` — updated current handover and prepended this entry.
-
-**Outcome:** Complete. Groups A, B, and C from the Claude handover were implemented as doc-only Beam changes on `beam/structural-audit-2026-06-25` and later merged.
-
-**Validation:** Token budget script run: pass against a local mirror of connector-fetched/edited files. Manual file review: done for boot order, router entry point, Route 11, pack metadata, progress protocol, progress template, script, and compression-back template. JSON schema parse: not applicable — no schemas modified. Link/path check: partial manual check of changed paths; full repo crawler not run because no local GitHub checkout was available in this environment.
-
-**Source/Beam mismatches:** None — changes are Beam docs/templates only.
-
-**Risks / cautions:** `scripts/check-token-budgets.sh` can be run with `bash`; executable bit should be verified locally because the connector content API does not expose `chmod`.
-
-**Next suggested step:** Run `bash scripts/check-token-budgets.sh` locally. Once confirmed working, wire it as a GitHub Actions workflow in a separate session, then return to GitHub → Settings → Branches → branch protection rule and add it as a required status check.
-
-**Next AI should read:**
-
-- `AI_LOAD_ME_FIRST.md`
-- `AI_PROGRESS_LOG.md`
-- `context-packs/workspace/current-state.min.md`
-
-### 2026-06-25 — GPT — EPK publisher innerHTML runtime fix
-
-**Task:** Implement the fix for `Cannot set properties of undefined (setting 'innerHTML')` on the EPK publisher page.
-
-**Files changed or reviewed:**
-
-- `devknowsdev/EPK:EPK/public/publisher/index.html` — added `<div id="mode-links" class="mode-links"></div>` below the audience preview selector.
-- `devknowsdev/EPK:EPK/public/publisher/publisher.js` — reviewed; no final JS change remains on EPK main after reverting a non-minimal guard attempt.
+- `devknowsdev/prism-focus:index.html` — verified script order for planner, reset UI, and `focus_header_controls.js`.
+- `devknowsdev/prism-focus:src/planner_functions.js` — added planner helper/action layer.
+- `devknowsdev/prism-focus:src/planner_timeline_cursor.js` — added cursor-tracking day scheduler click-start/click-end task creation.
+- `devknowsdev/prism-focus:src/storage.js` — hardened per-key localStorage load and Focus-key clearing helper.
+- `devknowsdev/prism-focus:src/actions_export.js` — added full backup data builder and backup-gated factory reset flow.
+- `devknowsdev/prism-focus:src/factory_reset_ui.js` — added visible factory reset UI patch.
+- `devknowsdev/prism-focus:src/focus_header_controls.js` — grouped header controls into `Plan day`, `Focus mode`, `Assistant`, `Manage`.
+- `devknowsdev/EPK:EPK/functions/_middleware.js` — added hosting-layer private/redacted routing.
+- `devknowsdev/EPK:EPK/public/public-empty-cta.js` — added public redacted shell CTA and on-demand build wizard.
+- `devknowsdev/EPK:EPK/public/index.html` — loads the public CTA patch.
+- `devknowsdev/EPK:EPK/public/publisher/publisher-focus-packet.js` — simplified publisher top controls and sidebar grouping.
+- `context-packs/prism-focus/current-surface.min.md` — refreshed on Beam `main`.
+- `context-packs/epk/current-surface.min.md` — refreshed on Beam `main`.
+- `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` — added detailed compression-back note.
+- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` — added EPK admin/export/contact compression-back note.
 - `AI_PROGRESS_LOG.md` — updated this handover entry.
 
-**Outcome:** The likely `els['mode-links'].innerHTML` crash path is patched by restoring the missing HTML mount. The public homepage/published shells already had `#app`; the concrete mismatch was in publisher HTML versus publisher JS.
+**Outcome:** Focus top-level UI is calmer and better grouped; planner day scheduling and reset/persistence behavior are safer. EPK can expose a useful public outreach/profile shell while protecting/redacting private content, and publisher controls are less cluttered.
 
-**Validation:** Connector verified the new `mode-links` element in `publisher/index.html` and verified `publisher.js` is back to the prior blob. Browser/runtime testing was not run in this session.
+**Validation:** GitHub connector verified current app repo `main` status: Focus was ahead of the pre-session base by 16 commits and behind by 0; EPK was ahead of the pre-session base by 14 commits and behind by 0. Connector verified key files and script order. Browser/runtime tests, hosting redeploy tests, Beam token-budget checks, and Beam link/path checks were not run.
 
-**Source/Beam mismatches:** None; Beam correctly required source escalation only after the report changed from extension-console noise to an app-origin `innerHTML` error.
+**Source/Beam mismatches:** Prior Focus and EPK mini-packs did not include the 2026-06-26 planner/header/reset/redacted-shell/CTA changes. This is now corrected on Beam `main`.
 
-**Risks / cautions:** Deployment/cache may lag. If the error persists, inspect the browser stack trace and deployed file line numbers before changing more code.
+**Risks / cautions:** Keep EPK private configuration outside repo files. Keep protected EPK surfaces behind hosting-layer controls. Do not return Focus to a dense icon-only header. Keep Focus AI use routed through Spectra rather than expanding direct provider ownership.
 
-**Next suggested step:** Hard-refresh `/publisher/` after Cloudflare redeploy, then confirm whether the publisher loads live `/data/epk.json` and renders dashboard metrics/routes without console errors.
+**Next suggested step:** Browser-test Focus and hosting-test EPK. Then decide whether to reset/retire `beam/ai-change-review-queue-v2` after confirming no unique content remains there.
 
-### 2026-06-25 — GPT — Delegation and usage-limit awareness
+**Next AI should read:**
 
-**Task:** Add Beam rules so an AI can recommend a better-suited model/profile and avoid session cutoffs or usage drain.
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/prism-focus/current-surface.min.md`
+- `context-packs/epk/current-surface.min.md`
+- `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`
 
-**Files changed or reviewed:**
+### 2026-06-26 — GPT — EPK admin cleanup note
 
-- `ai-guides/AI_DELEGATION_PROTOCOL.md` — added delegation triggers, target-profile matrix, and handoff behavior.
-- `ai-guides/AI_USAGE_LIMITS.md` — added task-size and usage-risk self-checks.
-- `templates/AI_DELEGATION_PROMPT.md` — added ready-to-use prompt for handing work to another AI/profile.
-- `schemas/ai-delegation.schema.json` — added structured delegation recommendation schema.
-- `AI_LOAD_ME_FIRST.md` — added delegation/usage check before route selection and context expansion.
-- `ai-guides/AI_PROMPT_ROUTER.md` — added delegation route and first-response fields for task size, usage risk, and delegation need.
-- `README.md` — indexed delegation and usage-limit files, templates, and schema.
-
-**Outcome:** If GPT receives a task better suited to Claude, Codex, Gemini, technical review, or a local/small model, it should now say so and produce a compact handoff prompt instead of continuing inefficiently. AIs must not claim exact remaining quota unless exposed by the platform; they should classify risk as small/medium/large/unsafe-to-continue.
-
-**Validation:** GitHub connector writes succeeded. Full local JSON validation and link/path validation were not run.
-
-**Source/Beam mismatches:** None found; this was a Beam docs/schema/template update.
-
-**Risks / cautions:** Delegation prompts must stay compact. If they include long repo context or research archives, they will recreate the usage problem.
-
-**Next suggested step:** Validate JSON schemas and harvest files locally, then run a link/path check over the Beam routing files.
-
-### 2026-06-25 — GPT — AI-to-AI progress and handover protocol
-
-**Task:** Add a singular changelog/progress/handover guide so GPT, Claude, DeepSeek-style reviewers, Codex, and other AIs can continue each other's work through the repo without the user re-prompting orientation.
+**Task:** Record EPK block-canvas admin cleanup and source-of-truth status.
 
 **Files changed or reviewed:**
 
-- `AI_PROGRESS_LOG.md` — created shared current handover/changelog file.
-- `ai-guides/AI_PROGRESS_PROTOCOL.md` — created protocol for reading/updating the progress log.
-- `templates/AI_PROGRESS_ENTRY.md` — created compact session-entry template.
-- `schemas/ai-progress-entry.schema.json` — created structured progress-entry schema.
-- `AI_LOAD_ME_FIRST.md` — updated to require reading the progress log and updating it at session end.
-- `ai-guides/AI_PROMPT_ROUTER.md` — added progress/changelog route and progress status to first-response format.
-- `README.md` — indexed core progress files and progress template/schema.
-- `ai-guides/model-profiles/TECHNICAL_REVIEW.md` — added neutral profile for DeepSeek-style/focused technical review sessions after the connector blocked a more explicit filename/content.
-- `templates/model-specific/TECHNICAL_REVIEW.md` — added wrapper for focused technical review sessions.
+- `docs/progress/EPK_ADMIN_CLEANUP_20260626.md` — added on Beam `main` before this sync pass.
 
-**Outcome:** Beam now has a shared repo handover bus. A new AI should read `AI_LOAD_ME_FIRST.md`, then `AI_PROGRESS_LOG.md`, then choose a model profile and task route. Any AI that changes files or decisions should leave a compact entry for the next AI.
+**Outcome:** Beam records that `devknowsdev/EPK@main` is canonical for the block-canvas admin upgrade; earlier generated ZIPs and chat-local files are historical.
 
-**Validation:** Fetched `AI_PROGRESS_LOG.md`, `AI_LOAD_ME_FIRST.md`, and `AI_PROMPT_ROUTER.md` during the session. Full JSON validation and complete link validation were not run through a local checkout.
+**Validation:** Connector verified this note on Beam `main` and copied a safer summary to the review queue branch.
 
-**Source/Beam mismatches:** None found in source; this was a Beam docs/schema/template update.
+**Next suggested step:** Browser/live verification after the public host refreshes.
 
-**Risks / cautions:** Progress log can grow too large if AIs paste long reports. Protocol says archive old entries when the log exceeds 5,000 tokens.
+### 2026-06-26 — GPT — EPK admin/export/direct-contact completion compressed to Beam
 
-**Next suggested step:** Validate all JSON files under `schemas/` and `harvest/spectra/`, then check README links and add the technical-review profile/wrapper to README if still missing.
+**Task:** Record the completed EPK hosted admin, export, PDF, and direct-contact hardening session in Beam for future low-token orientation.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/EPK:EPK/public/print.js` — verified on EPK `main`; final export script includes `renderContactBox()`, `/api/contact` POST, `sendWhatsApp()`, WhatsApp URL generation, and no heredoc duplicate after cleanup.
+- `devknowsdev/EPK:functions/api/contact.js` — verified on EPK `main`; Cloudflare Pages Function sends via server-side email provider using env vars.
+- `devknowsdev/EPK:.gitignore` — verified on EPK `main`; ignores `.wrangler/` and `*.pdf`.
+- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` — added detailed Beam compression-back note.
+- `context-packs/epk/current-surface.min.md` — refreshed with current EPK admin/export/contact behavior and operational requirements.
+- `AI_PROGRESS_LOG.md` — updated this handover entry.
+
+**Outcome:** EPK now has a Cloudflare-ready admin surface at `/admin/admin.html`, branded client HTML/PDF exports, content-adaptive PDF layout, direct contact modal that posts to `/api/contact`, WhatsApp fallback, and local dev/export ignore rules. Beam now records the exact routes, env vars, caution points, and source files future AIs should inspect.
+
+**Validation:** EPK session ran/observed `node EPK/scripts/validate-epk-admin-upgrade.mjs`, `node EPK/scripts/prepare-cloudflare-pages.mjs`, `node --check EPK/public/print.js`, `node --check functions/api/contact.js`, and `npx wrangler pages dev EPK/public`. GitHub connector verified the final EPK remote files after push. Full local Beam token-budget/link validation was not run.
+
+**Source/Beam mismatches:** Prior EPK mini-pack only described EPK as a public professional presence app and did not mention the completed admin/export/contact surface. This is now corrected on Beam `main`.
+
+**Risks / cautions:** Direct email must remain server-side and env-var based. Add spam protection before heavy public promotion. If future edits touch `print.js`, grep for pasted shell/heredoc residue and run syntax checks before pushing.
+
+**Next suggested step:** Consider adding an EPK link-check script and spam protection.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/epk/current-surface.min.md`
+- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`
 
 ## How to add the next entry
 
