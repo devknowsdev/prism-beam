@@ -24,15 +24,45 @@
 
 ## Current active handover
 
-**Status:** Beam main now directly triggers the low-token multi-AI orientation workflow. The stale `beam/ai-change-review-queue` PR was closed unmerged, and the fresh staging branch is `beam/ai-change-review-queue-v2`.
+**Status:** EPK admin/export/direct-contact work is complete in `devknowsdev/EPK` and compressed back into Beam on `beam/ai-change-review-queue-v2`. The Beam review queue now contains an EPK progress note plus a refreshed EPK current-surface mini-pack.
 
-**Most recent completed work:** Updated `AI_LOAD_ME_FIRST.md`, `ai-guides/AI_PROGRESS_PROTOCOL.md`, `docs/progress/AI_CHANGE_REVIEW_QUEUE.md`, and `README.md` on `main`; created and fast-forwarded `beam/ai-change-review-queue-v2` so it is identical to current `main`; closed PR #17 as superseded rather than merging stale branch content.
+**Most recent completed work:** Added `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`, refreshed `context-packs/epk/current-surface.min.md`, and prepended this progress entry. The EPK repo itself now has a Cloudflare-ready admin/export flow, branded PDF export, direct `/api/contact` email relay through a Cloudflare Pages Function, WhatsApp fallback, and `.gitignore` protection for `.wrangler/` and local PDFs.
 
-**Current next priority:** Re-enable branch protection on `main`. Future Beam maintenance should stage compact logs/rule/context-pack edits on `beam/ai-change-review-queue-v2`, then open a new review PR into `main`.
+**Current next priority:** Review and merge `beam/ai-change-review-queue-v2` into Beam `main` if the staged Beam compression-back entry is acceptable. Separately, keep EPK Cloudflare env vars valid: `RESEND_API_KEY`, `CONTACT_TO`, and `CONTACT_FROM`.
 
-**Known caution:** PR #15 and PR #16 were merged before all follow-up workflow steps were complete, but the missing wiring has now been completed on `main`. Full local link validation and token-budget script validation should still be run from a local checkout.
+**Known caution:** Direct EPK email sending depends on Cloudflare Pages environment variables and Resend sender/domain validity. WhatsApp cannot send silently; it opens WhatsApp/Web with a prefilled message. PDF exports cannot submit live forms and should keep clean static contact links.
 
 ## Recent session entries
+
+### 2026-06-26 — GPT — EPK admin/export/direct-contact completion compressed to Beam
+
+**Task:** Record the completed EPK hosted admin, export, PDF, and direct-contact hardening session in Beam for future low-token orientation.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/EPK:EPK/public/print.js` — verified on EPK `main`; final export script includes `renderContactBox()`, `/api/contact` POST, `sendWhatsApp()`, WhatsApp URL generation, and no heredoc duplicate after cleanup.
+- `devknowsdev/EPK:functions/api/contact.js` — verified on EPK `main`; Cloudflare Pages Function sends via Resend using env vars.
+- `devknowsdev/EPK:.gitignore` — verified on EPK `main`; ignores `.wrangler/` and `*.pdf`.
+- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` — added detailed Beam compression-back note.
+- `context-packs/epk/current-surface.min.md` — refreshed with current EPK admin/export/contact behavior and operational requirements.
+- `AI_PROGRESS_LOG.md` — updated this handover entry.
+
+**Outcome:** EPK now has a Cloudflare-ready admin surface at `/admin/admin.html`, branded client HTML/PDF exports, content-adaptive PDF layout, direct contact modal that posts to `/api/contact`, WhatsApp fallback, and local dev/export ignore rules. Beam now records the exact routes, env vars, caution points, and source files future AIs should inspect.
+
+**Validation:** EPK session ran/observed `node EPK/scripts/validate-epk-admin-upgrade.mjs`, `node EPK/scripts/prepare-cloudflare-pages.mjs`, `node --check EPK/public/print.js`, `node --check functions/api/contact.js`, and `npx wrangler pages dev EPK/public`. GitHub connector verified the final EPK remote files after push. Beam writes were staged through the review queue branch; full local Beam token-budget/link validation was not run.
+
+**Source/Beam mismatches:** Prior EPK mini-pack only described EPK as a public professional presence app and did not mention the completed admin/export/contact surface. This is now corrected on the review queue branch.
+
+**Risks / cautions:** Do not reintroduce browser-only hidden email sending. Direct email must remain server-side and env-var based. Add Turnstile or equivalent spam protection before heavy public promotion. If future edits touch `print.js`, grep for pasted shell/heredoc residue and run syntax checks before pushing.
+
+**Next suggested step:** Review the staged Beam updates on `beam/ai-change-review-queue-v2`, merge to Beam `main` if acceptable, then consider adding an EPK link-check script and Turnstile protection.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/epk/current-surface.min.md`
+- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`
 
 ### 2026-06-26 — GPT — Beam orientation and review-queue cleanup
 
