@@ -90,7 +90,7 @@ Instead:
 3. Before writing a file, verify only the exact target file/ref/SHA and directly adjacent files required for a safe write.
 4. Re-check broader live status only if the user says another AI changed the same repo, the write fails because the SHA/ref is stale, the task scope changes, the session has been idle long enough that another AI may have continued, or the path is known to be high-conflict.
 5. When the session is done, ask the user whether to commit the session log to Beam.
-6. After confirmation, update Beam progress once, preferably through the `beam/ai-change-review-queue-v2` branch for review before protected `main`.
+6. After confirmation, update Beam progress once, preferably through the `beam/ai-change-review-queue-v3` branch for review before protected `main`.
 
 Session delta format:
 
@@ -118,7 +118,7 @@ Before reading source, state:
 
 If you changed files, confirmed decisions, recommended delegation, found mismatches, or left work partially complete, update `AI_PROGRESS_LOG.md` using `templates/AI_PROGRESS_ENTRY.md` when the user confirms the session log should be committed.
 
-For Beam foundational files, prefer staging updates on `beam/ai-change-review-queue-v2` and reviewing them through its PR before merging to protected `main`.
+For Beam foundational files, prefer staging updates on `beam/ai-change-review-queue-v3` and reviewing them through its PR before merging to protected `main`.
 
 ## Hard rules
 
@@ -138,23 +138,3 @@ Most rules below are currently `[BEHAVIORAL]`. This is intentional transparency,
 - [BEHAVIORAL] Do not claim exact remaining usage/quota unless the platform exposes it.
 - [BEHAVIORAL] Delegate when another profile is clearly safer or more efficient.
 - [BEHAVIORAL] Compress important new findings back into Beam.
-- [BEHAVIORAL] Leave a compact progress entry for the next AI when the user confirms the session log should be committed.
-- [BEHAVIORAL] Do not create a high-token coordination loop by polling live repo status before every write.
-
-Update this table when Spectra implements enforcement for specific actions.
-
-## First response expected
-
-Start by stating:
-
-1. selected model profile,
-2. selected task route,
-3. progress log status,
-4. task size estimate,
-5. usage risk,
-6. delegation needed: yes/no,
-7. packs read,
-8. whether source escalation is needed,
-9. whether a compact session delta will be maintained.
-
-Then proceed with the task or provide a delegation prompt.
