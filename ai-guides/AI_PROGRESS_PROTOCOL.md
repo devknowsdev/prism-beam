@@ -37,7 +37,7 @@ If the work is large, also create or update a detailed report under:
 
 For Beam foundational files, prefer staging proposed progress/rule/instruction/context-pack changes on:
 
-- `beam/ai-change-review-queue-v2`
+- `beam/ai-change-review-queue-v3`
 
 Then review through its PR before merging into protected `main`.
 
