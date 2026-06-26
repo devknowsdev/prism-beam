@@ -1,6 +1,7 @@
 # AI Change Review Queue
 
-**Branch:** `beam/ai-change-review-queue`
+**Active branch:** `beam/ai-change-review-queue-v2`
+**Superseded branch:** `beam/ai-change-review-queue`
 **Purpose:** Safe staging branch for AI session logs, Beam rule proposals, instruction edits, and context-pack updates that need review before protected `main`.
 
 ## Why this branch exists
@@ -8,6 +9,8 @@
 Beam `main` is the foundational orientation and anti-drift layer for the Prism suite. It should normally stay protected.
 
 This branch is a review queue. It lets GPT, Claude, Codex, and other AI sessions add compact logs and proposed Beam updates without bypassing human review.
+
+The earlier `beam/ai-change-review-queue` branch diverged while `main` was temporarily opened for direct instruction updates. PR #17 was closed without merge as superseded. Use `beam/ai-change-review-queue-v2`, which was created from current `main` after those updates.
 
 ## What belongs here
 
@@ -36,7 +39,7 @@ Use this workflow instead:
 2. Keep a compact chat-side session delta during work.
 3. Verify only exact target file refs/SHA before writes.
 4. Add or update the review-queue files once the user says the session is done.
-5. Open or update a PR from this branch into `main` for review.
+5. Open or update a PR from `beam/ai-change-review-queue-v2` into `main` for review.
 
 ## Session delta format
 
