@@ -15,6 +15,27 @@ Before expanding context, check delegation and usage risk using:
 - `ai-guides/AI_DELEGATION_PROTOCOL.md`
 - `ai-guides/AI_USAGE_LIMITS.md`
 
+## Entry point
+
+You are reading this because you followed `AI_LOAD_ME_FIRST.md`.
+Do not loop back to it. Proceed to model profile selection and task route below.
+
+If you arrived here directly without reading `AI_LOAD_ME_FIRST.md` first, stop and
+read it now before continuing.
+
+## How to select your profile
+
+**Preferred: user-specified.** If your model type is stated in the opening prompt or system
+context (e.g. "You are GPT" / "Using Claude" / "This is a Codex session"), use that profile.
+Do not second-guess an explicit instruction.
+
+**Fallback: self-identify.** If your model type was not specified, use the table below as a
+best-effort match. When uncertain, select the profile closest to your general behaviour and
+note the assumption in your first response.
+
+**Conservative default:** If neither applies, select `CLAUDE.md` (bounded reviewer) and behave
+conservatively — small scope, max 3 source files, compact output.
+
 ## Model profile selection
 
 | Situation | Profile |
@@ -26,18 +47,6 @@ Before expanding context, check delegation and usage risk using:
 | You are DeepSeek-style or acting mainly as a focused technical reviewer | `ai-guides/model-profiles/TECHNICAL_REVIEW.md` |
 | You are local, small, free, or low-context | `ai-guides/model-profiles/LOCAL_SMALL_MODEL.md` |
 | Unsure | `ai-guides/MODEL_SPECIFIC_PROMPTING.md`, then behave conservatively |
-
-## Universal first-load files
-
-Always begin with:
-
-1. `AI_LOAD_ME_FIRST.md`
-2. `AI_PROGRESS_LOG.md`
-3. `ai-guides/TINY_BOOT.md`
-4. `ai-guides/AI_DELEGATION_PROTOCOL.md`
-5. `ai-guides/AI_USAGE_LIMITS.md`
-6. selected model profile
-7. `context-packs/workspace/current-state.min.md`
 
 ## Task routes
 
@@ -148,6 +157,29 @@ Read:
 - `AI_PROGRESS_LOG.md`
 - `templates/FREE_CLAUDE_BEAM_INSIGHT_PROMPT.md` if Claude-like
 - one relevant mini-pack only
+
+### 11. Beam structural maintenance or audit
+
+Read:
+
+- `docs/token-efficiency/CONTEXT_BUDGETS.md`
+- `ai-guides/AI_SESSION_LOADING_POLICY.md`
+- `docs/token-efficiency/REPO_SOURCE_ESCALATION_POLICY.md`
+
+Optional:
+
+- `docs/token-efficiency/BEAM_TOKEN_EFFICIENCY_AUDIT.md` (if the task is a token audit)
+- Relevant context packs to check for staleness
+
+Use this route when:
+
+- auditing Beam for structural problems or boot-sequence issues,
+- refreshing or compressing stale context packs,
+- implementing audit recommendations,
+- running the token budget check (`scripts/check-token-budgets.sh`),
+- or updating Beam's own operating protocols.
+
+Hard constraint for this route: changes are documentation only. Do not touch app source repos.
 
 ## Source escalation rule
 

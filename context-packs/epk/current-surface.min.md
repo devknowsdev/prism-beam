@@ -2,7 +2,8 @@
 
 **Purpose:** Tier-1 app card for low-token EPK sessions.
 
-**Last verified:** 2026-06-25
+**Last verified:** 2026-06-25  
+**Verified against:** EPK boundary captured in Beam suite AI contract as of 2026-06-25
 **Scope:** `EPK`. Verify source before implementation.
 
 ## Role

@@ -2,7 +2,8 @@
 
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
-**Last verified:** 2026-06-25
+**Last verified:** 2026-06-25  
+**Verified against:** prism-focus boundary captured in Beam suite AI contract as of 2026-06-25
 **Scope:** `prism-focus`. Verify source before implementation.
 
 ## Role

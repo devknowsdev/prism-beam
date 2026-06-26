@@ -24,15 +24,51 @@
 
 ## Current active handover
 
-**Status:** EPK publisher `innerHTML` runtime error was narrowed and patched on `devknowsdev/EPK` main.
+**Status:** Beam structural audit implementation is complete on branch `beam/structural-audit-2026-06-25`.
 
-**Most recent completed work:** EPK publisher page now includes the missing `mode-links` mount used by `publisher.js`.
+**Most recent completed work:** GPT implemented the Claude structural audit recommendations across Beam docs/templates: boot order fixed, router loop removed, model profile selection clarified, context-pack `Verified against` metadata added, progress protocol made append-only, validation wording tightened, token-budget script added, compression-back template added, and hard rules tagged with rule-status classes.
 
-**Current next priority:** Verify deployed `/publisher/` after Cloudflare redeploy/cache refresh. If `Cannot set properties of undefined (setting 'innerHTML')` persists, collect the exact stack trace and line number before further source changes.
+**Current next priority:** Dave reviews and merges the PR. After merge, run `bash scripts/check-token-budgets.sh` locally to confirm baseline. Once confirmed working, wire it as a GitHub Actions workflow in a separate session, then add that workflow as a required branch-protection status check.
 
-**Known caution:** Several files were written directly to `main` through the GitHub connector because a requested new branch did not exist in an earlier session. In this session, the final EPK main state was force-reset to the clean HTML-fix commit after a non-minimal JS guard attempt; `publisher.js` is intentionally back at its prior blob, and the HTML mount fix remains. A temporary `AI_PROGRESS_LOG.md.tmp` was accidentally created and then removed from Beam.
+**Known caution:** Branch protection on `main` is a human prerequisite that must be confirmed before merge. The budget script was created through the GitHub connector and can be run with `bash scripts/check-token-budgets.sh`; the connector content API does not expose executable-bit control, so `chmod +x scripts/check-token-budgets.sh` should be verified from a local clone if direct execution is required.
 
 ## Recent session entries
+
+### 2026-06-25 — GPT — Beam structural audit implementation
+
+**Task:** Implement Claude structural audit recommendations across `prism-beam`.
+
+**Files changed or reviewed:**
+
+- `AI_LOAD_ME_FIRST.md` — fixed step order so `TINY_BOOT.md` is Step 1, removed the loader/router loop, and added rule-status tags to hard rules.
+- `ai-guides/AI_PROMPT_ROUTER.md` — removed the competing universal first-load section, added entry-point guidance, added user-specified model profile selection guidance, and added Route 11 for Beam structural maintenance.
+- `context-packs/workspace/current-state.min.md` — added `Verified against` field.
+- `context-packs/prism-spectra/current-surface.min.md` — added `Verified against` field.
+- `context-packs/prism-focus/current-surface.min.md` — added `Verified against` field.
+- `context-packs/epk/current-surface.min.md` — added `Verified against` field.
+- `ai-guides/AI_SESSION_LOADING_POLICY.md` — added `Verified against` requirement to the staleness rule and linked the compression-back template.
+- `ai-guides/AI_PROGRESS_PROTOCOL.md` — added append-only rule and tightened validation-field expectations.
+- `templates/AI_PROGRESS_ENTRY.md` — replaced bare `not run` validation wording with explicit skipped-check requirements.
+- `scripts/check-token-budgets.sh` — created token budget enforcement script.
+- `docs/token-efficiency/CONTEXT_BUDGETS.md` — added enforcement note referencing the script.
+- `templates/COMPRESSION_BACK_ENTRY.md` — created compression-back template.
+- `AI_PROGRESS_LOG.md` — updated current handover and prepended this entry.
+
+**Outcome:** Complete. Groups A, B, and C from the Claude handover were implemented as doc-only Beam changes on `beam/structural-audit-2026-06-25`.
+
+**Validation:** Token budget script run: pass against a local mirror of connector-fetched/edited files. Manual file review: done for boot order, router entry point, Route 11, pack metadata, progress protocol, progress template, script, and compression-back template. JSON schema parse: not applicable — no schemas modified. Link/path check: partial manual check of changed paths; full repo crawler not run because no local GitHub checkout was available in this environment.
+
+**Source/Beam mismatches:** None — changes are Beam docs/templates only.
+
+**Risks / cautions:** Branch protection on `main` is a human prerequisite that must be confirmed with Dave before this branch is merged. All writes went to `beam/structural-audit-2026-06-25`, not `main`. `scripts/check-token-budgets.sh` can be run with `bash`; executable bit should be verified locally because the connector content API does not expose `chmod`.
+
+**Next suggested step:** Dave reviews and merges PR. Then run `bash scripts/check-token-budgets.sh` locally to confirm baseline. Once confirmed working, wire it as a GitHub Actions workflow in a separate session, then return to GitHub → Settings → Branches → branch protection rule and add it as a required status check. That closes the enforcement loop: the status checks rule is currently enabled but has no checks registered, so it is a no-op until the workflow is added.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/workspace/current-state.min.md`
 
 ### 2026-06-25 — GPT — EPK publisher innerHTML runtime fix
 

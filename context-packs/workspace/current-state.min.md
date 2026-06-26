@@ -2,7 +2,8 @@
 
 **Purpose:** Tier-1 suite orientation for low-token AI sessions.
 
-**Last verified:** 2026-06-25
+**Last verified:** 2026-06-25  
+**Verified against:** Beam internal suite-role docs and current Beam context packs as of 2026-06-25
 **Target budget:** 500-1,000 tokens
 **Scope:** Prism suite repo roles and current direction. Source code still overrides this pack.
 

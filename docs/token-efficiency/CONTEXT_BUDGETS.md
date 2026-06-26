@@ -50,3 +50,11 @@ Beam should reduce:
 - and handover loss between AI sessions.
 
 The current audit estimates typical savings around 60%, with narrow continuation or prompt-writing tasks often saving 80%+.
+
+## Enforcement
+
+Run `bash scripts/check-token-budgets.sh` from the repo root to validate key files against
+hard maxes. Add this to a pre-commit hook or run it before each Beam structural session.
+
+The script is a character-count proxy (4 chars ≈ 1 token). For precise counts, use tiktoken
+or paste individual files into a token counter.

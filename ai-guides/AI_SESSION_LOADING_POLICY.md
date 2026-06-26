@@ -73,9 +73,14 @@ Use `ai-guides/FREE_AI_MODE.md`. Keep first-load context under 5,000 tokens wher
 Every pack should include:
 
 - `Last verified`
+- `Verified against`
 - owning repo or scope
 - source pointers when relevant
 - assumptions not to make
+
+Context packs must include a `Verified against` field describing the source state the pack was
+checked against (a repo, branch, date range, or "Beam internal"). A pack without this field
+should be treated as potentially stale.
 
 When Beam conflicts with source, source wins. Update Beam after verification.
 
@@ -87,5 +92,9 @@ After any significant repo inspection or deep research, compress findings back i
 - a current-surface update,
 - a schema/harvest entry,
 - or a handover prompt.
+
+Use `templates/COMPRESSION_BACK_ENTRY.md` as the standard format for recording source findings
+back into Beam. A compression note should be added to the relevant context pack or
+`docs/progress/` within the same session that performed the source read.
 
 The goal is to avoid paying the same orientation cost twice.

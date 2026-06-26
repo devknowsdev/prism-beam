@@ -14,7 +14,9 @@ Use this when updating `AI_PROGRESS_LOG.md` after a Beam or Prism session.
 
 **Outcome:** [What was completed or left incomplete.]
 
-**Validation:** [Checks performed, or `not run` with reason.]
+**Validation:** [List specific checks performed. If any were skipped, name them explicitly:
+e.g. "JSON schema parse: skipped — no local checkout available; link/path check: not run —
+connector-only write, verify before next structural session." Do not write `not run` alone.]
 
 **Source/Beam mismatches:** [Any stale docs or source contradictions, or `none found`.]
 
