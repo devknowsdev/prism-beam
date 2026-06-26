@@ -2,7 +2,7 @@
 
 **Purpose:** Give GPT, Claude, Codex, DeepSeek, Gemini, local models, and future agents a shared repo-based handover mechanism.
 
-**Last verified:** 2026-06-25
+**Last verified:** 2026-06-26
 **Target budget:** 1,000-2,000 tokens
 **Hard max:** 3,000 tokens
 
@@ -21,16 +21,52 @@ At session start, every AI must read:
 1. `AI_LOAD_ME_FIRST.md`
 2. `AI_PROGRESS_LOG.md`
 3. `ai-guides/AI_PROMPT_ROUTER.md`
-4. selected model profile
-5. task-relevant mini-pack/docs
+4. `ai-guides/LOW_TOKEN_MULTI_AI_COORDINATION.md`
+5. selected model profile
+6. task-relevant mini-pack/docs
 
-At session end, every AI that changes files or decisions must update:
+During the session, every AI that changes files, confirms decisions, or leaves incomplete work must keep a compact chat-side session delta.
+
+At session end, every AI that changes files or decisions must ask the user whether to commit the session log. When the user confirms, update:
 
 - `AI_PROGRESS_LOG.md`
 
 If the work is large, also create or update a detailed report under:
 
 - `docs/progress/`
+
+For Beam foundational files, prefer staging proposed progress/rule/instruction/context-pack changes on:
+
+- `beam/ai-change-review-queue`
+
+Then review through its PR before merging into protected `main`.
+
+## Low-token coordination rule
+
+Do not re-read the whole progress log, rescan repos, or poll live status before every write. That creates the token burn Beam exists to prevent.
+
+Before writing, verify only the exact target file/ref/SHA and directly adjacent files needed for a safe change.
+
+Re-check broader live status only when:
+
+- the user says another AI changed the same repo,
+- the write fails because the SHA/ref is stale,
+- the task scope changes,
+- the session has been idle long enough that another AI may plausibly have continued,
+- or the target path is part of a known high-conflict area.
+
+## Session delta format
+
+Use this compact block after meaningful work, not necessarily after every sentence:
+
+```text
+Session delta:
+- Changed: <repo:path or none>
+- Decision: <one-line decision or none>
+- Validation: <done/not done>
+- Open: <next exact step>
+- Commit prompt: Tell me when to commit this session log to Beam.
+```
 
 ## Append-only rule
 
@@ -101,12 +137,12 @@ still list:
 
 Example:
 
-1. Claude reviews Beam and updates `AI_PROGRESS_LOG.md`.
-2. GPT reads `AI_LOAD_ME_FIRST.md` and `AI_PROGRESS_LOG.md`, sees Claude's entry, and continues from the next step.
-3. Codex reads the same log, implements a scoped change, validates it, and updates the log.
+1. Claude reviews Beam and updates `AI_PROGRESS_LOG.md` once at session end.
+2. GPT reads `AI_LOAD_ME_FIRST.md`, `AI_PROGRESS_LOG.md`, and `LOW_TOKEN_MULTI_AI_COORDINATION.md`, sees Claude's entry, and continues from the next step.
+3. Codex reads the same compact handover, implements a scoped change, validates it, keeps a chat-side session delta, and asks the user when to commit the log.
 4. Claude reads the updated log and reviews only the latest changes.
 
-The repo becomes the shared handover channel.
+The repo becomes the shared handover channel without becoming a high-frequency coordination database.
 
 ## Token control
 
@@ -131,4 +167,5 @@ Progress log updated: yes/no
 Files changed: ...
 Validation: ...
 Next AI should read: ...
+Session delta: ...
 ```
