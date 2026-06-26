@@ -215,7 +215,7 @@ stays in the owning app repo unless a small stable reference pattern clearly
 belongs in Beam.
 
 For Beam maintenance, foundational instruction edits should normally be staged on
-`beam/ai-change-review-queue` and reviewed before protected `main`, unless the
+`beam/ai-change-review-queue-v2` and reviewed before protected `main`, unless the
 maintainer has explicitly opened `main` for a short instruction-update window.
 
 ## Local Helpers
