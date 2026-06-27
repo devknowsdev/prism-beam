@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
 **Last verified:** 2026-06-27  
-**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work and Journal/check-in consolidation. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
+**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work and Journal cleanup. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
 **Scope:** `prism-focus`. Verify source before implementation.
 
 ## Role
@@ -28,7 +28,7 @@ Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 - `src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, setup wizard, dev defaults, gateway test, provider-failure guidance.
 - `src/ai_chat_spectra_bridge.js` — app-aware Focus Assistant chat through Spectra, local chat state, New/Delete/Clear controls, `Thinking…` placeholder, structured proposed tasks/schedule, review-first `Apply proposed tasks`.
 - `src/ai_chat_repaint_patch.js` — live `#chat-messages` sync and textarea composer: Enter sends, Shift+Enter inserts a line break.
-- `src/journal_checkin_patch.js` — renames Dump widget to Journal, embeds Daily Check-in inside Journal as optional/collapsible, hides standalone Check-in from default/migrated layouts.
+- `src/journal_checkin_patch.js` — renames Dump widget to Journal, hides standalone Check-in from default/migrated layouts, and does not render energy/check-in UI in Journal.
 - `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs.
 
 ## AI boundary
@@ -71,7 +71,6 @@ If ordinary Focus chat routes to a coder model, it may over-focus on terminal/de
 - Any write/action flow should be explicit and auditable.
 - Planner helper calls can mutate local Focus state only after visible user action or reviewed import.
 - AI chat/day-dump proposals should stay local-draft/read-only until user clicks Apply.
-- Daily check-in should be optional/collapsible inside Journal, not a focus-pulling first task.
 - Factory reset should remain backup-prompted and typed-confirmed; normal refresh must preserve local data.
 
 ## UI/control posture
@@ -84,6 +83,11 @@ Top-level controls should stay grouped by user intention:
 - `Manage` — files, widgets, settings, setup, theme, backup, factory reset.
 
 Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels.
+
+## Optional/future surfaces
+
+- Energy / check-in can remain a future optional widget idea in Beam, but should not be visible in the current main Journal surface unless it becomes connected to planning, pacing, task selection, or Spectra suggestions.
+- If reintroduced, it should be opt-in and clearly useful, not a focus-pulling first task.
 
 ## Relevant Beam packs
 
