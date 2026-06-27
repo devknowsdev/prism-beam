@@ -31,7 +31,7 @@ Do not make Focus own long-term provider routing or direct model selection. Dire
 
 ## Focus branch changes
 
-Branch: `spectra-focus-ai-init-20260627` — 10 commits ahead of `main`, 0 behind at time of Beam update.
+Branch: `spectra-focus-ai-init-20260627` — feature branch ahead of `main`, not merged at time of Beam update.
 
 Files changed:
 
@@ -53,15 +53,22 @@ Files changed:
   - Requests structured JSON with `reply`, `proposedTasks`, `proposedSchedule`, and `followUpQuestion`.
   - Renders proposed Focus changes with `Apply proposed tasks` and `Dismiss`.
   - Applies proposed tasks only after visible user confirmation.
+- `src/ai_chat_repaint_patch.js`
+  - Directly syncs the visible `#chat-messages` pane when async Spectra responses arrive.
+  - Upgrades chat composer to textarea behavior: Enter sends, Shift+Enter inserts a line break.
+- `src/journal_checkin_patch.js`
+  - Renames user-facing Dump widget to Journal while preserving widget id `journal`.
+  - Embeds Daily Check-in inside Journal as an optional/collapsible section.
+  - Hides standalone Check-in from default/migrated widget layout so it does not act as a focus-pulling first task.
 - `index.html`
   - Loads `ai_spectra_settings.js`.
-  - Loads `ai_chat_spectra_bridge.js` after `ai_spectra_bridge.js` and before later AI/runtime scripts.
+  - Loads `ai_chat_spectra_bridge.js`, `ai_chat_repaint_patch.js`, and `journal_checkin_patch.js` in the classic script order.
 - `docs/AI_SPECTRA_BRIDGE.md`
   - Documents Spectra-first setup, wizard, safety boundary, local storage keys, and remaining follow-ups.
 
 ## Spectra branch changes
 
-Branch: `spectra-focus-ai-init-20260627` — 4 commits ahead of `main`, 0 behind at time of Beam update.
+Branch: `spectra-focus-ai-init-20260627` — 4 commits ahead of `main`, 0 behind at earlier Beam update.
 
 Files changed:
 
@@ -82,6 +89,7 @@ User validated on local machine:
 - Installed models included `qwen3:8b`, `qwen2.5-coder:7b`, `phi3:mini`, `deepseek-coder:6.7b`, `qwen2.5:7b`, `mistral:7b`, and `llama3.1:8b`.
 - Spectra real Ollama mode then worked when started with `OLLAMA_GENERAL_MODEL="qwen3:8b"` and `OLLAMA_CODER_MODEL="qwen2.5-coder:7b"`.
 - Focus panel showed provider `ollama`, model `qwen3:8b`, and boundary `local`.
+- Focus chat response arrival initially stayed stuck on `Thinking…` until clicking a conversation; after `ai_chat_repaint_patch.js`, user confirmed live message-pane updating worked.
 
 Recommended local model policy for now:
 
@@ -98,7 +106,7 @@ Do not require larger model downloads yet. User cancelled `qwen3:14b` due to siz
 - No assistant-side local `npm install`, typecheck, unit tests, or browser automation were run.
 - No PRs were opened.
 - No merge to Focus/Spectra `main` was performed.
-- Full chat day-dump proposal flow still needs browser testing after latest Focus pull/hard refresh.
+- Journal/check-in consolidation needs local browser verification after latest Focus pull/hard refresh.
 
 ## Current cautions
 
@@ -107,6 +115,7 @@ Do not require larger model downloads yet. User cancelled `qwen3:14b` due to siz
 - If ordinary Focus chat routes to `qwen2.5-coder:7b`, it may behave like a terminal/coding assistant. Route ordinary Focus chat/planning to `qwen3:8b`.
 - The old direct provider code in `src/ai.js` still exists as legacy/transition code. Do not expand it as the primary architecture.
 - Settings UI may still need copy cleanup so generic mock-mode notes do not visually imply mock mode is active when real Ollama is active.
+- Journal/check-in consolidation is currently patch-based; later cleanup can fold it into `render_journal.js`, `render_checkin.js`, and `storage.js` directly after browser verification.
 
 ## Suggested next implementation steps
 
@@ -128,9 +137,10 @@ Do not require larger model downloads yet. User cancelled `qwen3:14b` due to siz
    Expected: reply plus proposed Focus tasks/schedule blocks and `Apply proposed tasks` button.
 
 4. Verify applying proposed tasks creates local Focus tasks with `ts`, `estimatedMins`, `durationMins`, `note`, and review-first confirmation.
-5. Fix any prompt/JSON parsing issues discovered in browser testing.
-6. Consider Spectra-side routing policy so `focus-chat-message`, `focus-day-dump-schedule`, and `focus-task-breakdown` prefer `qwen3:8b`, while coding intents use `qwen2.5-coder:7b`.
-7. Open PRs for Focus and Spectra after manual browser validation.
+5. Verify Journal shows an optional/collapsible check-in and standalone Check-in is hidden from normal layout.
+6. Fix any prompt/JSON parsing or Journal/check-in UI issues discovered in browser testing.
+7. Consider Spectra-side routing policy so `focus-chat-message`, `focus-day-dump-schedule`, and `focus-task-breakdown` prefer `qwen3:8b`, while coding intents use `qwen2.5-coder:7b`.
+8. Open PRs for Focus and Spectra after manual browser validation.
 
 ## Next AI should read
 
