@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
 **Last verified:** 2026-06-27  
-**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work, Journal cleanup, Day Log top-level menu posture, and Assistant-absorbed planning controls. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
+**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work, Journal cleanup, Day Log top-level menu posture, Assistant-absorbed planning controls, widget catalogue categories, and baseline hotkey settings. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
 **Scope:** `prism-focus`. Verify source before implementation.
 
 ## Role
@@ -16,7 +16,7 @@ Stable notable files/routes after 2026-06-26 hardening:
 
 - `src/planner_functions.js` — planner helper/action layer for scheduling, unscheduling, duration, copy, create, dump item, view navigation.
 - `src/planner_timeline_cursor.js` — day-scheduler cursor tracking plus click-start / click-end task creation.
-- `src/storage.js` — defensive per-key `adhd4_*` localStorage loading and Focus-key clearing helper.
+- `src/storage.js` — defensive per-key `adhd4_*` localStorage loading and Focus-key clearing helper; no longer forces Music Tools visible for existing users.
 - `src/actions_export.js` — full backup export plus backup-gated factory reset flow.
 - `src/factory_reset_ui.js` — Day Log factory-reset UI patch.
 - `src/focus_header_controls.js` — grouped top-level header controls: `Focus mode`, `Log`, `Assistant`, `Manage`; planning actions live inside `Assistant`.
@@ -30,6 +30,9 @@ Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 - `src/ai_chat_repaint_patch.js` — live `#chat-messages` sync and textarea composer: Enter sends, Shift+Enter inserts a line break.
 - `src/journal_checkin_patch.js` — renames Dump widget to Journal, hides standalone Check-in from default/migrated layouts, and does not render energy/check-in UI in Journal.
 - `src/daylog_menu_patch.js` — hides Day Log from the dashboard widget surface and exposes it as a top-level Log modal with compact tracked-time summary.
+- `src/widget_catalog_patch.js` — assigns widget categories/descriptions, groups hidden widgets by category, keeps hidden system surfaces out of drawer/count UI, and hides Music Tools on first upgraded load.
+- `src/hotkeys_patch.js` — adds Settings -> Hotkeys baseline: whitelisted app actions, set/clear shortcut capture, suggested template, and localStorage persistence under `adhd4_hotkeys_v1`.
+- `src/render_music.js` — Music Tools remain available but default hidden under Creative tools.
 - `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs.
 
 ## AI boundary
@@ -72,6 +75,7 @@ If ordinary Focus chat routes to a coder model, it may over-focus on terminal/de
 - Any write/action flow should be explicit and auditable.
 - Planner helper calls can mutate local Focus state only after visible user action or reviewed import.
 - AI chat/day-dump proposals should stay local-draft/read-only until user clicks Apply.
+- Hotkeys should call only whitelisted local app functions, ignore normal typing in inputs, and remain user-configurable.
 - Factory reset should remain backup-prompted and typed-confirmed; normal refresh must preserve local data.
 
 ## UI/control posture
@@ -84,6 +88,13 @@ Top-level controls should stay grouped by user intention:
 - `Manage` — files, widgets, settings, setup, theme, backup, factory reset.
 
 Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels. Day Log should be treated as metadata/history, not a primary dashboard widget. Plan-day actions should live under Assistant rather than as their own top-level menu.
+
+## Widget catalogue posture
+
+- Widgets should carry a category and short description as the app grows.
+- Current categories include `Core focus`, `Planning`, `Capture`, `Routines`, `Creative tools`, and `System`.
+- Music Tools should not be visible by default; keep them restorable under `Creative tools`.
+- Hidden non-pinnable system surfaces should not inflate widget drawer counts or appear as restorable clutter.
 
 ## Optional/future surfaces
 
