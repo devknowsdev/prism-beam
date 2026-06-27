@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
 **Last verified:** 2026-06-27  
-**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work, Journal cleanup, and Day Log top-level menu posture. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
+**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work, Journal cleanup, Day Log top-level menu posture, and Assistant-absorbed planning controls. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
 **Scope:** `prism-focus`. Verify source before implementation.
 
 ## Role
@@ -19,7 +19,7 @@ Stable notable files/routes after 2026-06-26 hardening:
 - `src/storage.js` — defensive per-key `adhd4_*` localStorage loading and Focus-key clearing helper.
 - `src/actions_export.js` — full backup export plus backup-gated factory reset flow.
 - `src/factory_reset_ui.js` — Day Log factory-reset UI patch.
-- `src/focus_header_controls.js` — grouped top-level header controls: `Plan day`, `Focus mode`, `Log`, `Assistant`, `Manage`.
+- `src/focus_header_controls.js` — grouped top-level header controls: `Focus mode`, `Log`, `Assistant`, `Manage`; planning actions live inside `Assistant`.
 - `index.html` — classic script order is significant; verify load order before adding render/action patches.
 
 Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
@@ -78,13 +78,12 @@ If ordinary Focus chat routes to a coder model, it may over-focus on terminal/de
 
 Top-level controls should stay grouped by user intention:
 
-- `Plan day` — day wizard, AI daily plan, reviewed imports.
 - `Focus mode` — visible major state switch.
 - `Log` — metadata/history surface for Day Log, with compact today summary only.
-- `Assistant` — chat, voice listen, AI settings.
+- `Assistant` — planning wizard, AI daily plan, chat, voice listen, AI settings, and reviewed imports.
 - `Manage` — files, widgets, settings, setup, theme, backup, factory reset.
 
-Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels. Day Log should be treated as metadata/history, not a primary dashboard widget.
+Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels. Day Log should be treated as metadata/history, not a primary dashboard widget. Plan-day actions should live under Assistant rather than as their own top-level menu.
 
 ## Optional/future surfaces
 
