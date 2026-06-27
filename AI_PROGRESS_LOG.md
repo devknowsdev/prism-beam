@@ -2,7 +2,7 @@
 
 **Purpose:** Single current handover/changelog file for AI-to-AI continuity across GPT, Claude, Codex, DeepSeek, Gemini, local models, and future agents.
 
-**Last updated:** 2026-06-26
+**Last updated:** 2026-06-27
 **Target budget:** 1,000-3,000 tokens
 **Hard max:** 5,000 tokens
 
@@ -24,15 +24,52 @@
 
 ## Current active handover
 
-**Status:** Beam `main` now includes the Focus and EPK surface-hardening compression-back updates. A clean review branch, `beam/ai-change-review-queue-v3`, was created from current `main` after the older v2 branch became historically divergent.
+**Status:** Beam `main` now records the staged Focus/Spectra AI bridge session. Focus and Spectra app changes remain on feature branches, not merged to app `main` yet.
 
-**Most recent completed work:** Added `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`, added `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`, refreshed `context-packs/prism-focus/current-surface.min.md`, refreshed `context-packs/epk/current-surface.min.md`, updated the review-queue guide to v3, and prepended this progress entry. Focus now has planner helper functions, day-scheduler cursor click-create, safer persistence/factory reset, and grouped header controls. EPK now has public/private redaction behavior, a public empty-shell CTA wizard, and simplified publisher chrome.
+**Most recent completed work:** Added `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md` and refreshed `context-packs/prism-focus/current-surface.min.md`. Focus branch `spectra-focus-ai-init-20260627` now contains Spectra setup UI, dynamic adapter, app-aware Focus Assistant chat, local chat controls, thinking placeholder, structured proposal parsing, and review-first `Apply proposed tasks`. Spectra branch `spectra-focus-ai-init-20260627` contains Focus AI init docs and smoke test scripts.
 
-**Current next priority:** Browser-test Focus and hosting-test EPK. Future Beam staged updates should use `beam/ai-change-review-queue-v3`.
+**Current next priority:** Pull latest Focus branch locally, hard-refresh, browser-test the Focus Assistant day-dump proposal flow, then open PRs for Focus and Spectra. Continue to use `qwen3:8b` as the default Focus assistant model and `qwen2.5-coder:7b` for coding/dev help only.
 
-**Known caution:** Browser/runtime and hosting redeploy tests were not run in this assistant environment. EPK private behavior depends on hosting environment configuration. Focus data should persist on normal refresh and reset only through the backup-gated factory reset path.
+**Known caution:** Assistant-side local tests/typecheck/browser automation were not run. User manually validated Spectra mock mode and real Ollama mode with `qwen3:8b`; latest app-aware chat/proposal UI still needs browser testing after local pull. Chat attachments remain blocked because they depend on older/full local daemon file APIs.
 
 ## Recent session entries
+
+### 2026-06-27 — GPT — Focus + Spectra AI bridge staged and compressed to Beam
+
+**Task:** Build and record a Spectra-first Focus AI bridge with visible setup, local Ollama validation, app-aware chat, and review-first task/schedule proposals.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/prism-focus:spectra-focus-ai-init-20260627/src/ai_adapter_local.js` — dynamic URL/token, `health()`, `testAiRequest()`, `/api/v1/ai/request` helper.
+- `devknowsdev/prism-focus:spectra-focus-ai-init-20260627/src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, setup wizard, mock/real gateway commands, provider-failure guidance.
+- `devknowsdev/prism-focus:spectra-focus-ai-init-20260627/src/ai_chat_spectra_bridge.js` — app-aware Focus Assistant, local chat persistence, New/Delete/Clear, `Thinking…`, structured `reply`/`proposedTasks`/`proposedSchedule`, review-first Apply/Dismiss.
+- `devknowsdev/prism-focus:spectra-focus-ai-init-20260627/index.html` — loads Spectra settings and chat bridge scripts.
+- `devknowsdev/prism-focus:spectra-focus-ai-init-20260627/docs/AI_SPECTRA_BRIDGE.md` — Focus-side setup/safety docs.
+- `devknowsdev/prism-spectra:spectra-focus-ai-init-20260627/package.json` — adds Focus AI scripts.
+- `devknowsdev/prism-spectra:spectra-focus-ai-init-20260627/tools/focus-ai-smoke.ts` — Focus AI gateway smoke test.
+- `devknowsdev/prism-spectra:spectra-focus-ai-init-20260627/docs/FOCUS_AI_INIT.md` — Spectra-side Focus AI init docs.
+- `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md` — added detailed Beam compression-back note.
+- `context-packs/prism-focus/current-surface.min.md` — refreshed with staged AI bridge state and model guidance.
+- `AI_PROGRESS_LOG.md` — updated this handover entry.
+
+**Outcome:** Focus now has a staged Spectra-first AI setup path and app-aware assistant bridge. Chat should stop behaving like a terminal assistant, should ignore accidental pasted terminal/git commands unless explicitly asked, and should propose Focus tasks/schedules for visible review before local writes.
+
+**Validation:** Connector compared branches: Focus branch 10 commits ahead / 0 behind `main`; Spectra branch 4 commits ahead / 0 behind `main`. User manually validated Spectra mock mode, then real Ollama mode after starting Ollama and setting `OLLAMA_GENERAL_MODEL="qwen3:8b"`; Focus showed provider `ollama`, model `qwen3:8b`, boundary `local`. Assistant-side local npm tests, typecheck, and browser automation were not run.
+
+**Source/Beam mismatches:** Prior Focus mini-pack did not include staged Spectra AI setup/chat bridge. This is now corrected on Beam `main` with explicit note that app changes are on feature branches.
+
+**Risks / cautions:** Keep Focus task/planner writes review-first. Do not expand Focus direct provider code as the main architecture. Route ordinary Focus chat/day dumps to `qwen3:8b`, not `qwen2.5-coder:7b`. Chat attachments are still unsupported in the Spectra chat bridge. App branches are not merged yet.
+
+**Next suggested step:** Pull latest Focus branch locally, hard-refresh, test `What can you do in this app?`, then test a messy day-dump schedule request and Apply proposed tasks. Open PRs after browser validation.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `docs/contracts/SUITE_AI_ENGINE_BOUNDARY.md`
+- `integrations/approval-posture.md`
+- `context-packs/prism-focus/current-surface.min.md`
+- `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`
 
 ### 2026-06-26 — GPT — Focus + EPK surface hardening compressed to Beam main
 
