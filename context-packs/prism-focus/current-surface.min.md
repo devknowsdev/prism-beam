@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
 **Last verified:** 2026-06-27  
-**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work and Journal cleanup. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
+**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work, Journal cleanup, and Day Log top-level menu posture. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
 **Scope:** `prism-focus`. Verify source before implementation.
 
 ## Role
@@ -19,7 +19,7 @@ Stable notable files/routes after 2026-06-26 hardening:
 - `src/storage.js` — defensive per-key `adhd4_*` localStorage loading and Focus-key clearing helper.
 - `src/actions_export.js` — full backup export plus backup-gated factory reset flow.
 - `src/factory_reset_ui.js` — Day Log factory-reset UI patch.
-- `src/focus_header_controls.js` — grouped top-level header controls: `Plan day`, `Focus mode`, `Assistant`, `Manage`.
+- `src/focus_header_controls.js` — grouped top-level header controls: `Plan day`, `Focus mode`, `Log`, `Assistant`, `Manage`.
 - `index.html` — classic script order is significant; verify load order before adding render/action patches.
 
 Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
@@ -29,6 +29,7 @@ Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 - `src/ai_chat_spectra_bridge.js` — app-aware Focus Assistant chat through Spectra, local chat state, New/Delete/Clear controls, `Thinking…` placeholder, structured proposed tasks/schedule, review-first `Apply proposed tasks`.
 - `src/ai_chat_repaint_patch.js` — live `#chat-messages` sync and textarea composer: Enter sends, Shift+Enter inserts a line break.
 - `src/journal_checkin_patch.js` — renames Dump widget to Journal, hides standalone Check-in from default/migrated layouts, and does not render energy/check-in UI in Journal.
+- `src/daylog_menu_patch.js` — hides Day Log from the dashboard widget surface and exposes it as a top-level Log modal with compact tracked-time summary.
 - `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs.
 
 ## AI boundary
@@ -79,10 +80,11 @@ Top-level controls should stay grouped by user intention:
 
 - `Plan day` — day wizard, AI daily plan, reviewed imports.
 - `Focus mode` — visible major state switch.
+- `Log` — metadata/history surface for Day Log, with compact today summary only.
 - `Assistant` — chat, voice listen, AI settings.
 - `Manage` — files, widgets, settings, setup, theme, backup, factory reset.
 
-Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels.
+Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels. Day Log should be treated as metadata/history, not a primary dashboard widget.
 
 ## Optional/future surfaces
 
