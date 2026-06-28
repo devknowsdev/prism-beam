@@ -2,7 +2,7 @@
 
 **Purpose:** Single current handover/changelog file for AI-to-AI continuity across GPT, Claude, Codex, DeepSeek, Gemini, local models, and future agents.
 
-**Last updated:** 2026-06-28
+**Last updated:** 2026-06-29
 **Target budget:** 1,000-3,000 tokens
 **Hard max:** 5,000 tokens
 
@@ -24,15 +24,39 @@
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 merged to `main` (PR #22). Spectra Tier 2a branch validated and ready to merge — PR not yet opened. Focus/Spectra bridge branches still unmerged (browser testing pending).
+**Status:** Spectra Tier 1 (PR #22) and Tier 2a (PR #23) both merged to `main`. Focus/Spectra bridge branches still unmerged (browser testing pending); Spectra side of that branch has drifted to 4 ahead / 7 behind `main` since Tier 1 landed.
 
-**Most recent completed work:** Validated `spectra-tier2a-model-catalog-20260628` — `tsc --noEmit` clean, 59/60 tests pass (1 pre-existing daemon e2e failure present on both `main` and branch; not caused by Tier 2a changes). Code review passed in prior session. Beam context pack for Spectra updated to reflect real daemon scope.
+**Most recent completed work:** Opened and merged PR #23 (`spectra-tier2a-model-catalog-20260628` → `main`, commit `07f633d`). Post-merge verification on `main`: `src/executors/ollama.ts` confirmed to contain `ModelRole`, `LocalModelEntry`, `LOCAL_MODEL_CATALOG`, `ROLE_BY_NODE_TYPE`, `selectModelForRole()`, `classifyIntent()`; only that one file changed (94 insertions / 3 deletions); `tsc --noEmit` clean on `main` post-merge.
 
-**Current next priority:** Open PR for `spectra-tier2a-model-catalog-20260628` → `main`, then merge. After that: either browser-test Focus branch (`spectra-focus-ai-init-20260627`) and open Focus/Spectra bridge PRs, or begin Tier 0 (semantic primitive via Ollama `/api/embed`).
+**Current next priority:** Either browser-test Focus branch (`spectra-focus-ai-init-20260627`) and open Focus/Spectra bridge PRs, or begin Tier 0 (semantic primitive via Ollama `/api/embed`). Before resuming Focus bridge work, re-diff `spectra-focus-ai-init-20260627` against current Spectra `main` — it is now 4 ahead / 7 behind, not the 0-behind state recorded on 2026-06-27.
 
 **Known caution:** `classifyIntent()` in Tier 2a is a standalone primitive only — not yet wired into `OllamaExecutor.execute()`. Wiring is Tier 2b and must go through `ModelLock`. Focus chat attachments still blocked (depend on full daemon file API).
 
 ## Recent session entries
+
+### 2026-06-29 — Claude (Sonnet 4.6) — Spectra Tier 2a: PR opened and merged
+
+**Task:** Pick up where prior session left off (no GitHub auth available to open/merge PRs from sandbox) — provide Dave with exact PR title/body for manual creation, then mechanically re-verify and merge once Dave confirmed it was created and merged.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/prism-spectra:main/src/executors/ollama.ts` — re-verified post-merge (commit `07f633d`): contains `ModelRole`, `LocalModelEntry`, `LOCAL_MODEL_CATALOG`, `ROLE_BY_NODE_TYPE`, `selectModelForRole()`, `classifyIntent()`. Diff confirmed as 94 insertions / 3 deletions, single file.
+
+**Outcome:** PR #23 (`spectra-tier2a-model-catalog-20260628` → `main`) opened by Dave via GitHub web UI using provided title/body, then merged by Dave. Tier 2a is fully landed on `main`.
+
+**Validation:** Did not just trust prior session's transcript — independently re-ran `npx tsc --noEmit -p tsconfig.test.json` (clean) and `npm test` (59/60, same pre-existing daemon e2e failure on both branch and `main`) before handing off PR text. After Dave confirmed merge, re-fetched and confirmed via `git merge-base --is-ancestor` that `ae17f6e` is now an ancestor of `origin/main`, then re-ran `tsc --noEmit` on `main` post-merge (clean).
+
+**Source/Beam mismatches:** Spectra side of `spectra-focus-ai-init-20260627` has drifted to 4 ahead / 7 behind `main` (was 0 behind when recorded 2026-06-27) since Tier 1 merged. Flagging for whoever resumes that branch — re-diff before continuing.
+
+**Risks / cautions:** Same as before — `classifyIntent()` still unwired (Tier 2b, must go through `ModelLock`).
+
+**Next suggested step:** Re-diff `spectra-focus-ai-init-20260627` (Spectra side) against current `main` before resuming Focus bridge work, or start Tier 0 (semantic primitive via Ollama `/api/embed`) if Dave prefers fresh work over re-validating a drifted branch.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/prism-spectra/current-surface.min.md`
 
 ### 2026-06-28 — Claude (Sonnet 4.6) — Spectra Tier 2a: model catalog validation
 
@@ -58,7 +82,38 @@
 - `AI_PROGRESS_LOG.md`
 - `context-packs/prism-spectra/current-surface.min.md`
 
-### 2026-06-28 — Claude (Sonnet 4.6) + GPT — Spectra Tier 1: router truth and ADR housekeeping  **Task:** Wire Ollama health probe into daemon and gateway at startup; invert mock executor flag to real-by-default in both tools; add TODO comment on router stub; formally supersede padded ADR series (ADR-0009–0024) with ADR-0025.  **Files changed or reviewed:**  - `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/tools/ai-gateway.ts` — mock flag inverted (`=== "1"`), `probeAllProviders()` + `applyProviderProbe()` wired after `engine.init()`, Ollama unavailable warning added, startup mock log added. - `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/tools/daemon.ts` — mock flag changed from hardcoded `true` to `process.env.AI_FORGE_MOCK_EXECUTORS === "1"`, same probe pattern wired after `engine.init()`. Note: probe block landed on one line (newlines collapsed in GitHub editor) — syntactically valid, cosmetically messy. - `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/src/routing/router.ts` — TODO comment added above `localTierAvailable()` stub; no logic changed. - `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/docs/adr/ADR-0025-supersede-padded-adr-series.md` — new file; formally supersedes ADR-0009–0024 as historical/aspirational; records decision rationale and hardware constraints.  **Outcome:** Branch `spectra-tier1-router-truth-20260628` is 6 commits ahead of main, 0 behind. PR #22 is open. Tier 1 fixes complete. Not merged yet.  **Additional files changed (post-session validation):** - `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/test/run.ts` — 5 pre-existing test assertion fixes applied (all caused by API shape evolution since the test was written, none caused by Tier 1 changes): conversation attachment count (1→2), workbench attachments shape (array→collection), resume latestAttachmentSummary (stale filename), lastEventSummary regex (broadened to cover preview events), changes fetch URL (added ?limit=100). - `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/tools/daemon.ts` — changes endpoint now supports `?limit=N` query param (max 200), defaulting to 50.  **Validation:** `npx tsc --noEmit -p tsconfig.test.json` — clean. `npm test` — 60/60 passing on branch.  **Source/Beam mismatches:** Prior Beam context described `tools/daemon.ts` as a minimal POC daemon. Live source shows it has grown to a full workbench API with attachment CRUD, conversation management, SSE graph-execution streaming, and per-node preview in isolated temp dirs. Beam context packs for Spectra must be updated to reflect this before the next Spectra-focused session.  **Risks / cautions:** Daemon probe block on one line — syntactically valid, cosmetically messy; reformat if the file is touched again. `execute-node` and `preview-node` endpoints in daemon.ts each instantiate their own engine with explicit `mockExecutors` values — intentionally left unchanged.  **Next suggested step:** Open PR for `spectra-tier1-router-truth-20260628` → `main`. Run typecheck and tests locally before merge. After merge, update `context-packs/prism-spectra/current-surface.min.md` to reflect daemon's real scope. Then Tier 2 (model registry / local pre-classifier) or Focus branch PRs depending on Dave's priority.  **Next AI should read:**  - `AI_LOAD_ME_FIRST.md` - `AI_PROGRESS_LOG.md` - `context-packs/prism-spectra/current-surface.min.md` - `docs/progress/` — check for any Spectra surface update written this session
+### 2026-06-28 — Claude (Sonnet 4.6) + GPT — Spectra Tier 1: router truth and ADR housekeeping
+
+**Task:** Wire Ollama health probe into daemon and gateway at startup; invert mock executor flag to real-by-default in both tools; add TODO comment on router stub; formally supersede padded ADR series (ADR-0009–0024) with ADR-0025.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/tools/ai-gateway.ts` — mock flag inverted (`=== "1"`), `probeAllProviders()` + `applyProviderProbe()` wired after `engine.init()`, Ollama unavailable warning added, startup mock log added.
+- `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/tools/daemon.ts` — mock flag changed from hardcoded `true` to `process.env.AI_FORGE_MOCK_EXECUTORS === "1"`, same probe pattern wired after `engine.init()`. Note: probe block landed on one line (newlines collapsed in GitHub editor) — syntactically valid, cosmetically messy.
+- `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/src/routing/router.ts` — TODO comment added above `localTierAvailable()` stub; no logic changed.
+- `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/docs/adr/ADR-0025-supersede-padded-adr-series.md` — new file; formally supersedes ADR-0009–0024 as historical/aspirational; records decision rationale and hardware constraints.
+
+**Outcome:** Branch `spectra-tier1-router-truth-20260628` is 6 commits ahead of main, 0 behind. PR #22 is open. Tier 1 fixes complete. Not merged yet.
+
+**Additional files changed (post-session validation):**
+
+- `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/test/run.ts` — 5 pre-existing test assertion fixes applied (all caused by API shape evolution since the test was written, none caused by Tier 1 changes): conversation attachment count (1→2), workbench attachments shape (array→collection), resume latestAttachmentSummary (stale filename), lastEventSummary regex (broadened to cover preview events), changes fetch URL (added ?limit=100).
+- `devknowsdev/prism-spectra:spectra-tier1-router-truth-20260628/tools/daemon.ts` — changes endpoint now supports `?limit=N` query param (max 200), defaulting to 50.
+
+**Validation:** `npx tsc --noEmit -p tsconfig.test.json` — clean. `npm test` — 60/60 passing on branch.
+
+**Source/Beam mismatches:** Prior Beam context described `tools/daemon.ts` as a minimal POC daemon. Live source shows it has grown to a full workbench API with attachment CRUD, conversation management, SSE graph-execution streaming, and per-node preview in isolated temp dirs. Beam context packs for Spectra must be updated to reflect this before the next Spectra-focused session.
+
+**Risks / cautions:** Daemon probe block on one line — syntactically valid, cosmetically messy; reformat if the file is touched again. `execute-node` and `preview-node` endpoints in daemon.ts each instantiate their own engine with explicit `mockExecutors` values — intentionally left unchanged.
+
+**Next suggested step:** Open PR for `spectra-tier1-router-truth-20260628` → `main`. Run typecheck and tests locally before merge. After merge, update `context-packs/prism-spectra/current-surface.min.md` to reflect daemon's real scope. Then Tier 2 (model registry / local pre-classifier) or Focus branch PRs depending on Dave's priority.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/prism-spectra/current-surface.min.md`
+- `docs/progress/` — check for any Spectra surface update written this session
 
 ### 2026-06-27 — GPT — Focus + Spectra AI bridge staged and compressed to Beam
 
