@@ -24,15 +24,41 @@
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22) and Tier 2a (PR #23) both merged to `main`. Focus/Spectra bridge branches still unmerged (browser testing pending); Spectra side of that branch has drifted to 4 ahead / 7 behind `main` since Tier 1 landed.
+**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), and the Spectra side of the Focus/Spectra AI bridge (PR #24) are all merged to `main`. Spectra `main` is now caught up across all three. The Focus repo side of the bridge branch (`prism-focus:spectra-focus-ai-init-20260627`, 33 ahead / 0 behind) is still unmerged and still needs browser validation.
 
-**Most recent completed work:** Opened and merged PR #23 (`spectra-tier2a-model-catalog-20260628` → `main`, commit `07f633d`). Post-merge verification on `main`: `src/executors/ollama.ts` confirmed to contain `ModelRole`, `LocalModelEntry`, `LOCAL_MODEL_CATALOG`, `ROLE_BY_NODE_TYPE`, `selectModelForRole()`, `classifyIntent()`; only that one file changed (94 insertions / 3 deletions); `tsc --noEmit` clean on `main` post-merge.
+**Most recent completed work:** Opened and merged PR #24 (`spectra-focus-ai-init-20260627` → `main`, Spectra side only, commit `cbd67f9`) — adds `tools/focus-ai-smoke.ts`, `docs/FOCUS_AI_INIT.md`, and two npm scripts (`test:focus-ai`, `focus:ai:gateway`). Before opening the PR, test-merged `main` into the branch locally (throwaway, not pushed) to confirm zero conflicts — file sets were fully disjoint from Tier 1/Tier 2a changes. Post-merge on `main`: all 3 expected file changes verified present, `tsc --noEmit` clean, `npm test` 59/60 (same pre-existing daemon e2e failure, no regression).
 
-**Current next priority:** Either browser-test Focus branch (`spectra-focus-ai-init-20260627`) and open Focus/Spectra bridge PRs, or begin Tier 0 (semantic primitive via Ollama `/api/embed`). Before resuming Focus bridge work, re-diff `spectra-focus-ai-init-20260627` against current Spectra `main` — it is now 4 ahead / 7 behind, not the 0-behind state recorded on 2026-06-27.
+**Current next priority:** Focus repo side of `spectra-focus-ai-init-20260627` still needs: (1) re-diff against current Focus `main` to check for drift since 2026-06-27, (2) browser validation — test `What can you do in this app?`, a messy day-dump schedule request, and Apply on proposed tasks — before opening that PR. Alternatively, begin Tier 0 (semantic primitive via Ollama `/api/embed`) if Dave prefers fresh work.
 
 **Known caution:** `classifyIntent()` in Tier 2a is a standalone primitive only — not yet wired into `OllamaExecutor.execute()`. Wiring is Tier 2b and must go through `ModelLock`. Focus chat attachments still blocked (depend on full daemon file API).
 
 ## Recent session entries
+
+### 2026-06-29 — Claude (Sonnet 4.6) — Spectra-side Focus AI bridge: re-diff and merge
+
+**Task:** Following the Tier 2a merge, re-diff `spectra-focus-ai-init-20260627` (Spectra side) against current `main` since it had drifted to 4 ahead / 7 behind, confirm mergeability, then open and merge the PR once confirmed safe.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/prism-spectra:main/tools/focus-ai-smoke.ts` — verified present post-merge (commit `cbd67f9`).
+- `devknowsdev/prism-spectra:main/docs/FOCUS_AI_INIT.md` — verified present post-merge.
+- `devknowsdev/prism-spectra:main/package.json` — verified `test:focus-ai` and `focus:ai:gateway` scripts present post-merge.
+
+**Outcome:** PR #24 (`spectra-focus-ai-init-20260627` → `main`, Spectra side only) opened by Dave using provided title/body, then merged. Spectra `main` is now caught up across Tier 1, Tier 2a, and this branch's 4 commits.
+
+**Validation:** Before recommending merge, diffed file sets on both sides (`git diff --name-only`) and confirmed zero overlap with Tier 1/Tier 2a changes. Test-merged `origin/main` into the branch locally in a throwaway branch (not pushed) — automatic merge, no conflicts. Ran `tsc --noEmit` (clean) and `npm test` (59/60, same pre-existing daemon e2e failure) on that merged state before giving the go-ahead. After Dave confirmed the real merge, re-fetched and re-ran the same two checks directly on `main` — identical clean results.
+
+**Source/Beam mismatches:** None new. The 2026-06-27 entry's "0 behind" status for this branch is now stale (branch has been behind since Tier 1 merged on 2026-06-28) but this is already noted in the 2026-06-29 entry below and now resolved by this merge.
+
+**Risks / cautions:** This PR covered the Spectra side only. The Focus repo side of the same branch name (`prism-focus:spectra-focus-ai-init-20260627`, 33 commits ahead, UI/chat bridge code) is unmerged and is a separate PR against a different repo — do not assume it's done because the Spectra side is.
+
+**Next suggested step:** Re-diff the Focus repo side of `spectra-focus-ai-init-20260627` against current Focus `main` for drift, then complete the pending browser validation (test `What can you do in this app?`, a day-dump schedule request, Apply proposed tasks) before opening that PR.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/prism-focus/current-surface.min.md`
 
 ### 2026-06-29 — Claude (Sonnet 4.6) — Spectra Tier 2a: PR opened and merged
 
