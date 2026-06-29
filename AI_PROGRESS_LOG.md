@@ -8,17 +8,40 @@
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` and has now been browser-validated locally through mock mode, with real Ollama mode partially validated.
+**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` and has now been browser-validated locally through mock mode, with real Ollama mode partially validated. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
 
-**Most recent completed work:** Dave browser-tested the Focus/Spectra bridge on 2026-06-29. Focus static site served on `http://localhost:4173/`. Spectra gateway served on `http://127.0.0.1:3000`. Health/token/CORS passed. Mock mode chat passed. Real mode started with installed models `qwen3.5:9b`, `qwen3:1.7b`, and `qwen2.5-coder:7b`; `qwen3.5:9b` loaded and Focus showed provider/model metadata, but the app displayed `I received that, but no response text was returned.` Resource checks showed no immediate machine danger: disk had 139 GiB free, Ollama model storage was about 35 GiB, Spectra `.demo` runtime files were about 1.8 MiB, memory pressure reported 74% free, thermal state reported no warning, and `ollama ps` ended empty.
+**Most recent completed work:** GPT implemented Spectra cockpit Slice 1 on branch `spectra-project-cockpit-20260629`: hardened PID parsing so blank `lsof` output no longer becomes PID `0`, filtered non-positive PIDs from the external PID pill, and added parser regression coverage to `test/cockpit-html.test.ts`. Commits: `0a49f62a11c5d624f9713a2454df446f17a03f8c` and `7d193ff188cb8d7af7886f1a773d303a3b9dadc6`.
 
-**Validation:** PASS for Focus -> Spectra health, token, CORS, mock gateway request, and mock chat. PASS for real gateway startup and real Ollama model load. PARTIAL for real chat response: request reached `ollama / qwen3.5:9b`, but Focus did not receive usable response text. Known local validation blockers/follow-ups: stale gateway DB can set Ollama `rpm_limit = 0` and return `ollama: RPM budget exhausted (0/0)`; Focus setup text still contains stale `qwen3:9b`/older model guidance in places; attachment flow remains text-only and intentionally warns that full local daemon file API work is still needed.
+**Validation:** Slice 1 was verified by fetching the changed files back from GitHub and by local sandbox static checks: TypeScript syntax check using local shims and the cockpit HTML test logic passed. The real repo command `npm run test:cockpit` was not run by GPT because the sandbox cannot clone GitHub or install npm dependencies. Dave/Codex should run `npm run test:cockpit` locally before continuing to Slice 2.
 
-**Current next priority:** Do not open/merge the Focus PR yet. Next small implementation slice should harden local resource safety and real-mode smoke testing: add a Focus/Spectra local resource/status monitor, fix stale model guidance to the current stack (`qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`), add a lighter real-mode classifier smoke path or cap output for settings tests, handle empty real-mode response text clearly, and avoid reusing stale gateway DB state during validation.
+**Current next priority:** On the cockpit branch, run `npm run test:cockpit` locally. If clean, continue only to Slice 2: add the guided panel scaffold in `tools/cockpit/projectCockpit.ts` and guidance tests, without changing `tools/ai-gateway.ts`, role definitions, Focus, or PR state.
 
-**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor shows disk, `.ollama` size, `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, and thermal state. Route hints are advisory and must preserve local-first routing order, provider availability checks, and budget ledger checks.
+**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor shows disk, `.ollama` size, `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, and thermal state. Route hints are advisory and must preserve local-first routing order, provider availability checks, and budget ledger checks. For cockpit work, do not add free-form shell input, hidden writes, or browser-based killing of externally owned processes.
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit Slice 1 PID parser hardening
+
+Implemented Slice 1 from the Spectra cockpit guided-layer handover on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
+
+Changes:
+- `tools/cockpit/projectCockpit.ts`: exported `parsePidOutput(raw)`, changed `listeningPids()` to use it, and filtered blank, zero, negative, and non-integer PID tokens.
+- `tools/cockpit/projectCockpit.ts`: changed the external PID pill renderer to derive `realPids` and display only positive finite numeric PIDs.
+- `test/cockpit-html.test.ts`: added six parser assertions for empty, whitespace, single PID, multiple PID, zero, and negative input, plus a guard that the HTML no longer uses the raw `status.port.pids.join` display path.
+
+Commits:
+- `0a49f62a11c5d624f9713a2454df446f17a03f8c` — `fix: harden cockpit PID parsing`
+- `7d193ff188cb8d7af7886f1a773d303a3b9dadc6` — `test: cover cockpit PID parsing`
+
+Validation:
+- Fetched changed files back from GitHub after writing.
+- `compare_commits` from previous branch head `5f12919502a55b40a700e2ba2126559a9a1cdaff` to `spectra-project-cockpit-20260629` reports 2 commits and only 2 files changed.
+- Local sandbox check passed with temporary Node shims: TypeScript syntax check and cockpit HTML test logic.
+- Real `npm run test:cockpit` still needs to be run locally because GPT sandbox cannot clone GitHub or install repo dependencies.
+
+Next:
+- Run `npm run test:cockpit` locally on the Spectra branch.
+- If clean, proceed to Slice 2 guided panel scaffold only.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Focus/Spectra bridge browser validation and resource safety check
 
