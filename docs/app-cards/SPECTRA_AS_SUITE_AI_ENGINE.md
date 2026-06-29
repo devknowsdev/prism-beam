@@ -1,6 +1,6 @@
 # Spectra as Suite AI Engine
 
-Date: 2026-06-25
+Date: 2026-06-29
 Repos evidenced: `devknowsdev/prism-spectra`, `devknowsdev/prism-focus`, `devknowsdev/EPK`, `devknowsdev/prism-beam`
 
 ## Purpose
@@ -64,10 +64,11 @@ Current Spectra Ollama executor evidence:
 
 - default host: `http://127.0.0.1:11434`
 - coder model: `qwen2.5-coder:7b`
-- general model: `qwen3:9b`
+- general/planner/reasoner model: `qwen3.5:9b`
+- classifier/fallback model: `qwen3:1.7b`
 - local provider probe through `/api/tags`
 - local model calls through Ollama HTTP
-- model choice based on task packet node type
+- role-tagged local model catalog in Track A
 
 ### Spectra already has routing and learning primitives
 
@@ -80,6 +81,10 @@ ollama -> free_tier -> paid provider
 The learning loop records provider outcomes and updates routing weights by
 provider and node type. This is currently provider-routing learning, not yet a
 complete personal-memory system.
+
+ADR-010 now defines the next routing-intelligence build path: cascade
+quality-gate, L1/L2 classification, semantic cache, circuit breaker, warm
+routing, and telemetry.
 
 ### Focus still has legacy direct AI surfaces
 
@@ -132,7 +137,7 @@ Beam = canonical contracts/context/pattern memory, not runtime execution.
   or approval boundary.
 - Do not treat Spectra's current routing learning as full personal memory; it is
   provider/outcome learning until broader memory contracts are added.
-- Do not enable real provider calls during setup/doctor paths.
+- Do not enable real provider calls during setup/doctor paths unless explicitly requested.
 - Do not make Spectra automation of EPK -> Focus task creation implicit; the
   manual review-first loop remains the safety boundary until a later contract says
   otherwise.
@@ -146,14 +151,14 @@ canonical before runtime changes.
 
 ### Step 2 — Spectra adds a plain AI request contract
 
-Recommended next Spectra sprint:
+Implemented Spectra endpoint:
 
-```text
-Spectra-AI-Gateway-001 — add POST /api/v1/ai/request as a read-only routed AI request endpoint
+```http
+POST /api/v1/ai/request
 ```
 
-The endpoint should support Focus/EPK feature requests without forcing every
-request into a graph execution path.
+The endpoint supports Focus/EPK feature requests without forcing every request
+into a graph execution path.
 
 ### Step 3 — Focus prefers Spectra for AI calls
 
@@ -177,13 +182,13 @@ EPK-AI-Bridge-001 — request promo copy/planning help through Spectra without d
 
 ## Minimum Spectra API shape
 
-Suggested read-only request endpoint:
+Read-only request endpoint:
 
 ```http
 POST /api/v1/ai/request
 ```
 
-Suggested payload:
+Payload:
 
 ```json
 {
@@ -196,13 +201,13 @@ Suggested payload:
 }
 ```
 
-Suggested response:
+Response:
 
 ```json
 {
   "ok": true,
   "provider": "ollama",
-  "model": "qwen3:9b",
+  "model": "qwen3.5:9b",
   "response": {},
   "provenance": {
     "routedBy": "prism-spectra",
@@ -216,5 +221,5 @@ Suggested response:
 Future prompts can omit the decision that Spectra is the suite AI engine, the
 rule that Ollama belongs behind Spectra rather than inside each app, the warning
 that Focus direct AI providers are legacy/transition surfaces, and the
-recommendation to add a Spectra `/api/v1/ai/request` endpoint before migrating
+recommendation to use Spectra `/api/v1/ai/request` endpoint before migrating
 Focus feature calls.
