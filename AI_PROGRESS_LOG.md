@@ -8,25 +8,31 @@
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra AI bridge (PR #24), and Spectra Tier 2b routing intelligence (PR #25) are merged to `devknowsdev/prism-spectra:main`. ADR-010 is committed to Spectra. Beam routing docs were refreshed before Tier 2b; this progress log is the freshest Spectra status source.
+**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra AI bridge (PR #24), and Spectra Tier 2b routing intelligence (PR #25) are merged to `devknowsdev/prism-spectra:main`. Spectra Tier 3a semantic cache is open as PR #26 from `spectra-tier3a-semantic-cache-20260629` to `main`. ADR-010 is committed to Spectra. This progress log is the freshest Spectra status source.
 
-**Most recent completed work:** PR #25 implemented Track A Tier 2b routing intelligence: pure L1 heuristic classification, explicit `aiRole` model-role handling, provider availability state in the router, probe status sharing with the router, live classifier calls through `LocalModelLock`, local confidence scoring, low-confidence retry scaffolding, and focused Tier 2b tests.
+**Most recent completed work:** PR #26 implements Track A Tier 3a semantic cache Layer B: Ollama `/api/embed` provider, optional embedding keepalive, derived in-memory semantic pattern cache after exact cache miss, exact cache preserved as Layer A, soft degradation when embeddings fail, semantic cache disabled for terminal/file-writing/patch packets, `cacheHitKind` metadata, and focused Tier 3a tests.
 
-**Validation:** Dave locally ran `npm run typecheck`, `npm run test:tier2b`, and `npm test` after the final classifier-weight fix. Results: typecheck clean; Tier 2b tests 7/7; original suite 60/60; combined `npm test` runs original 60 plus Tier 2b 7. GitHub Actions on PR #25 were also green: `Run AI-Forge Tests` and `Docs Lint` completed successfully.
+**Validation:** Dave locally ran `npm run typecheck`, `npm run test:tier3a`, and `npm test` on PR #26 after pulling the remote branch. Results: typecheck clean; Tier 3a tests 4/4; original suite 60/60; Tier 2b 7/7; combined `npm test` runs 60 + 7 + 4 successfully. GitHub Actions for PR #26 were not yet returned by the connector at first check.
 
-**Current next priority:** Spectra Tier 3a: semantic cache Layer B plus Ollama embedding keepalive. Keep embeddings derived/rebuildable and retrieval advisory per ADR-005 through ADR-009. Alternative priority: browser-validate the Focus repo side of `spectra-focus-ai-init-20260627` before opening that PR.
+**Current next priority:** Let PR #26 checks finish, merge if green, then proceed to Spectra Tier 3b: L2 embedding classification / route decision cache. Alternative priority remains browser-validating the Focus repo side of `spectra-focus-ai-init-20260627` before opening that PR.
 
-**Known caution:** Tier 2b is merged, but live classifier behavior should still be exercised with real Ollama workloads. Focus chat attachments still depend on the full daemon file API. The Focus repo side of `spectra-focus-ai-init-20260627` is still unmerged and was last checked at 34 ahead / 0 behind `main`.
+**Known caution:** Tier 3a embeddings are derived/rebuildable and advisory, not authoritative memory. Semantic cache is in-memory in this tier and intentionally refuses fuzzy replay for mutating/file-writing packets. Pull `nomic-embed-text` locally before exercising real Ollama semantic cache behavior. Focus chat attachments still depend on the full daemon file API.
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3a semantic cache PR opened
+
+PR #26 (`feat: add Tier 3a semantic cache`) is open from `spectra-tier3a-semantic-cache-20260629` to Spectra `main`. It changes 7 files: `package.json`, `src/embeddings/ollamaEmbeddings.ts`, `src/engine/executionEngine.ts`, `src/index.ts`, `src/memory/semanticPatternCache.ts`, `src/types.ts`, and `test/tier3a-semantic-cache.test.ts`.
+
+Local validation: `npm run typecheck` passed, `npm run test:tier3a` passed 4/4, and `npm test` passed the original 60 tests plus Tier 2b 7 and Tier 3a 4. The SQLite experimental warning is unchanged.
+
+Next suggested action: wait for GitHub Actions on PR #26, merge if green, then update this log from “open” to “merged.”
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 2b routing intelligence merged
 
 PR #25 (`feat: add Tier 2b routing intelligence`) was opened from `spectra-tier2b-routing-intelligence-20260629` and merged to Spectra `main` on 2026-06-29. It changed 9 files: `package.json`, `src/config/providerProbe.ts`, `src/engine/executionEngine.ts`, `src/executors/ollama.ts`, `src/index.ts`, `src/routing/l1Classifier.ts`, `src/routing/router.ts`, `src/types.ts`, and `test/tier2b-routing.test.ts`.
 
 Local validation after the final fix: `npm run typecheck` passed, `npm run test:tier2b` passed 7/7, and `npm test` passed the original 60 tests plus the 7 Tier 2b tests. GitHub Actions also passed for the PR head.
-
-Next suggested implementation is Tier 3a: semantic cache Layer B, Ollama embedding keepalive, derived/rebuildable vector metadata, graceful no-vector fallback, and clear cache-vs-ledger boundaries.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra routing docs, model-tag fix, and local validation
 
