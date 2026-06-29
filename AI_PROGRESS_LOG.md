@@ -10,15 +10,41 @@
 
 **Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627`. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
 
-**Most recent completed work:** GPT fixed the cockpit guided layer to lean into the guided path instead of leaving Dave between a wizard and a control panel. Failed validation now shows `What to do now`, inline `Validation output`, `Run validation again`, and secondary `Open advanced logs`. Commits: `cfa63bac38b765bccaa43e0efbd18da7ba2a3d58` and `e1458fe1745d5d2053e528745508a1b27203aa4c`.
+**Most recent completed work:** GPT fixed the Focus/Spectra bridge 500 root cause found by Dave's curl output: Spectra was denying Ollama with `RPM budget exhausted (0/0)` because provider probing persisted `rpmLimit=0` when Ollama was unavailable and did not clear it when Ollama became available again. Commits: `74b96c083a53d2aa61bb2a65b09bc9328790f4ed` and `ddfbfca23f421c9800761654090303194451f118`.
 
-**Validation:** GPT fetched the changed files back from GitHub and added regression coverage for guided-first validation failure, inline validation output, rerun action, and secondary advanced logs. Real local `npm run test:cockpit` still needs to be run after Dave pulls and restarts the cockpit gateway.
+**Validation:** GPT fetched the changed files back from GitHub and added regression coverage in `test/ai-request.test.ts`. Dave should pull, restart the gateway, run `npm run test:ai-request && npm run test:cockpit`, then retest Focus Settings → AI.
 
-**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, run validation again from the guided panel, and read the inline validation output. Do not continue to Slice 3 until local `npm run test:cockpit` and browser smoke are clean.
+**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, verify the bridge with curl/Focus. If the persisted DB still has the stale value before restart, run a one-off SQLite reset for `ollama` or delete only the local gateway DB if the data is disposable.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor exists. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra provider probe budget recovery fix
+
+Dave's direct curl to `/api/v1/ai/request` returned `500` with `no executor within budget`; Ollama was blocked as `RPM budget exhausted (0/0)`, while free/paid providers were unavailable due missing API keys.
+
+Root cause:
+- `applyProviderProbe()` wrote `rpmLimit: 0` for unavailable providers.
+- `Ledger.ensureRows()` uses `INSERT OR IGNORE`, so a stale persisted `ollama` row with `rpm_limit=0` stayed in `.demo/ai-gateway.db`.
+- When Ollama later became available, `applyProviderProbe()` did not clear the old block.
+
+Changes:
+- `src/config/providerProbe.ts`: widened probe-aware `setBudget` typing to allow `rpmLimit: null`.
+- `src/config/providerProbe.ts`: now writes `{ rpmLimit: status.available ? null : 0 }`, so available providers clear the startup-probe RPM block.
+- `test/ai-request.test.ts`: added regression coverage that a stale `ollama rpmLimit=0` is cleared by an available Ollama probe before AI request execution.
+
+Commits:
+- `74b96c083a53d2aa61bb2a65b09bc9328790f4ed` — `fix: clear provider probe rpm block when available`
+- `ddfbfca23f421c9800761654090303194451f118` — `test: cover provider probe budget recovery`
+
+Validation:
+- Fetched changed files back from GitHub after writing.
+- Real local validation still needed: `npm run test:ai-request && npm run test:cockpit`.
+
+Next:
+- Pull and restart the gateway.
+- Retest curl and Focus Settings → AI.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit guided-first validation failure UX
 
@@ -34,15 +60,6 @@ Commits:
 - `cfa63bac38b765bccaa43e0efbd18da7ba2a3d58` — `fix: make validation failure guided-first`
 - `e1458fe1745d5d2053e528745508a1b27203aa4c` — `test: cover guided-first validation failure`
 
-Validation:
-- Fetched changed files back from GitHub after writing.
-- Real `npm run test:cockpit` still needs local execution.
-
-Next:
-- Pull and restart the cockpit.
-- Click `Run validation again` in the guided panel.
-- Read the inline `Validation output` before using advanced controls.
-
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit guided-panel log-access fix
 
 Dave browser-tested Slice 2 and found that validation failed but logs were hard to access because the advanced drawer collapsed while moving toward it. Root cause: the cockpit auto-refresh re-rendered the whole page every few seconds and reset local UI state.
@@ -52,10 +69,6 @@ Changes:
 - `tools/cockpit/projectCockpit.ts`: added a direct `Open validation logs` guided action for failed validation instead of only showing passive status text.
 - `tools/cockpit/projectCockpit.ts`: made the successful state expose an `Open Focus` guided action.
 - `test/cockpit-html.test.ts`: added regression coverage for failed-validation `show-logs`, direct log button rendering, drawer-state persistence, and open-log persistence.
-
-Commits:
-- `8c56a95b59014b156ade2ce5b709737ad9add136` — `fix: keep cockpit logs accessible across refresh`
-- `94c014717eae197ddd0d0c58892ca90ed55f0301` — `test: cover cockpit log drawer persistence`
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit Slice 2 guided panel scaffold
 
@@ -67,10 +80,6 @@ Changes:
 - `tools/cockpit/projectCockpit.ts`: added guided panel UI with mission, state summary, next safe action, readiness checklist, waiting state, and collapsed advanced controls.
 - `test/cockpit-html.test.ts`: added guidance derivation tests.
 
-Commits:
-- `e51dc951c2bf6df96fb7fa0bd86676624ff5c281` — `feat: add cockpit guided panel scaffold`
-- `bdf6af509936dab3268b9a0ab7aa5b245c564f79` — `test: cover cockpit guidance scaffold`
-
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit Slice 1 PID parser hardening
 
 Implemented Slice 1 on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
@@ -78,12 +87,3 @@ Implemented Slice 1 on `devknowsdev/prism-spectra:spectra-project-cockpit-202606
 Changes:
 - `tools/cockpit/projectCockpit.ts`: exported `parsePidOutput(raw)`, changed `listeningPids()` to use it, and filtered blank, zero, negative, and non-integer PID tokens.
 - `tools/cockpit/projectCockpit.ts`: changed the external PID pill renderer to display only positive finite numeric PIDs.
-- `test/cockpit-html.test.ts`: added parser assertions and a guard against raw `status.port.pids.join` rendering.
-
-Commits:
-- `0a49f62a11c5d624f9713a2454df446f17a03f8c` — `fix: harden cockpit PID parsing`
-- `7d193ff188cb8d7af7886f1a773d303a3b9dadc6` — `test: cover cockpit PID parsing`
-
-### 2026-06-29 — GPT-5.5 Thinking — Focus/Spectra bridge browser validation and resource safety check
-
-Dave validated the Focus side of the Spectra bridge from local branch `spectra-focus-ai-init-20260627`. Focus static site ran on port 4173. Spectra `main` AI gateway ran on port 3000 with `AI_FORGE_AI_GATEWAY_TOKEN="dev-local-token"`. Mock mode chat returned through Spectra. Real mode loaded `qwen3.5:9b`, but Focus displayed an empty assistant body. Next step is resource/status monitor plus real-response parsing/smoke hardening before Focus PR.
