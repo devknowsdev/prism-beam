@@ -8,25 +8,25 @@
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), and Tier 3b-A route decision cache hints (PR #27) are merged to `devknowsdev/prism-spectra:main`. Tier 3b-B ExecutionEngine route-hint wiring is open as PR #28 from `spectra-tier3b-engine-route-hints-20260629` to `main`. ADR-010 is committed to Spectra. This progress log is the freshest Spectra status source.
+**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), and Tier 3b-B ExecutionEngine route-hint wiring (PR #28) are merged to `devknowsdev/prism-spectra:main`. ADR-010 is committed to Spectra. This progress log is the freshest Spectra status source.
 
-**Most recent completed work:** PR #28 wires the already-merged Tier 3b-A route cache into Track A `ExecutionEngine`: route decision cache options, `ExecutionEngine.routeDecisionCache`, async route helper, route remembering after successful work, route-cache role use before live classifier fallback, route metadata in logs/provenance, and focused Tier 3b-B engine tests.
+**Most recent completed work:** PR #28 wired the already-merged Tier 3b-A route cache into Track A `ExecutionEngine`: route decision cache options, `ExecutionEngine.routeDecisionCache`, async route helper, route remembering after successful work, route-cache role use before live classifier fallback, route metadata in logs/provenance, and focused Tier 3b-B engine tests. PR #28 was squash-merged on 2026-06-29 as `16e5d4807b9c9f0eda45e9657a8c179a6185fcdb`.
 
-**Validation:** Dave patched and pushed PR #28 on 2026-06-29. Local validation output was not pasted before PR creation. GitHub Actions had not appeared at first check, so PR #28 must be treated as CI-pending until `Docs Lint` and `Run AI-Forge Tests` complete.
+**Validation:** Dave patched and pushed PR #28 on 2026-06-29. Local validation output was not pasted before PR creation. GitHub Actions for PR #28 passed: `Docs Lint` and `Run AI-Forge Tests`.
 
-**Current next priority:** Let PR #28 GitHub checks appear and finish, fix if needed, merge if green, then mark Tier 3b-B merged. Keep route hints Track A only, no new dependency, and preserve ADR-005 through ADR-009 boundaries: embeddings and retrieval indexes are derived/rebuildable/advisory, not authoritative memory.
+**Current next priority:** Tier 3c should be a small hardening pass around routing telemetry/docs/export surface, or pause Spectra routing and browser-validate the Focus repo side of `spectra-focus-ai-init-20260627`. Keep all route/cache features Track A only, no new dependency, and preserve ADR-005 through ADR-009 boundaries: embeddings and retrieval indexes are derived/rebuildable/advisory, not authoritative memory.
 
-**Known caution:** Tier 3b-B must not bypass local-first order, provider availability, or budget ledger checks. Local untracked files observed in Dave's working tree remain outside PR #28: `SPECTRA_INTELLIGENCE_HANDOVER.md`, `files.zip`, `files/`, and `guitar-chord-chart-major-keys.jpg`. Focus chat attachments still depend on the full daemon file API. The Focus repo side of `spectra-focus-ai-init-20260627` still needs browser validation and PR.
+**Known caution:** Tier 3b route hints must not bypass local-first order, provider availability, or budget ledger checks. Local untracked files observed in Dave's working tree remain outside PR #28: `SPECTRA_INTELLIGENCE_HANDOVER.md`, `files.zip`, `files/`, and `guitar-chord-chart-major-keys.jpg`. Focus chat attachments still depend on the full daemon file API. The Focus repo side of `spectra-focus-ai-init-20260627` still needs browser validation and PR.
 
 ## Recent session entries
 
-### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3b-B ExecutionEngine route-hint PR opened
+### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3b-B ExecutionEngine route-hint wiring merged
 
-PR #28 (`feat: wire Tier 3b route hints into execution engine`) is open from `spectra-tier3b-engine-route-hints-20260629` to Spectra `main`. It changes 3 files: `package.json`, `src/engine/executionEngine.ts`, and `test/tier3b-engine-route-hints.test.ts`.
+PR #28 (`feat: wire Tier 3b route hints into execution engine`) was merged to Spectra `main` on 2026-06-29 with squash commit `16e5d4807b9c9f0eda45e9657a8c179a6185fcdb`. It changed 3 files: `package.json`, `src/engine/executionEngine.ts`, and `test/tier3b-engine-route-hints.test.ts`.
 
-Local patch was applied and pushed by Dave. Local validation output was not pasted before PR creation. GitHub Actions had not appeared at first check.
+Local patch was applied and pushed by Dave. GitHub Actions passed: `Docs Lint` and `Run AI-Forge Tests`. Local validation output was not pasted before PR creation, but CI passed after PR creation.
 
-Next suggested action: check PR #28 Actions, merge if green, or fix test/typecheck failures with the smallest possible patch.
+Next suggested action: either run a small Tier 3c hardening pass for route telemetry/docs/export surface, or switch to the pending Focus repo side of the Spectra/Focus bridge for browser validation and PR.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3b-A route decision cache merged
 
