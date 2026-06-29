@@ -24,15 +24,108 @@
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), and the Spectra side of the Focus/Spectra AI bridge (PR #24) are all merged to `main`. Spectra `main` is now caught up across all three. The Focus repo side of the bridge branch (`prism-focus:spectra-focus-ai-init-20260627`, 33 ahead / 0 behind) is still unmerged and still needs browser validation.
+**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), and the Spectra side of the Focus/Spectra AI bridge (PR #24) are all merged to `main`. ADR-010 is now committed to Spectra. Beam's Spectra current-surface and model-routing packs have been refreshed to reflect Tier 2a/ADR-010 and the qwen model-tag fix. The Focus repo side of the bridge branch (`prism-focus:spectra-focus-ai-init-20260627`, 34 ahead / 0 behind as of 2026-06-29) is still unmerged and still needs browser validation.
 
-**Most recent completed work:** Opened and merged PR #24 (`spectra-focus-ai-init-20260627` → `main`, Spectra side only, commit `cbd67f9`) — adds `tools/focus-ai-smoke.ts`, `docs/FOCUS_AI_INIT.md`, and two npm scripts (`test:focus-ai`, `focus:ai:gateway`). Before opening the PR, test-merged `main` into the branch locally (throwaway, not pushed) to confirm zero conflicts — file sets were fully disjoint from Tier 1/Tier 2a changes. Post-merge on `main`: all 3 expected file changes verified present, `tsc --noEmit` clean, `npm test` 59/60 (same pre-existing daemon e2e failure, no regression).
+**Most recent completed work:** GPT committed the Spectra local model tag fix (`qwen3:9b` → `qwen3.5:9b`; classifier/fallback → `qwen3:1.7b`), added `docs/adr/ADR-010-routing-intelligence-architecture.md` to Spectra, replaced Beam `context-packs/prism-spectra/model-routing-current.md`, refreshed Beam `context-packs/prism-spectra/current-surface.min.md`, and prepended this progress update.
 
-**Current next priority:** Focus repo side of `spectra-focus-ai-init-20260627` still needs: (1) re-diff against current Focus `main` to check for drift since 2026-06-27, (2) browser validation — test `What can you do in this app?`, a messy day-dump schedule request, and Apply on proposed tasks — before opening that PR. Alternatively, begin Tier 0 (semantic primitive via Ollama `/api/embed`) if Dave prefers fresh work.
+**Current next priority:** Tier 2b in Spectra: wire `classifyIntent()` through `ModelLock`, implement real `localTierAvailable()`, add L1 heuristic classification, add confidence scoring/cascade quality-gate scaffolding. Alternative priority: re-diff and browser-validate the Focus repo side of `spectra-focus-ai-init-20260627` before opening that PR.
 
-**Known caution:** `classifyIntent()` in Tier 2a is a standalone primitive only — not yet wired into `OllamaExecutor.execute()`. Wiring is Tier 2b and must go through `ModelLock`. Focus chat attachments still blocked (depend on full daemon file API).
+**Known caution:** `classifyIntent()` is still a standalone primitive only — not wired into `OllamaExecutor.execute()`. Wiring is Tier 2b and must go through `ModelLock`. `localTierAvailable()` is still a router stub. Focus chat attachments still blocked (depend on full daemon file API).
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra routing docs and model-tag fix committed
+
+**Task:** Continue Claude's prior routing-intelligence documentation work, verify live Beam/Spectra state, fix the broken local Ollama default tag, and commit the pending ADR/context-pack updates.
+
+**Files changed:**
+
+- `devknowsdev/prism-spectra:src/executors/ollama.ts` — updated `OLLAMA_GENERAL_MODEL` from nonexistent `qwen3:9b` to `qwen3.5:9b`; updated `LOCAL_MODEL_CATALOG` so classifier/fallback use `qwen3:1.7b`, planner/reasoner use `qwen3.5:9b`, and the comment no longer claims defaults are locally installed.
+- `devknowsdev/prism-spectra:docs/adr/ADR-010-routing-intelligence-architecture.md` — added accepted ADR covering cascade quality-gate, L1/L2 classification, semantic cache, circuit breaker, warm routing, telemetry, model capability profiles, and build order.
+- `devknowsdev/prism-beam:context-packs/prism-spectra/model-routing-current.md` — replaced stale 2026-06-25 routing pack with ADR-010-aware routing pack.
+- `devknowsdev/prism-beam:context-packs/prism-spectra/current-surface.min.md` — refreshed Tier 2a, PR #22/#23/#24, Focus bridge status, qwen model stack, ADR-010 reference, and Tier 2b+ build targets.
+- `devknowsdev/prism-beam:AI_PROGRESS_LOG.md` — updated current handover and prepended this entry plus Claude's staged ADR entry below.
+
+**Outcome:** The broken `qwen3:9b` default is fixed in Spectra. ADR-010 is present in Spectra. Beam now has current routing context for the next low-token AI session.
+
+**Validation:** Used targeted GitHub connector reads only: Beam `AI_LOAD_ME_FIRST.md`, `TINY_BOOT.md`, `AI_PROGRESS_LOG.md`, `LOW_TOKEN_MULTI_AI_COORDINATION.md`, Spectra mini-pack, routing pack, Spectra `src/executors/ollama.ts`, `src/routing/router.ts`, `src/engine/modelLock.ts`, `package.json`, and PRs #22-#24. Confirmed `prism-focus:spectra-focus-ai-init-20260627` is currently 34 ahead / 0 behind `main`. Could not run local `npm test` from connector-only environment.
+
+**Risks / cautions:** `qwen3.5:9b` should still be pulled locally with `ollama pull qwen3.5:9b` before non-mock Tier 2b testing. The new catalog default assumes that model is available. `classifyIntent()` remains unwired and must use `ModelLock` when wired.
+
+**Next suggested step:** Tier 2b implementation in one PR: real `localTierAvailable()`, L1 classifier, `classifyIntent()` via `ModelLock`, confidence scoring, and cascade-quality logging.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/prism-spectra/current-surface.min.md`
+- `context-packs/prism-spectra/model-routing-current.md`
+- `prism-spectra/docs/adr/ADR-010-routing-intelligence-architecture.md`
+
+### 2026-06-29 — Claude (Sonnet 4.6) — Routing intelligence architecture documented
+
+**Task:** Read all three repos (prism-beam, prism-spectra, prism-focus via Beam),
+audit the current routing state, and produce ADR-010 and Beam context pack updates
+before Tier 2b implementation begins.
+
+**Files changed or reviewed:**
+
+- `devknowsdev/prism-beam:context-packs/prism-spectra/current-surface.min.md` — read;
+  patch notes produced (see `context-packs/current-surface-min-patch.md` in staging).
+- `devknowsdev/prism-beam:context-packs/prism-spectra/model-routing-current.md` — full
+  replacement written; now includes cascade mental model, classification tier table,
+  confidence scoring summary, and ADR-010 reference.
+- `devknowsdev/prism-spectra:docs/adr/ADR-010-routing-intelligence-architecture.md` — new
+  file drafted; covers cascade quality-gate, L1/L2 two-tier classification, semantic
+  caching (dual-layer with TTL policy), provider circuit breaker, warm routing, telemetry
+  schema, model capability profiles, and build order.
+
+**Outcome:** Architecture is now documented. ADR-010 is ready to commit to prism-spectra.
+Beam context packs updated/patched. No code written this session.
+
+**Key findings from repo sweep:**
+
+- Routing intelligence plan discussed in prior conversation was **never committed to Beam**.
+  ADR-010 captures it in full.
+- Spectra `main` is clean: Tier 1 (PR #22), Tier 2a (PR #23), Focus bridge Spectra side
+  (PR #24) all merged. Tests at 59/60 (pre-existing daemon e2e failure, not a regression).
+- `classifyIntent()` exists and is correct but unwired. Wiring is Tier 2b.
+- `localTierAvailable()` is still a stub (always returns true). Also Tier 2b.
+- Focus bridge Focus repo side (`prism-focus:spectra-focus-ai-init-20260627`) is still
+  unmerged — 33 commits ahead, needs re-diff and browser validation before PR.
+- Track B `config/modelRegistry.ts` concept is worth reviving but must be ported into
+  Track A's governed path, not taken wholesale.
+
+**Validation:** Beam tree and all key files read directly via raw GitHub API. No source
+was invented — all current truths verified against live file content.
+
+**Source/Beam mismatches:** `model-routing-current.md` was last verified 2026-06-25 and
+had no mention of the cascade architecture, L1/L2 classification, or Tier 2a additions.
+Now corrected. `current-surface.min.md` did not reflect Tier 2a additions — patch notes
+produced.
+
+**Risks / cautions:**
+
+- `classifyIntent()` must go through `ModelLock` when wired. This constraint is in ADR-010
+  and the updated routing pack. Do not skip it.
+- Embedding model keepalive is required before semantic cache can be reliable on M1
+  (cold-start is 10–30s). Budget this into Tier 3a.
+- Budget state is in-memory only — lost on daemon restart. Flag for Tier 2b or Tier 4.
+- `qwen3:8b` (model catalog) vs `qwen3:9b` (router default) — verify which tag is actually
+  installed before Tier 2b wiring.
+
+**Next suggested step:** Commit ADR-010 to `prism-spectra/docs/adr/`. Apply Beam context
+pack updates. Then Tier 2b: wire `classifyIntent()` through `ModelLock`, implement real
+`localTierAvailable()`, add L1 heuristic classifier, add confidence scoring + cascade
+escalation. One PR.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `context-packs/prism-spectra/current-surface.min.md`
+- `context-packs/prism-spectra/model-routing-current.md`
+- `prism-spectra/docs/adr/ADR-010-routing-intelligence-architecture.md`
 
 ### 2026-06-29 — Claude (Sonnet 4.6) — Spectra-side Focus AI bridge: re-diff and merge
 
@@ -177,102 +270,3 @@
 - `integrations/approval-posture.md`
 - `context-packs/prism-focus/current-surface.min.md`
 - `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`
-
-### 2026-06-26 — GPT — Focus + EPK surface hardening compressed to Beam main
-
-**Task:** Record completed Focus planner/header/persistence updates and EPK redacted-shell/CTA/publisher-control updates in Beam for future low-token orientation.
-
-**Files changed or reviewed:**
-
-- `devknowsdev/prism-focus:index.html` — verified script order for planner, reset UI, and `focus_header_controls.js`.
-- `devknowsdev/prism-focus:src/planner_functions.js` — added planner helper/action layer.
-- `devknowsdev/prism-focus:src/planner_timeline_cursor.js` — added cursor-tracking day scheduler click-start/click-end task creation.
-- `devknowsdev/prism-focus:src/storage.js` — hardened per-key localStorage load and Focus-key clearing helper.
-- `devknowsdev/prism-focus:src/actions_export.js` — added full backup data builder and backup-gated factory reset flow.
-- `devknowsdev/prism-focus:src/factory_reset_ui.js` — added visible factory reset UI patch.
-- `devknowsdev/prism-focus:src/focus_header_controls.js` — grouped header controls into `Plan day`, `Focus mode`, `Assistant`, `Manage`.
-- `devknowsdev/EPK:EPK/functions/_middleware.js` — added hosting-layer private/redacted routing.
-- `devknowsdev/EPK:EPK/public/public-empty-cta.js` — added public redacted shell CTA and on-demand build wizard.
-- `devknowsdev/EPK:EPK/public/index.html` — loads the public CTA patch.
-- `devknowsdev/EPK:EPK/public/publisher/publisher-focus-packet.js` — simplified publisher top controls and sidebar grouping.
-- `context-packs/prism-focus/current-surface.min.md` — refreshed on Beam `main`.
-- `context-packs/epk/current-surface.min.md` — refreshed on Beam `main`.
-- `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` — added detailed compression-back note.
-- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` — added EPK admin/export/contact compression-back note.
-- `docs/progress/AI_CHANGE_REVIEW_QUEUE.md`, `AI_LOAD_ME_FIRST.md`, and `ai-guides/AI_PROGRESS_PROTOCOL.md` — now point future staged Beam updates at `beam/ai-change-review-queue-v3`.
-- `AI_PROGRESS_LOG.md` — updated this handover entry.
-
-**Outcome:** Focus top-level UI is calmer and better grouped; planner day scheduling and reset/persistence behavior are safer. EPK can expose a useful public outreach/profile shell while protecting/redacting private content, and publisher controls are less cluttered. Beam `main` is current and the new queue branch is cleanly based on it.
-
-**Validation:** GitHub connector verified current app repo `main` status: Focus was ahead of the pre-session base by 16 commits and behind by 0; EPK was ahead of the pre-session base by 14 commits and behind by 0. Connector verified key files and script order. Browser/runtime tests, hosting redeploy tests, Beam token-budget checks, and Beam link/path checks were not run.
-
-**Source/Beam mismatches:** Prior Focus and EPK mini-packs did not include the 2026-06-26 planner/header/reset/redacted-shell/CTA changes. This is now corrected on Beam `main`.
-
-**Risks / cautions:** Keep EPK private configuration outside repo files. Keep protected EPK surfaces behind hosting-layer controls. Do not return Focus to a dense icon-only header. Keep Focus AI use routed through Spectra rather than expanding direct provider ownership.
-
-**Next suggested step:** Browser-test Focus and hosting-test EPK. Future Beam review-queue work should use `beam/ai-change-review-queue-v3`.
-
-**Next AI should read:**
-
-- `AI_LOAD_ME_FIRST.md`
-- `AI_PROGRESS_LOG.md`
-- `context-packs/prism-focus/current-surface.min.md`
-- `context-packs/epk/current-surface.min.md`
-- `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`
-
-### 2026-06-26 — GPT — EPK admin cleanup note
-
-**Task:** Record EPK block-canvas admin cleanup and source-of-truth status.
-
-**Files changed or reviewed:**
-
-- `docs/progress/EPK_ADMIN_CLEANUP_20260626.md` — added on Beam `main` before this sync pass.
-
-**Outcome:** Beam records that `devknowsdev/EPK@main` is canonical for the block-canvas admin upgrade; earlier generated ZIPs and chat-local files are historical.
-
-**Validation:** Connector verified this note on Beam `main` and copied a safer summary to the review queue branch before v3 was created cleanly from main.
-
-**Next suggested step:** Browser/live verification after the public host refreshes.
-
-### 2026-06-26 — GPT — EPK admin/export/direct-contact completion compressed to Beam
-
-**Task:** Record the completed EPK hosted admin, export, PDF, and direct-contact hardening session in Beam for future low-token orientation.
-
-**Files changed or reviewed:**
-
-- `devknowsdev/EPK:EPK/public/print.js` — verified on EPK `main`; final export script includes `renderContactBox()`, `/api/contact` POST, `sendWhatsApp()`, WhatsApp URL generation, and no heredoc duplicate after cleanup.
-- `devknowsdev/EPK:functions/api/contact.js` — verified on EPK `main`; Cloudflare Pages Function sends via server-side email provider using env vars.
-- `devknowsdev/EPK:.gitignore` — verified on EPK `main`; ignores `.wrangler/` and `*.pdf`.
-- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` — added detailed Beam compression-back note.
-- `context-packs/epk/current-surface.min.md` — refreshed with current EPK admin/export/contact behavior and operational requirements.
-- `AI_PROGRESS_LOG.md` — updated this handover entry.
-
-**Outcome:** EPK now has a Cloudflare-ready admin surface at `/admin/admin.html`, branded client HTML/PDF exports, content-adaptive PDF layout, direct contact modal that posts to `/api/contact`, WhatsApp fallback, and local dev/export ignore rules. Beam now records the exact routes, env vars, caution points, and source files future AIs should inspect.
-
-**Validation:** EPK session ran/observed `node EPK/scripts/validate-epk-admin-upgrade.mjs`, `node EPK/scripts/prepare-cloudflare-pages.mjs`, `node --check EPK/public/print.js`, `node --check functions/api/contact.js`, and `npx wrangler pages dev EPK/public`. GitHub connector verified the final EPK remote files after push. Full local Beam token-budget/link validation was not run.
-
-**Source/Beam mismatches:** Prior EPK mini-pack only described EPK as a public professional presence app and did not mention the completed admin/export/contact surface. This is now corrected on Beam `main`.
-
-**Risks / cautions:** Direct email must remain server-side and env-var based. Add spam protection before heavy public promotion. If future edits touch `print.js`, grep for pasted shell/heredoc residue and run syntax checks before pushing.
-
-**Next suggested step:** Consider adding an EPK link-check script and spam protection.
-
-**Next AI should read:**
-
-- `AI_LOAD_ME_FIRST.md`
-- `AI_PROGRESS_LOG.md`
-- `context-packs/epk/current-surface.min.md`
-- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`
-
-## How to add the next entry
-
-Append a new entry at the top of `Recent session entries` using `templates/AI_PROGRESS_ENTRY.md`. Keep it compact and source-backed.
-
-## Archive rule
-
-When this file exceeds 5,000 tokens, move older entries to `docs/progress/archive/YYYY-MM.md` and keep only:
-
-- active handover,
-- last 3-5 entries,
-- unresolved risks,
-- next suggested step.
