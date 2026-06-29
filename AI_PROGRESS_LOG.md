@@ -10,15 +10,38 @@
 
 **Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` and has now been browser-validated locally through mock mode, with real Ollama mode partially validated. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
 
-**Most recent completed work:** GPT implemented Spectra cockpit Slice 2 on branch `spectra-project-cockpit-20260629`: added the guided panel scaffold, backend `deriveCockpitGuidance()` state machine, `guidance` in the profile response, collapsible advanced process controls, structured guided action packets via `data-guided-action`, and guidance regression tests. Commits: `e51dc951c2bf6df96fb7fa0bd86676624ff5c281` and `bdf6af509936dab3268b9a0ab7aa5b245c564f79`.
+**Most recent completed work:** GPT fixed the Spectra cockpit Slice 2 guided-panel usability bug reported from local browser testing: the advanced drawer/log view now survives auto-refresh re-renders, and failed validation shows a direct `Open validation logs` action in the guided panel. Commits: `8c56a95b59014b156ade2ce5b709737ad9add136` and `94c014717eae197ddd0d0c58892ca90ed55f0301`.
 
-**Validation:** Slice 2 was verified from this GPT session by fetching the changed files back from GitHub and comparing the branch against the Slice 1 head. A pre-push generated inline-script parse check passed in the sandbox. The real repo command `npm run test:cockpit` was not run by GPT because this environment does not have the local repo checkout/npm dependency state. Dave/Codex should run `npm run test:cockpit` locally before continuing to Slice 3 or opening a PR.
+**Validation:** The fix was verified from this GPT session by fetching the changed files back from GitHub and adding regression coverage for drawer/log persistence and the direct validation-log action. The real repo command `npm run test:cockpit` was not run by GPT because this environment does not have the local repo checkout/npm dependency state. Dave/Codex should pull the branch, restart the gateway, and run `npm run test:cockpit` locally before continuing to Slice 3 or opening a PR.
 
-**Current next priority:** On the cockpit branch, run `npm run test:cockpit` locally, then manually smoke `http://127.0.0.1:3000/cockpit`. If clean, the next implementation slice is Slice 3: plain-language card labels and external-process copy in `tools/cockpit/projectCockpit.ts` only.
+**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, click `Open validation logs`, and inspect the `Spectra Validation` output. If clean after local `npm run test:cockpit`, the next implementation slice is Slice 3: plain-language card labels and external-process copy in `tools/cockpit/projectCockpit.ts` only.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor shows disk, `.ollama` size, `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, and thermal state. Route hints are advisory and must preserve local-first routing order, provider availability checks, and budget ledger checks. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit guided-panel log-access fix
+
+Dave browser-tested Slice 2 and found that validation failed but the logs were hard to access because the advanced drawer collapsed while moving toward it. Root cause: the cockpit auto-refresh re-rendered the whole page every few seconds and reset local UI state.
+
+Changes:
+- `tools/cockpit/projectCockpit.ts`: added `advancedOpen` and `openLogRoles` client-side state so the advanced drawer and open log cards survive auto-refresh renders.
+- `tools/cockpit/projectCockpit.ts`: added a direct `Open validation logs` guided action for failed validation instead of only showing passive status text.
+- `tools/cockpit/projectCockpit.ts`: made the successful state expose an `Open Focus` guided action.
+- `test/cockpit-html.test.ts`: added regression coverage for failed-validation `show-logs`, direct log button rendering, drawer-state persistence, and open-log persistence.
+
+Commits:
+- `8c56a95b59014b156ade2ce5b709737ad9add136` — `fix: keep cockpit logs accessible across refresh`
+- `94c014717eae197ddd0d0c58892ca90ed55f0301` — `test: cover cockpit log drawer persistence`
+
+Validation:
+- Fetched changed files back from GitHub after writing.
+- Real `npm run test:cockpit` still needs to be run locally because this GPT session does not have the local repo checkout/npm dependency state.
+
+Next:
+- Pull and restart the cockpit gateway.
+- Click `Open validation logs` from the guided panel when validation fails.
+- Use the logs to identify the failing validation command.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit Slice 2 guided panel scaffold
 
@@ -75,29 +98,3 @@ Dave validated the Focus side of the Spectra bridge from local branch `spectra-f
 Observed results: health endpoint returned `200 OK` with CORS headers in mock and real modes; Focus accepted token settings; mock mode chat returned through Spectra; real mode loaded `qwen3.5:9b` and Focus displayed `ollama / qwen3.5:9b`, but the assistant response body was empty from Focus's perspective. Earlier failures were explained by configuration/state: Ollama server not running, stale `qwen3:9b` guidance, and stale gateway DB setting Ollama RPM limit to `0/0`.
 
 Machine safety check: `.demo` runtime files stayed tiny (~1.8 MiB), Ollama model storage was ~35 GiB, disk free was ~139 GiB, memory pressure was safe, thermal warnings were absent, and `ollama ps` ended with no loaded model. Next step is resource/status monitor plus real-response parsing/smoke hardening before Focus PR.
-
-### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3c routing telemetry/export hardening merged
-
-PR #29 (`chore: harden routing telemetry exports`) was merged to Spectra `main` on 2026-06-29 with squash commit `a9073b0c90852c75390edcd208844e621046f9a0`. It changed 4 files: `docs/ROUTING_TELEMETRY.md`, `package.json`, `src/index.ts`, and `test/tier3c-routing-hardening.test.ts`.
-
-Tier 3c exported route decision cache primitives through `src/index.ts`, added `test:tier3c`, included the Tier 3c smoke test in aggregate test commands, added public export coverage for route cache helpers, and documented the route telemetry/cache boundary.
-
-GitHub Actions passed: `Docs Lint` and `Run AI-Forge Tests`. Dave merged PR #29, pulled `main` locally, and deleted the local Tier 3c branch. Remote Tier 3c cleanup reported that the old remote branches no longer existed, which is expected.
-
-### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3b-B ExecutionEngine route-hint wiring merged
-
-PR #28 (`feat: wire Tier 3b route hints into execution engine`) was merged to Spectra `main` on 2026-06-29 with squash commit `16e5d4807b9c9f0eda45e9657a8c179a6185fcdb`. It changed 3 files: `package.json`, `src/engine/executionEngine.ts`, and `test/tier3b-engine-route-hints.test.ts`.
-
-Local patch was applied and pushed by Dave. GitHub Actions passed: `Docs Lint` and `Run AI-Forge Tests`. Local validation output was not pasted before PR creation, but CI passed after PR creation.
-
-### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3b-A route decision cache merged
-
-PR #27 (`feat: add Tier 3b route decision cache hints`) was merged to Spectra `main` on 2026-06-29 with squash commit `91b286b1babd4838e6926230f678e6168e7c5583`. Local validation and GitHub Actions passed.
-
-### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 3a semantic cache merged
-
-PR #26 (`feat: add Tier 3a semantic cache`) was merged to Spectra `main` on 2026-06-29 with squash commit `04a22417fa91977e753e3e3febac753fc2210ff8`. Local validation passed and GitHub Actions passed.
-
-### 2026-06-29 — GPT-5.5 Thinking — Spectra Tier 2b routing intelligence merged
-
-PR #25 (`feat: add Tier 2b routing intelligence`) was merged to Spectra `main` on 2026-06-29. Local validation and GitHub Actions passed.
