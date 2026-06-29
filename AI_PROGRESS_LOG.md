@@ -12,11 +12,11 @@
 
 **Most recent completed work:** GPT implemented Spectra cockpit Slice 1 on branch `spectra-project-cockpit-20260629`: hardened PID parsing so blank `lsof` output no longer becomes PID `0`, filtered non-positive PIDs from the external PID pill, and added parser regression coverage to `test/cockpit-html.test.ts`. Commits: `0a49f62a11c5d624f9713a2454df446f17a03f8c` and `7d193ff188cb8d7af7886f1a773d303a3b9dadc6`.
 
-**Validation:** Slice 1 was verified by fetching the changed files back from GitHub and by local sandbox static checks: TypeScript syntax check using local shims and the cockpit HTML test logic passed. The real repo command `npm run test:cockpit` was not run by GPT because the sandbox cannot clone GitHub or install npm dependencies. Dave/Codex should run `npm run test:cockpit` locally before continuing to Slice 2.
+**Validation:** Slice 1 was verified from this GPT session by fetching the changed files back from GitHub and comparing the branch against the previous handover head. The real repo command `npm run test:cockpit` was not run by GPT because this environment does not have the local repo checkout/npm dependency state. Dave/Codex should run `npm run test:cockpit` locally before continuing to Slice 2.
 
 **Current next priority:** On the cockpit branch, run `npm run test:cockpit` locally. If clean, continue only to Slice 2: add the guided panel scaffold in `tools/cockpit/projectCockpit.ts` and guidance tests, without changing `tools/ai-gateway.ts`, role definitions, Focus, or PR state.
 
-**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor shows disk, `.ollama` size, `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, and thermal state. Route hints are advisory and must preserve local-first routing order, provider availability checks, and budget ledger checks. For cockpit work, do not add free-form shell input, hidden writes, or browser-based killing of externally owned processes.
+**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor shows disk, `.ollama` size, `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, and thermal state. Route hints are advisory and must preserve local-first routing order, provider availability checks, and budget ledger checks. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
 
@@ -36,8 +36,7 @@ Commits:
 Validation:
 - Fetched changed files back from GitHub after writing.
 - `compare_commits` from previous branch head `5f12919502a55b40a700e2ba2126559a9a1cdaff` to `spectra-project-cockpit-20260629` reports 2 commits and only 2 files changed.
-- Local sandbox check passed with temporary Node shims: TypeScript syntax check and cockpit HTML test logic.
-- Real `npm run test:cockpit` still needs to be run locally because GPT sandbox cannot clone GitHub or install repo dependencies.
+- Real `npm run test:cockpit` still needs to be run locally because this GPT session does not have the local repo checkout/npm dependency state.
 
 Next:
 - Run `npm run test:cockpit` locally on the Spectra branch.
