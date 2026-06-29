@@ -10,15 +10,36 @@
 
 **Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627`. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
 
-**Most recent completed work:** GPT fixed the Focus/Spectra bridge 500 root cause found by Dave's curl output: Spectra was denying Ollama with `RPM budget exhausted (0/0)` because provider probing persisted `rpmLimit=0` when Ollama was unavailable and did not clear it when Ollama became available again. Commits: `74b96c083a53d2aa61bb2a65b09bc9328790f4ed` and `ddfbfca23f421c9800761654090303194451f118`.
+**Most recent completed work:** GPT fixed mock-mode Focus chat shape. The Focus/Spectra bridge now routes successfully in mock mode, but Focus chat initially displayed Spectra's raw mock executor echo. `OllamaMockExecutor` now returns Focus-shaped JSON for Prism Focus requests that ask for JSON/chat proposals. Commits: `aaaee02fb1ce3f4f9d22fc9737daee19eb7cf08c` and `a5cbe27e99bd047a2e7df9f1caa2652a5296081a`.
 
-**Validation:** GPT fetched the changed files back from GitHub and added regression coverage in `test/ai-request.test.ts`. Dave should pull, restart the gateway, run `npm run test:ai-request && npm run test:cockpit`, then retest Focus Settings → AI.
+**Validation:** GPT fetched the changed files back from GitHub and added regression coverage in `test/ai-request.test.ts` for structured Focus chat mock responses. Dave should pull, restart the gateway, run `npm run test:ai-request && npm run test:cockpit`, then retest Focus chat.
 
-**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, verify the bridge with curl/Focus. If the persisted DB still has the stale value before restart, run a one-off SQLite reset for `ollama` or delete only the local gateway DB if the data is disposable.
+**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, retest Focus chat in mock mode. Expected mock answer: a short natural reply, not the giant `[ollama:mock:...] handled ...` transport echo. After local tests pass, consider a PR for the cockpit/bridge branch.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor exists. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra mock Focus chat JSON response
+
+Dave confirmed Focus chat now reaches Spectra and routes to Ollama mock, but the UI displayed the raw debug executor echo because Focus requested valid JSON while the mock executor returned `[ollama:mock:model] handled ...`.
+
+Changes:
+- `src/executors/ollamaMock.ts`: added `mockOutputFor()` and `isFocusJsonAiRequest()`.
+- `src/executors/ollamaMock.ts`: Prism Focus JSON/chat requests now return JSON with `reply`, `proposedTasks`, `proposedSchedule`, and `followUpQuestion` instead of a transport/debug echo.
+- `test/ai-request.test.ts`: added a Focus chat request fixture and assertions that mock mode returns a structured response with a string `reply` and empty proposal arrays.
+
+Commits:
+- `aaaee02fb1ce3f4f9d22fc9737daee19eb7cf08c` — `fix: return Focus-shaped JSON from mock AI requests`
+- `a5cbe27e99bd047a2e7df9f1caa2652a5296081a` — `test: cover Focus JSON mock response`
+
+Validation:
+- Fetched changed files back from GitHub after writing.
+- Real local validation still needed: `npm run test:ai-request && npm run test:cockpit`.
+
+Next:
+- Pull and restart the gateway.
+- Retest Focus chat in mock mode.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra provider probe budget recovery fix
 
@@ -38,14 +59,6 @@ Commits:
 - `74b96c083a53d2aa61bb2a65b09bc9328790f4ed` — `fix: clear provider probe rpm block when available`
 - `ddfbfca23f421c9800761654090303194451f118` — `test: cover provider probe budget recovery`
 
-Validation:
-- Fetched changed files back from GitHub after writing.
-- Real local validation still needed: `npm run test:ai-request && npm run test:cockpit`.
-
-Next:
-- Pull and restart the gateway.
-- Retest curl and Focus Settings → AI.
-
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit guided-first validation failure UX
 
 Dave browser-tested the cockpit and found the UI was stuck between guided workflow and process controls: it said validation failed, but did not make the next step obvious enough.
@@ -55,10 +68,6 @@ Changes:
 - `tools/cockpit/projectCockpit.ts`: added inline `Validation output` inside the guided panel using the latest Spectra Validation log lines from the profile.
 - `tools/cockpit/projectCockpit.ts`: changed failed-validation actions to `Open advanced logs` and `Run validation again`, making advanced logs explicitly secondary.
 - `test/cockpit-html.test.ts`: added regression coverage for guided-first failure copy, inline output, rerun action, and advanced-log secondary action.
-
-Commits:
-- `cfa63bac38b765bccaa43e0efbd18da7ba2a3d58` — `fix: make validation failure guided-first`
-- `e1458fe1745d5d2053e528745508a1b27203aa4c` — `test: cover guided-first validation failure`
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit guided-panel log-access fix
 
