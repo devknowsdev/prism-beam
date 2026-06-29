@@ -10,15 +10,41 @@
 
 **Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` and has now been browser-validated locally through mock mode, with real Ollama mode partially validated. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
 
-**Most recent completed work:** GPT implemented Spectra cockpit Slice 1 on branch `spectra-project-cockpit-20260629`: hardened PID parsing so blank `lsof` output no longer becomes PID `0`, filtered non-positive PIDs from the external PID pill, and added parser regression coverage to `test/cockpit-html.test.ts`. Commits: `0a49f62a11c5d624f9713a2454df446f17a03f8c` and `7d193ff188cb8d7af7886f1a773d303a3b9dadc6`.
+**Most recent completed work:** GPT implemented Spectra cockpit Slice 2 on branch `spectra-project-cockpit-20260629`: added the guided panel scaffold, backend `deriveCockpitGuidance()` state machine, `guidance` in the profile response, collapsible advanced process controls, structured guided action packets via `data-guided-action`, and guidance regression tests. Commits: `e51dc951c2bf6df96fb7fa0bd86676624ff5c281` and `bdf6af509936dab3268b9a0ab7aa5b245c564f79`.
 
-**Validation:** Slice 1 was verified from this GPT session by fetching the changed files back from GitHub and comparing the branch against the previous handover head. The real repo command `npm run test:cockpit` was not run by GPT because this environment does not have the local repo checkout/npm dependency state. Dave/Codex should run `npm run test:cockpit` locally before continuing to Slice 2.
+**Validation:** Slice 2 was verified from this GPT session by fetching the changed files back from GitHub and comparing the branch against the Slice 1 head. A pre-push generated inline-script parse check passed in the sandbox. The real repo command `npm run test:cockpit` was not run by GPT because this environment does not have the local repo checkout/npm dependency state. Dave/Codex should run `npm run test:cockpit` locally before continuing to Slice 3 or opening a PR.
 
-**Current next priority:** On the cockpit branch, run `npm run test:cockpit` locally. If clean, continue only to Slice 2: add the guided panel scaffold in `tools/cockpit/projectCockpit.ts` and guidance tests, without changing `tools/ai-gateway.ts`, role definitions, Focus, or PR state.
+**Current next priority:** On the cockpit branch, run `npm run test:cockpit` locally, then manually smoke `http://127.0.0.1:3000/cockpit`. If clean, the next implementation slice is Slice 3: plain-language card labels and external-process copy in `tools/cockpit/projectCockpit.ts` only.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor shows disk, `.ollama` size, `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, and thermal state. Route hints are advisory and must preserve local-first routing order, provider availability checks, and budget ledger checks. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
+
+### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit Slice 2 guided panel scaffold
+
+Implemented Slice 2 from the Spectra cockpit guided-layer handover on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
+
+Changes:
+- `tools/cockpit/projectCockpit.ts`: added checklist/action/guidance types and an exported `deriveCockpitGuidance(profile)` function for the Focus ↔ Spectra bridge workflow.
+- `tools/cockpit/projectCockpit.ts`: changed `ProjectCockpit.profile()` to include `guidance` derived from the profile's gateway and role statuses.
+- `tools/cockpit/projectCockpit.ts`: added the guided panel CSS and client-side rendering helpers for mission, state summary, next safe action, readiness checklist, waiting state, and collapsed advanced controls.
+- `tools/cockpit/projectCockpit.ts`: moved existing role cards under a collapsed `Advanced process controls` section without removing them.
+- `tools/cockpit/projectCockpit.ts`: wired approve buttons through structured `data-guided-action` packets instead of inline JSON in `onclick`, keeping the guided layer structured while avoiding fragile HTML attributes.
+- `test/cockpit-html.test.ts`: added guidance derivation tests for focus stopped, focus external, focus owned with validation not run, and focus owned with validation passed; retained PID parser and inline-script parse checks.
+
+Commits:
+- `e51dc951c2bf6df96fb7fa0bd86676624ff5c281` — `feat: add cockpit guided panel scaffold`
+- `bdf6af509936dab3268b9a0ab7aa5b245c564f79` — `test: cover cockpit guidance scaffold`
+
+Validation:
+- Fetched changed files back from GitHub after writing.
+- `compare_commits` from Slice 1 head `7d193ff188cb8d7af7886f1a773d303a3b9dadc6` to `spectra-project-cockpit-20260629` reports 2 commits and only 2 files changed.
+- Real `npm run test:cockpit` still needs to be run locally because this GPT session does not have the local repo checkout/npm dependency state.
+
+Next:
+- Run `npm run test:cockpit` locally on the Spectra branch.
+- Start cockpit with `AI_FORGE_AI_GATEWAY_TOKEN="dev-local-token" AI_FORGE_MOCK_EXECUTORS=1 npm run cockpit` and smoke `http://127.0.0.1:3000/cockpit`.
+- Verify the guided panel appears above the collapsed advanced cards and that `Approve — Start Focus UI` calls the existing role start endpoint.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra cockpit Slice 1 PID parser hardening
 
