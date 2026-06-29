@@ -2,9 +2,9 @@
 
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
-**Last verified:** 2026-06-27  
-**Verified against:** `devknowsdev/prism-focus/main` for stable 2026-06-26 planner/header/persistence hardening, plus active staged branch `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` for Spectra AI bridge work, Journal cleanup, Day Log top-level menu posture, Assistant-absorbed planning controls, widget catalogue categories, and baseline hotkey settings. See `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md` and `docs/progress/FOCUS_SPECTRA_AI_BRIDGE_2026-06-27.md`.
-**Scope:** `prism-focus`. Verify source before implementation.
+**Last verified:** 2026-06-29  
+**Verified against:** `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` local browser validation plus `devknowsdev/prism-spectra:main` after Spectra PR #29. Focus bridge is not merged to Focus `main` yet. Spectra routing tiers through Tier 3c are merged to Spectra `main`.
+**Scope:** `prism-focus`. Verify exact source before implementation.
 
 ## Role
 
@@ -25,7 +25,7 @@ Stable notable files/routes after 2026-06-26 hardening:
 Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 
 - `src/ai_adapter_local.js` — dynamic Spectra URL/token resolution plus `health()`, `testAiRequest()`, and `/api/v1/ai/request` helper.
-- `src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, setup wizard, dev defaults, gateway test, provider-failure guidance.
+- `src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, setup wizard, dev defaults, gateway test, provider-failure guidance. Contains stale model guidance that must be refreshed before PR.
 - `src/ai_chat_spectra_bridge.js` — app-aware Focus Assistant chat through Spectra, local chat state, New/Delete/Clear controls, `Thinking…` placeholder, structured proposed tasks/schedule, review-first `Apply proposed tasks`.
 - `src/ai_chat_repaint_patch.js` — live `#chat-messages` sync and textarea composer: Enter sends, Shift+Enter inserts a line break.
 - `src/journal_checkin_patch.js` — renames Dump widget to Journal, hides standalone Check-in from default/migrated layouts, and does not render energy/check-in UI in Journal.
@@ -33,7 +33,7 @@ Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 - `src/widget_catalog_patch.js` — assigns widget categories/descriptions, groups hidden widgets by category, keeps hidden system surfaces out of drawer/count UI, and hides Music Tools on first upgraded load.
 - `src/hotkeys_patch.js` — adds Settings -> Hotkeys baseline: whitelisted app actions, set/clear shortcut capture, suggested template, and localStorage persistence under `adhd4_hotkeys_v1`.
 - `src/render_music.js` — Music Tools remain available but default hidden under Creative tools.
-- `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs.
+- `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs; needs refresh for the current model stack and validation findings.
 
 ## AI boundary
 
@@ -47,6 +47,27 @@ Beam-confirmed flow:
 Focus feature/chat/voice/day dump -> Focus AiAdapter -> Spectra /api/v1/ai/request -> provider response -> Focus review UI -> user Apply before task/planner writes
 ```
 
+## Browser validation status — 2026-06-29
+
+Validated locally by Dave with Focus static site at `http://localhost:4173/` and Spectra gateway at `http://127.0.0.1:3000`.
+
+PASS:
+
+- Focus branch checked out locally: `spectra-focus-ai-init-20260627`.
+- Spectra `main` gateway health returned `200 OK` with token accepted and CORS headers present.
+- Mock mode request/chat path worked.
+- Real gateway started with `AI_FORGE_MOCK_EXECUTORS=0`.
+- Installed current local stack was present: `qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`.
+- Real Ollama mode loaded `qwen3.5:9b` and Focus displayed provider/model metadata.
+- Machine safety check showed no immediate resource danger: about 139 GiB disk free, `.ollama` about 35 GiB, Spectra `.demo` about 1.8 MiB, memory pressure safe, thermal warnings absent, and `ollama ps` ended empty.
+
+PARTIAL / open:
+
+- Real Focus chat displayed `I received that, but no response text was returned.` after routing through `ollama / qwen3.5:9b`.
+- Stale gateway DB state can set Ollama RPM limit to `0/0`; fresh validation DB avoids this local-state blocker.
+- Focus setup text still includes stale `qwen3:9b`/older guidance in places.
+- Chat file attachments remain text-only in this branch and warn that full daemon file API support is still needed.
+
 ## Expected AI use cases
 
 - parse/summarise planning input,
@@ -59,13 +80,13 @@ Focus feature/chat/voice/day dump -> Focus AiAdapter -> Spectra /api/v1/ai/reque
 
 ## Current local model guidance
 
-Use installed models before asking user to download larger ones:
+Use installed models before asking user to download anything larger:
 
-- `qwen3:8b` — default Focus assistant, day dumps, planning, task breakdowns.
+- `qwen3.5:9b` — Focus assistant, day dumps, planning, task breakdowns, general/planner/reasoner routes.
+- `qwen3:1.7b` — classifier and fast fallback/smoke-test route.
 - `qwen2.5-coder:7b` — coding/dev help only.
-- `phi3:mini` or `mistral:7b` — fast fallback.
 
-If ordinary Focus chat routes to a coder model, it may over-focus on terminal/dev help.
+If ordinary Focus chat routes to a coder model, it may over-focus on terminal/dev help. If settings smoke tests use the full planner prompt, they may be too heavy for quick validation on M1 16GB.
 
 ## Safety defaults
 
@@ -77,6 +98,7 @@ If ordinary Focus chat routes to a coder model, it may over-focus on terminal/de
 - AI chat/day-dump proposals should stay local-draft/read-only until user clicks Apply.
 - Hotkeys should call only whitelisted local app functions, ignore normal typing in inputs, and remain user-configurable.
 - Factory reset should remain backup-prompted and typed-confirmed; normal refresh must preserve local data.
+- Real local model testing should be short until a resource/status monitor exists.
 
 ## UI/control posture
 
@@ -96,10 +118,15 @@ Avoid returning to a long row of icon-only global controls. Prefer Journal over 
 - Music Tools should not be visible by default; keep them restorable under `Creative tools`.
 - Hidden non-pinnable system surfaces should not inflate widget drawer counts or appear as restorable clutter.
 
-## Optional/future surfaces
+## Next implementation slice
 
-- Energy / check-in can remain a future optional widget idea in Beam, but should not be visible in the current main Journal surface unless it becomes connected to planning, pacing, task selection, or Spectra suggestions.
-- If reintroduced, it should be opt-in and clearly useful, not a focus-pulling first task.
+Before opening the Focus PR, implement a small safety/hardening slice:
+
+1. Add local resource/status monitor: disk free, `.ollama` size, Spectra `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, gateway health, thermal warning state where available.
+2. Refresh stale setup/model copy to current stack: `qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`.
+3. Add lighter real-mode classifier smoke path or token/output cap for settings tests.
+4. Fix or clarify empty real-mode response handling in Focus/Spectra.
+5. Keep attachment support explicitly text-only until full daemon file API integration is ready.
 
 ## Relevant Beam packs
 
