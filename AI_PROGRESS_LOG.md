@@ -2,23 +2,76 @@
 
 **Purpose:** Single current handover/changelog file for AI continuity across Prism work.
 
-**Last updated:** 2026-06-29
+**Last updated:** 2026-06-30
 **Target budget:** 1,000-3,000 tokens
 **Hard max:** 5,000 tokens
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627`. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
+**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627`. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`, now running a coherence-correction queue (P0–P3, see 2026-06-30 entries below): P0 landed on the branch, P1 implemented and pushed to `codex/cockpit-approval-ledger` pending merge, P2/P3 not started.
 
-**Most recent completed work:** GPT fixed mock-mode Focus chat shape. The Focus/Spectra bridge now routes successfully in mock mode, but Focus chat initially displayed Spectra's raw mock executor echo. `OllamaMockExecutor` now returns Focus-shaped JSON for Prism Focus requests that ask for JSON/chat proposals. Commits: `aaaee02fb1ce3f4f9d22fc9737daee19eb7cf08c` and `a5cbe27e99bd047a2e7df9f1caa2652a5296081a`.
+**Most recent completed work:** Codex fixed the real-mode Focus JSON bug (P0) and the cockpit's approval/ledger coherence gap (P1). Both independently re-verified by a Claude session against live source, not taken on report.
 
-**Validation:** GPT fetched the changed files back from GitHub and added regression coverage in `test/ai-request.test.ts` for structured Focus chat mock responses. Dave should pull, restart the gateway, run `npm run test:ai-request && npm run test:cockpit`, then retest Focus chat.
+**Validation:** See the two 2026-06-30 entries below for commits and exact validation commands run.
 
-**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, retest Focus chat in mock mode. Expected mock answer: a short natural reply, not the giant `[ollama:mock:...] handled ...` transport echo. After local tests pass, consider a PR for the cockpit/bridge branch.
+**Current next priority:** Review/merge `codex/cockpit-approval-ledger` (P1) into `spectra-project-cockpit-20260629`, then start P2 (engine cascade/cache consolidation) + P3 (aiRole/maxOutputTokens structured fields) as an isolated PR — higher risk, touches `src/engine/executionEngine.ts` directly.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor exists. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
+
+### 2026-06-30 — Codex, verified by Claude — Cockpit approval/ledger coherence (P1)
+
+**Task:** Replace the cockpit's bespoke `CockpitActionPacket`/flat-`risk` approval system with Spectra's real `ApprovalQueue`/`PrismEventLedger`, per `COCKPIT_APPROVAL_LEDGER_COHERENCE_HANDOVER_20260630.md`.
+
+**Files changed or reviewed:**
+
+- `tools/cockpit/projectCockpit.ts` — `CockpitActionPacket` → `CockpitGuidedAction` with `approvalClass`/`checkpointPolicy` (six-class taxonomy) replacing the flat `risk` field; added `handleApproveGuidedAction()` and the `/api/v1/cockpit/actions/approve` route; write-class actions now call `requestApproval()`/`resolveApproval()`, observe-class actions skip the queue entirely.
+- `tools/ai-gateway.ts` — instantiates `InMemoryApprovalQueue`/`InMemoryPrismEventLedger` once at gateway-process scope (same in-memory pattern the Workbench already uses, no new persistence layer).
+- `test/cockpit-html.test.ts` — added coverage for the approval/resolve ledger pair, observe-class actions never touching the queue, and (load-bearing) that the client script calls the approve endpoint *before* the process-execute endpoint.
+
+**Outcome:** Complete. Mapping table (§4 of the handover) implemented exactly per `CockpitActionKind`. All explicit guardrails held: no `CapabilityRegistry` registration, no Workbench merge, no shared/persistent store, one-click approve UX unchanged in behavior.
+
+**Validation:** Claude session independently checked out `codex/cockpit-approval-ledger` (`ba18e4d`, forked cleanly from cockpit-branch tip `71f5475`) fresh and ran `npm run typecheck && npm run test:cockpit && npm run test:ai-request` — all pass. Codex also reports a live cockpit smoke pass (not independently re-run).
+
+**Source/Beam mismatches:** None found — the handover document had no drift against current source.
+
+**Risks / cautions:** Minor, non-blocking: the old guided panel showed a `Risk: low/none` badge next to write-class approve buttons; this diff removes it entirely (no replacement using `approvalClass`). Cosmetic only — flagged for Dave to decide whether to restore it using the new taxonomy, not a correctness issue.
+
+**Next suggested step:** Review and merge `codex/cockpit-approval-ledger` into `spectra-project-cockpit-20260629`, then start P2/P3.
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `prism-spectra/docs/GPT_BUILD_PLAN_COCKPIT_ENGINE_FOCUS_JSON_20260630.md` §3–4 (P2/P3 scope)
+
+### 2026-06-30 — Codex, verified by Claude — Real-mode Focus JSON fix (P0)
+
+**Task:** Fix real-mode Focus chat returning unstructured prose instead of the `{reply, proposedTasks, proposedSchedule, followUpQuestion}` shape, per `CODEX_PROMPT_P0_FOCUS_JSON_FIX.md`.
+
+**Files changed or reviewed:**
+
+- `src/engine/executionEngine.ts` — `runAiRequest()` now sets a single `packet.context.expectsJson` signal instead of three scattered heuristics.
+- `src/executors/aiPrompt.ts` — `buildTaskPrompt()` surfaces Focus's literal instruction as the primary prompt text when `expectsJson` is true, and skips the generic "Respond concisely..." closing line that previously contradicted it.
+- `src/executors/ollama.ts` — `OllamaExecutor.execute()` passes Ollama's native `format` (full JSON schema, not just `"json"`) and `think: false` when `expectsJson` is set.
+- `test/ai-request.test.ts` — added coverage asserting the constructed prompt and the constructed Ollama request body directly (not model output), plus that `ollamaMock.ts` was left untouched.
+
+**Outcome:** Complete. Root cause was the instruction being buried in a JSON-dumped context blob and contradicted by a generic closing instruction; mock mode already handled this correctly via bespoke logic that was never extended to the real path.
+
+**Validation:** Claude session independently cloned `spectra-project-cockpit-20260629` fresh and ran `npm run typecheck && npm run test:ai-request && npm run test:cockpit` — all pass. Dave additionally validated against live `qwen3.5:9b` (Ollama 0.30.10): `structuredResponse` populated with task/schedule proposals, ~23s local inference.
+
+**Source/Beam mismatches:** Beam's `current-state.min.md` had flagged this as an unresolved, undiagnosed blocker ("Fix or clarify empty real-mode response handling") — now corrected in that file.
+
+**Risks / cautions:** None — `ollamaMock.ts` confirmed unchanged; fix is additive (new signal, new conditional branches) rather than a rewrite of existing paths.
+
+**Next suggested step:** See P1 entry above (same session, landed immediately after).
+
+**Next AI should read:**
+
+- `AI_LOAD_ME_FIRST.md`
+- `AI_PROGRESS_LOG.md`
+- `prism-spectra/docs/GPT_BUILD_PLAN_COCKPIT_ENGINE_FOCUS_JSON_20260630.md`
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra mock Focus chat JSON response
 
