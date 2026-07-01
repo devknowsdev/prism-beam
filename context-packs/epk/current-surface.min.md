@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token EPK/Music-Career sessions.
 
 **Last verified:** 2026-07-01
-**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion plus redacted-shell, public-CTA, and publisher-control hardening; Beam Music/Career boundary update branch.
+**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion, redacted-shell/public-CTA/publisher-control hardening, Beam Music/Career boundary updates, and EPK PR #23 (`career.refine_epk_copy`).
 **Scope:** `EPK` as current implementation seed for Dave's broader Prism Music/Career domain. Verify source before implementation.
 
 ## Role
@@ -20,13 +20,29 @@ It currently includes:
 - branded client HTML/PDF exports via `print.html`,
 - a server-side contact endpoint at `/api/contact`,
 - hosting-layer public/private redaction behavior,
-- a public redacted CTA shell for anonymous/non-owner users.
+- a public redacted CTA shell for anonymous/non-owner users,
+- the first app-side Music/Career AI slice: publisher biography copy refinement via Spectra read-only requests.
 
 ## Product-domain direction
 
 Prism Music/Career may eventually need visibility across socials, content queues, back-catalogue reuse, supporter/mailing-list awareness, press/venue contacts, project identities, and public outputs.
 
 Do not force that whole domain into a static EPK page. Do not assume a new repo is approved. Treat the existing `EPK` repo as the current seed until a Beam boundary contract explicitly approves a rename or new `prism-career` repo.
+
+## Implemented Music/Career AI slice
+
+EPK PR #23 added `career.refine_epk_copy` for Biography fields only:
+
+- `EPK/public/publisher/index.html` adds `Refine copy` controls for `bio.short`, `bio.acoustic`, and `bio.full`.
+- `EPK/public/publisher/publisher-ai-refine.js` calls Spectra's existing `/api/v1/ai/request` endpoint.
+- The request uses `sourceApp: "EPK"`, `intent: "career.refine_epk_copy"`, `riskClass: "read-only"`, and `preferredMode: "local-first"`.
+- Suggestions are visible, discardable local drafts.
+- Apply requires an explicit click and uses the existing local editor/input path.
+- No publish/export/social/supporter/platform/Focus code was added.
+- No EPK-local provider/model wiring was added.
+- No hardcoded fallback token is shipped; missing token fails closed before `fetch`.
+
+Do not infer any broader Music/Career cockpit, social/supporter/platform adapter, or Focus automation from this slice.
 
 ## Public/private surface model
 
@@ -57,6 +73,8 @@ Do not force that whole domain into a static EPK page. Do not assume a new repo 
 
 EPK/Music-Career should request AI services through Spectra rather than owning provider/model routing directly.
 
+Implemented example: `career.refine_epk_copy` in the publisher Biography section calls Spectra's `/api/v1/ai/request` with `riskClass: "read-only"`, then returns a reviewable local suggestion.
+
 The contact endpoint is not an AI service. It is a server-side message relay using hosting configuration.
 
 ## Current operational notes
@@ -70,6 +88,8 @@ Build output directory: EPK/public
 
 Contact delivery and owner access both require valid hosting configuration.
 
+Local Spectra-backed AI suggestions require a configured local Spectra URL/token in the browser environment or localStorage. Missing token should fail closed before any request.
+
 ## Current export/contact behavior
 
 - Client HTML export keeps hero CTAs and an on-page contact modal.
@@ -80,7 +100,8 @@ Contact delivery and owner access both require valid hosting configuration.
 
 ## Expected AI use cases
 
-- draft or refine public copy,
+- refine Biography copy for review using `career.refine_epk_copy` — implemented for `bio.short`, `bio.acoustic`, and `bio.full`,
+- draft or refine other public copy,
 - summarise professional material,
 - help prepare media/press-kit text,
 - suggest content-batch angles from back-catalogue material,
@@ -95,7 +116,9 @@ Contact delivery and owner access both require valid hosting configuration.
 - No hidden email or external write from static/browser code.
 - Server-side contact sending must stay explicit and spam-aware.
 - No private configuration values in public repo files.
+- No hardcoded fallback AI token in public browser code.
 - No direct cloud-model escalation from EPK.
+- AI suggestions must remain reviewable local drafts unless the user explicitly applies them.
 - Any public-facing content changes should remain reviewable.
 - Source/content truth should be preserved carefully.
 - Social/supporter/platform data must remain internal unless explicitly exported/published.
@@ -108,6 +131,7 @@ Contact delivery and owner access both require valid hosting configuration.
 - `docs/contracts/SUITE_AI_ENGINE_BOUNDARY.md`
 - `integrations/approval-posture.md`
 - `ai-guides/AI_SESSION_LOADING_POLICY.md`
+- `docs/progress/MUSIC_CAREER_OPEN_QUESTIONS_2026-07-01.md`
 - `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`
 - `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`
 
@@ -122,6 +146,8 @@ Common exact files:
 - `EPK/public/_redirects`
 - `EPK/public/index.html`
 - `EPK/public/public-empty-cta.js`
+- `EPK/public/publisher/index.html`
+- `EPK/public/publisher/publisher-ai-refine.js`
 - `EPK/public/publisher/publisher-focus-packet.js`
 - `EPK/admin/admin.html`
 - `EPK/public/admin/admin.html`
@@ -130,5 +156,6 @@ Common exact files:
 - `EPK/public/print.css`
 - `EPK/public/data/epk.json`
 - `functions/api/contact.js`
+- `EPK/scripts/test-career-refine-epk-copy.mjs`
 - `EPK/scripts/prepare-cloudflare-pages.mjs`
 - `EPK/scripts/validate-epk-admin-upgrade.mjs`
