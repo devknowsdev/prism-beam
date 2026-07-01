@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
 **Last verified:** 2026-07-01
-**Verified against:** Focus branch browser validation and Spectra `main` after PR #33. Focus bridge is not merged to Focus `main`.
+**Verified against:** `prism-focus:main` after PR #25 and Spectra `main` after PR #33.
 **Scope:** `prism-focus`. Verify exact source before implementation.
 
 ## Role
@@ -22,10 +22,10 @@ Stable notable files/routes after 2026-06-26 hardening:
 - `src/focus_header_controls.js` — grouped controls: `Focus mode`, `Log`, `Assistant`, `Manage`.
 - `index.html` — classic script order is significant; verify load order before adding render/action patches.
 
-Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
+Merged AI/UI bridge files:
 
 - `src/ai_adapter_local.js` — dynamic Spectra URL/token resolution plus `health()`, `testAiRequest()`, and `/api/v1/ai/request` helper.
-- `src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, setup wizard, dev defaults, gateway test, provider-failure guidance. Contains stale model guidance that must be refreshed before PR.
+- `src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, current model guidance, setup wizard, gateway test, and provider-failure guidance.
 - `src/ai_chat_spectra_bridge.js` — app-aware chat, structured proposals, review-first Apply.
 - `src/ai_chat_repaint_patch.js` — live chat repaint and composer behavior.
 - `src/journal_checkin_patch.js` — renames Dump widget to Journal, hides standalone Check-in from default/migrated layouts, and does not render energy/check-in UI in Journal.
@@ -33,7 +33,7 @@ Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 - `src/widget_catalog_patch.js` — assigns widget categories/descriptions, groups hidden widgets by category, keeps hidden system surfaces out of drawer/count UI, and hides Music Tools on first upgraded load.
 - `src/hotkeys_patch.js` — whitelisted, configurable local hotkeys.
 - `src/render_music.js` — Music Tools remain available but default hidden under Creative tools.
-- `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs; needs refresh for the current model stack and validation findings.
+- `docs/AI_SPECTRA_BRIDGE.md` — validated Focus-side setup, model, safety, and troubleshooting guidance.
 
 ## AI boundary
 
@@ -47,28 +47,26 @@ Beam-confirmed flow:
 Focus feature/chat/voice/day dump -> Focus AiAdapter -> Spectra /api/v1/ai/request -> provider response -> Focus review UI -> user Apply before task/planner writes
 ```
 
-## Browser validation status — 2026-06-29
+## Browser validation status — 2026-07-01
 
 Validated locally by Dave with Focus static site at `http://localhost:4173/` and Spectra gateway at `http://127.0.0.1:3000`.
 
 PASS:
 
-- Focus branch checked out locally: `spectra-focus-ai-init-20260627`.
+- Focus bridge merged to `main` through PR #25.
 - Spectra `main` gateway health returned `200 OK` with token accepted and CORS headers present.
 - Mock mode request/chat path worked.
 - Real gateway started with `AI_FORGE_MOCK_EXECUTORS=0`.
 - Installed current local stack was present: `qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`.
-- Real Ollama mode loaded `qwen3.5:9b` and Focus displayed provider/model metadata.
+- Real Ollama mode rendered an `ollama / qwen3.5:9b` reply, a structured
+  10-minute proposal, and Apply/Dismiss controls with no console errors.
 - Machine safety check showed no immediate resource danger: about 139 GiB disk free, `.ollama` about 35 GiB, Spectra `.demo` about 1.8 MiB, memory pressure safe, thermal warnings absent, and `ollama ps` ended empty.
 
-PARTIAL / open:
+OPEN:
 
-- Real chat is fixed by PR #30. Final browser validation passed: Focus rendered
-  `ollama / qwen3.5:9b`, a structured 10-minute proposal, and Apply/Dismiss controls.
-  Apply was not clicked; the console stayed clean.
+- Apply was not clicked during real validation, so no proposal was imported.
 - Stale gateway DB state can set Ollama RPM limit to `0/0`; fresh validation DB avoids this local-state blocker.
-- Focus setup text still includes stale `qwen3:9b`/older guidance in places.
-- Chat file attachments remain text-only in this branch and warn that full daemon file API support is still needed.
+- Chat file attachments remain text-only and warn that full daemon file API support is still needed.
 
 ## Expected AI use cases
 
@@ -100,7 +98,7 @@ If ordinary Focus chat routes to a coder model, it may over-focus on terminal/de
 - AI chat/day-dump proposals should stay local-draft/read-only until user clicks Apply.
 - Hotkeys should call only whitelisted local app functions, ignore normal typing in inputs, and remain user-configurable.
 - Factory reset should remain backup-prompted and typed-confirmed; normal refresh must preserve local data.
-- Real local model testing should be short until a resource/status monitor exists.
+- Refresh the resource/status monitor before heavier real local model testing.
 
 ## UI/control posture
 
@@ -115,13 +113,10 @@ Avoid returning to a long row of icon-only global controls. Prefer Journal over 
 
 ## Next implementation slice
 
-Before opening the Focus PR, implement a small safety/hardening slice:
-
-1. Add local resource/status monitor: disk free, `.ollama` size, Spectra `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, gateway health, thermal warning state where available.
-2. Refresh stale setup/model copy to current stack: `qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`.
-3. Add lighter real-mode classifier smoke path or token/output cap for settings tests.
-4. Review the branch diff and remaining hardening, then prepare the Focus client PR.
-5. Keep attachment support explicitly text-only until full daemon file API integration is ready.
+1. Add automated browser smoke coverage for Settings -> AI and the first reviewed helper action.
+2. Resolve the legacy module-header validator debt separately.
+3. Keep attachments text-only until full daemon file API integration is ready.
+4. Consider removing direct provider fallback only after Spectra is comfortably established.
 
 ## Relevant Beam packs
 
