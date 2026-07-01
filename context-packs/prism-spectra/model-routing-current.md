@@ -2,7 +2,7 @@
 
 **Purpose:** Compact routing-policy context for AI sessions working on Spectra model/provider behavior.
 
-**Last verified:** 2026-06-29
+**Last verified:** 2026-07-01
 **Scope:** Policy guidance only. Spectra source code remains implementation truth.
 
 ## Current decision
@@ -19,14 +19,14 @@ Routing intelligence architecture is defined in ADR-010
 |---|---|
 | Multi-tier router (local → free → paid) | ✅ live |
 | Ollama health probe at startup | ✅ live (Tier 1) |
-| `ModelRole`, `LOCAL_MODEL_CATALOG`, `classifyIntent()` | ✅ exists, unwired |
-| `localTierAvailable()` real implementation | ❌ stub — always returns true |
-| L1 heuristic classification | ❌ not started (Tier 2b) |
-| Cascade quality-gate + confidence scoring | ❌ not started (Tier 2b) |
-| Semantic cache (vector similarity layer) | ❌ not started (Tier 3a) |
-| L2 embedding classification | ❌ not started (Tier 3b) |
-| Route decision cache | ❌ not started (Tier 3b) |
-| Telemetry per request | ❌ not started (Tier 4) |
+| `ModelRole`, model catalog, `classifyIntent()` | ✅ live |
+| Probe-backed provider availability | ✅ live (Tier 2b) |
+| L1 heuristic classification | ✅ live (Tier 2b) |
+| Cascade quality-gate + confidence scoring | ✅ live; shared by graph and AI-request paths |
+| Semantic cache (vector similarity layer) | ✅ live (Tier 3a) |
+| L2 utterance-centroid classification | ❌ future |
+| Route decision cache | ✅ live (Tier 3b) |
+| Routing export/telemetry hardening | ✅ live (Tier 3c); full telemetry dataset remains future |
 
 ## Cascade model — critical framing
 
@@ -52,18 +52,17 @@ underperforms relative to the confidence threshold.
 | `balanced` | yes | allowed with controls | show provider/model/cost/data boundary |
 | `cloud-allowed` | yes | allowed | still log provenance and sensitive-data warnings |
 
-## Classification tiers (planned — ADR-010)
+## Classification tiers
 
 **L1 — heuristic (< 5ms, no model call):** keyword signals, query length, node
 type. Outputs task class: `code | reasoning | creative | general | unknown`.
 
-**L2 — embedding (Ollama, ~50ms):** cosine similarity against route utterance
-centroids. Replaces `classifyIntent()` LLM call for classification once stable.
-`classifyIntent()` becomes fallback for low-confidence L1+L2 results.
+**L2 — embedding (future):** cosine similarity against route utterance
+centroids. Current Tier 3b uses embedding-backed route-decision hints, not the
+full utterance-centroid classifier proposed by ADR-010.
 
-**Confidence scoring:** mean log probability from Ollama logprobs + heuristic
-signals (uncertainty phrases, suspiciously short response, placeholder text).
-Escalation threshold: 0.4 (configurable via env var).
+**Confidence scoring (live):** deterministic output heuristics plus L1
+confidence. Escalation threshold: 0.4, configurable via environment.
 
 ## Local runtime priority
 
