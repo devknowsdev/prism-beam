@@ -2,11 +2,11 @@
 
 ## Status
 
-Implemented and merged in `devknowsdev/EPK` PR #23.
+Implemented and merged in `devknowsdev/EPK` PR #23 and PR #24.
 
 ## Purpose
 
-Record the first completed app-side Music/Career slice after the Beam EPK → Music/Career boundary reframe.
+Record the first two completed app-side Music/Career slices after the Beam EPK → Music/Career boundary reframe.
 
 ## Implemented slice
 
@@ -15,18 +15,28 @@ Record the first completed app-side Music/Career slice after the Beam EPK → Mu
 Flow:
 
 ```text
-EPK publisher Biography fields
+EPK publisher Biography, offering description, and credit description fields
 → Spectra /api/v1/ai/request
+→ sourceApp=EPK
+→ intent=career.refine_epk_copy
 → riskClass=read-only
+→ preferredMode=local-first
 → visible discardable draft suggestion
 → manual Apply only
 ```
 
 ## Changed app files
 
+EPK PR #23:
+
 - `EPK/public/publisher/index.html`
 - `EPK/public/publisher/publisher-ai-refine.js`
 - `EPK/public/publisher/publisher.css`
+- `EPK/scripts/test-career-refine-epk-copy.mjs`
+
+EPK PR #24:
+
+- `EPK/public/publisher/publisher-ai-refine.js`
 - `EPK/scripts/test-career-refine-epk-copy.mjs`
 
 ## Request shape
@@ -35,14 +45,16 @@ EPK publisher Biography fields
 - `intent: "career.refine_epk_copy"`
 - `riskClass: "read-only"`
 - `preferredMode: "local-first"`
-- `input.text`: currently edited Biography field text
+- `input.text`: currently edited field text
 - `input.instruction`: refine for clarity/flow while preserving facts and not inventing details
 - `context.appSurface: "publisher"`
-- `context.field`: `bio.short`, `bio.acoustic`, or `bio.full`
+- `context.field`: `bio.short`, `bio.acoustic`, `bio.full`, `offerings[n].description`, or `credits[n].description`
 
 ## Review outcome
 
 Claude approved the boundary with one required fix before merge: remove the shippable default local auth fallback. Codex fixed this before merge so missing local auth fails closed before the request.
+
+EPK PR #24 reused that approved request path and intent. It added dynamic description controls and event delegation without adding another endpoint, provider wiring, schema, or write path.
 
 ## Validation reported by Codex
 
@@ -57,6 +69,15 @@ Claude approved the boundary with one required fix before merge: remove the ship
   - no console errors;
   - no publish/export action invoked.
 
+For EPK PR #24, Codex additionally reported:
+
+- Biography, offering, and credit refinement passed browser validation.
+- Add, duplicate, reorder, and delete rerender paths preserved dynamic controls.
+- Tokenless requests stopped before `fetch`.
+- Captured requests retained `sourceApp`, `intent`, `riskClass`, and `preferredMode`.
+- No console errors.
+- No publish/export action occurred.
+
 ## Guardrails confirmed
 
 - No EPK-local AI provider/model wiring.
@@ -69,7 +90,10 @@ Claude approved the boundary with one required fix before merge: remove the ship
 
 ## Do not infer
 
-Do not infer broader Music/Career implementation from this slice. Only Biography copy refinement exists app-side.
+Do not infer broader Music/Career implementation from these slices. The implemented app-side surface is limited to:
+
+1. Biography copy refinement.
+2. Offering and credit description refinement.
 
 ## Related Beam references
 
