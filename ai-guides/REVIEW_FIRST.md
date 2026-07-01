@@ -10,6 +10,19 @@ These suite-wide rules apply before app-specific instructions.
   publishing, or integration contracts.
 - Report what was validated and what remains unvalidated.
 
+## Reuse Before Reinvention
+
+- Before introducing a schema, execution sequence, audit trail, risk model,
+  cache, retry path, or prompt-construction special case, search the target
+  repo for the existing general-purpose primitive first.
+- In `prism-spectra`, check `src/approvals`, `src/events`, `src/capabilities`,
+  `src/engine`, `src/routing`, and `src/executors` before building a parallel
+  concept.
+- Extend the governed path when it fits. Build a new path only when the search
+  genuinely turns up no suitable primitive, and record that finding.
+- Check mock/real parity explicitly: bespoke mock behavior that produces a
+  correct contract is evidence that the real path may need equivalent wiring.
+
 ## Safety Rules
 
 - No fake auth. Frontend-only password gates, hidden flags, or obscured routes

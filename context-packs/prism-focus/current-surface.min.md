@@ -2,8 +2,8 @@
 
 **Purpose:** Tier-1 app card for low-token Focus sessions.
 
-**Last verified:** 2026-06-29  
-**Verified against:** `devknowsdev/prism-focus:spectra-focus-ai-init-20260627` local browser validation plus `devknowsdev/prism-spectra:main` after Spectra PR #29. Focus bridge is not merged to Focus `main` yet. Spectra routing tiers through Tier 3c are merged to Spectra `main`.
+**Last verified:** 2026-07-01
+**Verified against:** Focus branch browser validation and Spectra `main` after PR #33. Focus bridge is not merged to Focus `main`.
 **Scope:** `prism-focus`. Verify exact source before implementation.
 
 ## Role
@@ -14,24 +14,24 @@ Focus is the downstream planning/focus app in the Prism suite. It should not own
 
 Stable notable files/routes after 2026-06-26 hardening:
 
-- `src/planner_functions.js` — planner helper/action layer for scheduling, unscheduling, duration, copy, create, dump item, view navigation.
+- `src/planner_functions.js` — planner scheduling/action helpers.
 - `src/planner_timeline_cursor.js` — day-scheduler cursor tracking plus click-start / click-end task creation.
 - `src/storage.js` — defensive per-key `adhd4_*` localStorage loading and Focus-key clearing helper; no longer forces Music Tools visible for existing users.
 - `src/actions_export.js` — full backup export plus backup-gated factory reset flow.
 - `src/factory_reset_ui.js` — Day Log factory-reset UI patch.
-- `src/focus_header_controls.js` — grouped top-level header controls: `Focus mode`, `Log`, `Assistant`, `Manage`; planning actions live inside `Assistant`.
+- `src/focus_header_controls.js` — grouped controls: `Focus mode`, `Log`, `Assistant`, `Manage`.
 - `index.html` — classic script order is significant; verify load order before adding render/action patches.
 
 Active staged AI/UI bridge files on `spectra-focus-ai-init-20260627`:
 
 - `src/ai_adapter_local.js` — dynamic Spectra URL/token resolution plus `health()`, `testAiRequest()`, and `/api/v1/ai/request` helper.
 - `src/ai_spectra_settings.js` — Settings -> AI Spectra gateway panel, setup wizard, dev defaults, gateway test, provider-failure guidance. Contains stale model guidance that must be refreshed before PR.
-- `src/ai_chat_spectra_bridge.js` — app-aware Focus Assistant chat through Spectra, local chat state, New/Delete/Clear controls, `Thinking…` placeholder, structured proposed tasks/schedule, review-first `Apply proposed tasks`.
-- `src/ai_chat_repaint_patch.js` — live `#chat-messages` sync and textarea composer: Enter sends, Shift+Enter inserts a line break.
+- `src/ai_chat_spectra_bridge.js` — app-aware chat, structured proposals, review-first Apply.
+- `src/ai_chat_repaint_patch.js` — live chat repaint and composer behavior.
 - `src/journal_checkin_patch.js` — renames Dump widget to Journal, hides standalone Check-in from default/migrated layouts, and does not render energy/check-in UI in Journal.
 - `src/daylog_menu_patch.js` — hides Day Log from the dashboard widget surface and exposes it as a top-level Log modal with compact tracked-time summary.
 - `src/widget_catalog_patch.js` — assigns widget categories/descriptions, groups hidden widgets by category, keeps hidden system surfaces out of drawer/count UI, and hides Music Tools on first upgraded load.
-- `src/hotkeys_patch.js` — adds Settings -> Hotkeys baseline: whitelisted app actions, set/clear shortcut capture, suggested template, and localStorage persistence under `adhd4_hotkeys_v1`.
+- `src/hotkeys_patch.js` — whitelisted, configurable local hotkeys.
 - `src/render_music.js` — Music Tools remain available but default hidden under Creative tools.
 - `docs/AI_SPECTRA_BRIDGE.md` — staged Focus-side setup and safety docs; needs refresh for the current model stack and validation findings.
 
@@ -63,7 +63,10 @@ PASS:
 
 PARTIAL / open:
 
-- Real Focus chat displayed `I received that, but no response text was returned.` after routing through `ollama / qwen3.5:9b`.
+- The Spectra-side cause of empty/unstructured real chat replies is fixed in PR #30:
+  Focus instructions are surfaced and Ollama uses schema-constrained JSON. A direct
+  real `qwen3.5:9b` Focus-shaped request returned populated structured proposals.
+  Final validation from the Focus browser against merged Spectra `main` remains.
 - Stale gateway DB state can set Ollama RPM limit to `0/0`; fresh validation DB avoids this local-state blocker.
 - Focus setup text still includes stale `qwen3:9b`/older guidance in places.
 - Chat file attachments remain text-only in this branch and warn that full daemon file API support is still needed.
@@ -111,13 +114,6 @@ Top-level controls should stay grouped by user intention:
 
 Avoid returning to a long row of icon-only global controls. Prefer Journal over Dump wording for user-facing labels. Day Log should be treated as metadata/history, not a primary dashboard widget. Plan-day actions should live under Assistant rather than as their own top-level menu.
 
-## Widget catalogue posture
-
-- Widgets should carry a category and short description as the app grows.
-- Current categories include `Core focus`, `Planning`, `Capture`, `Routines`, `Creative tools`, and `System`.
-- Music Tools should not be visible by default; keep them restorable under `Creative tools`.
-- Hidden non-pinnable system surfaces should not inflate widget drawer counts or appear as restorable clutter.
-
 ## Next implementation slice
 
 Before opening the Focus PR, implement a small safety/hardening slice:
@@ -125,7 +121,7 @@ Before opening the Focus PR, implement a small safety/hardening slice:
 1. Add local resource/status monitor: disk free, `.ollama` size, Spectra `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, gateway health, thermal warning state where available.
 2. Refresh stale setup/model copy to current stack: `qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`.
 3. Add lighter real-mode classifier smoke path or token/output cap for settings tests.
-4. Fix or clarify empty real-mode response handling in Focus/Spectra.
+4. Run final real-mode Focus browser chat validation; Spectra's executor-side fix is merged.
 5. Keep attachment support explicitly text-only until full daemon file API integration is ready.
 
 ## Relevant Beam packs
@@ -139,4 +135,4 @@ Before opening the Focus PR, implement a small safety/hardening slice:
 
 ## Source escalation
 
-For Focus implementation, read this mini-pack first, then inspect only exact Focus files needed for the requested change. Do not rescan the whole repo just to orient.
+Read this pack first, then inspect only the exact Focus files needed.

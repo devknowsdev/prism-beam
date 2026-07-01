@@ -2,8 +2,8 @@
 
 **Purpose:** Tier-1 suite orientation for low-token AI sessions.
 
-**Last verified:** 2026-06-29  
-**Verified against:** Beam tracking docs after Spectra PR #29 merge and Focus/Spectra bridge local browser validation.
+**Last verified:** 2026-07-01
+**Verified against:** `devknowsdev/prism-spectra:main` after PRs #30 and #33, focused tests, and a real local Ollama Focus-shaped gateway request.
 **Target budget:** 500-1,000 tokens
 **Scope:** Prism suite repo roles and current direction. Source code still overrides this pack.
 
@@ -21,7 +21,9 @@ Spectra is the local-first AI engine/cockpit for Prism. Beam should minimize rep
 ## Current project state
 
 - Spectra routing work is merged through Tier 3c on `devknowsdev/prism-spectra:main`: Tier 2b routing intelligence, Tier 3a semantic cache, Tier 3b route decision cache hints/engine wiring, and Tier 3c telemetry/export hardening.
-- Focus branch `spectra-focus-ai-init-20260627` is staged and locally browser-validated in mock mode. Real Ollama mode is partially validated: gateway health/token/CORS pass and `qwen3.5:9b` loads, but Focus receives empty usable response text from the real chat path.
+- PR #33 gives `runAiRequest()` the same cache/routing/confidence-fallback path as graph execution and passes `aiRole`/`maxOutputTokens` structurally.
+- The Spectra project cockpit is merged. Guided write actions now use the suite's `ApprovalQueue`/`PrismEventLedger`; observe actions skip approval.
+- Focus branch `spectra-focus-ai-init-20260627` remains a separate client-repo concern. Mock browser flow was validated previously. Spectra's real gateway path is now validated with `qwen3.5:9b`: Focus-shaped requests return non-null structured JSON with task/schedule proposals. A final real browser-to-browser Focus check is still useful.
 - Current local model stack: `qwen3.5:9b` for general/planner/reasoner, `qwen3:1.7b` for classifier/fallback, and `qwen2.5-coder:7b` for coder.
 - Local resource safety matters on the M1 16GB target. Ollama model storage is persistent and can be large; Spectra `.demo` runtime files were tiny in validation.
 
@@ -50,5 +52,5 @@ Spectra is the local-first AI engine/cockpit for Prism. Beam should minimize rep
 - Add a Focus/Spectra local resource/status monitor: disk free, `.ollama` size, Spectra `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode/health, and thermal warning state where available.
 - Refresh Focus setup/model guidance to current local stack.
 - Add a lighter real-mode classifier smoke path or output cap for Settings -> Test Spectra.
-- Fix or clarify empty real-mode response handling before opening the Focus PR.
+- Run one final real-mode Focus browser chat check against merged Spectra `main`; the executor-side empty/unstructured response cause is fixed by PR #30.
 - Keep Beam current and compact after each validation pass.

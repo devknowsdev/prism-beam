@@ -2,23 +2,51 @@
 
 **Purpose:** Single current handover/changelog file for AI continuity across Prism work.
 
-**Last updated:** 2026-06-29
+**Last updated:** 2026-07-01
 **Target budget:** 1,000-3,000 tokens
 **Hard max:** 5,000 tokens
 
 ## Current active handover
 
-**Status:** Spectra Tier 1 (PR #22), Tier 2a (PR #23), the Spectra side of the Focus/Spectra bridge (PR #24), Tier 2b routing intelligence (PR #25), Tier 3a semantic cache (PR #26), Tier 3b-A route decision cache hints (PR #27), Tier 3b-B ExecutionEngine route-hint wiring (PR #28), and Tier 3c routing telemetry/export hardening (PR #29) are merged to `devknowsdev/prism-spectra:main`. The Focus side remains on `devknowsdev/prism-focus:spectra-focus-ai-init-20260627`. Spectra cockpit prototype work is active on `devknowsdev/prism-spectra:spectra-project-cockpit-20260629`.
+**Status:** Spectra routing through Tier 3c, the guided project cockpit, real-mode Focus JSON repair, cockpit approval/ledger coherence, and shared AI-request cache/cascade execution are merged to `devknowsdev/prism-spectra:main` through PR #33. The Focus client side remains a separate `prism-focus` branch concern.
 
-**Most recent completed work:** GPT fixed mock-mode Focus chat shape. The Focus/Spectra bridge now routes successfully in mock mode, but Focus chat initially displayed Spectra's raw mock executor echo. `OllamaMockExecutor` now returns Focus-shaped JSON for Prism Focus requests that ask for JSON/chat proposals. Commits: `aaaee02fb1ce3f4f9d22fc9737daee19eb7cf08c` and `a5cbe27e99bd047a2e7df9f1caa2652a5296081a`.
+**Most recent completed work:** PRs #30–#33 landed the cockpit/bridge integration and two architecture corrections. Real Ollama Focus-shaped requests now return schema-constrained structured JSON. Guided cockpit writes use `ApprovalQueue`/`PrismEventLedger`. `runAiRequest()` now shares cache, routing, confidence fallback, and route metadata with graph execution.
 
-**Validation:** GPT fetched the changed files back from GitHub and added regression coverage in `test/ai-request.test.ts` for structured Focus chat mock responses. Dave should pull, restart the gateway, run `npm run test:ai-request && npm run test:cockpit`, then retest Focus chat.
+**Validation:** `npm run typecheck`, `test:ai-request`, `test:cockpit`, Tier 2b tests, and the 60-test engine suite passed. A real local `qwen3.5:9b` gateway request returned non-null `structuredResponse` with task and schedule proposals. Local cockpit browser and approval-endpoint smoke checks passed.
 
-**Current next priority:** Pull `spectra-project-cockpit-20260629`, restart the cockpit gateway, retest Focus chat in mock mode. Expected mock answer: a short natural reply, not the giant `[ollama:mock:...] handled ...` transport echo. After local tests pass, consider a PR for the cockpit/bridge branch.
+**Current next priority:** Run one final real-mode Focus browser chat against merged Spectra `main`, then decide whether the Focus client branch is ready for its own PR.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor exists. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
 ## Recent session entries
+
+### 2026-07-01 — Codex — Spectra cockpit/Focus architecture corrections merged
+
+**Task:** Repair real Focus JSON responses, cohere cockpit approvals with suite
+primitives, and give `runAiRequest()` the existing cache/cascade intelligence.
+
+**Files changed or reviewed:**
+
+- `prism-spectra/src/executors/{aiPrompt,ollama}.ts` — real JSON instruction and schema-constrained output.
+- `prism-spectra/tools/cockpit/projectCockpit.ts` — suite approval/ledger wiring.
+- `prism-spectra/src/engine/executionEngine.ts` — shared cache/routing/fallback path.
+- `prism-spectra/test/{ai-request,cockpit-html}.test.ts` — regression coverage.
+
+**Outcome:** Merged to Spectra `main` through PRs #30 and #33. PRs #31/#32
+provided isolated review diffs before final promotion.
+
+**Validation:** Typecheck, focused AI/cockpit/routing tests, core engine 60/60,
+real `qwen3.5:9b` structured response, and local cockpit smoke passed.
+
+**Source/Beam mismatches:** Beam still described Tier 2b/3a/3b as unbuilt,
+classified `src/events` as inert Track B, and listed empty real-mode response
+handling as unresolved. Corrected in this housekeeping branch.
+
+**Risks / cautions:** Real gateway behavior is verified directly; a final
+end-to-end browser chat from the Focus client is still recommended.
+
+**Next suggested step:** Run the real Focus browser chat check against merged
+Spectra `main`, then prepare the separate Focus client PR.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra mock Focus chat JSON response
 

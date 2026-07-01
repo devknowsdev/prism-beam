@@ -2,8 +2,8 @@
 
 **Purpose:** Tier-1 app card for low-token Spectra sessions.
 
-**Last verified:** 2026-06-29
-**Verified against:** Tier 1 (PR #22), Tier 2a (PR #23), Focus bridge Spectra side (PR #24), and direct source inspection of `devknowsdev/prism-spectra` main branch, 2026-06-29.
+**Last verified:** 2026-07-01
+**Verified against:** Direct source inspection of `devknowsdev/prism-spectra:main` after PRs #30 and #33.
 **Scope:** `prism-spectra`. Verify source before implementation.
 
 ## Role
@@ -22,8 +22,8 @@ and a full workbench HTTP API served by a long-running daemon.
   `POST /api/v1/ai/request` routes through real router → ledger → learning loop → provenance.
   Token-gated (`x-local-token` header). `GET /api/v1/health` available.
 - **Router** (`src/routing/router.ts`) — cost-ascending tiers: ollama → free_tier → paid (gpt/claude).
-  Startup Ollama probe is wired to both daemon and gateway (Tier 1 / PR #22 merged).
-  `localTierAvailable()` still a **stub** (always returns true) — real fix is Tier 2b (ADR-010).
+  Startup provider probes, availability-aware routing, L1 task classification, role selection,
+  confidence scoring, and optional confidence-gated fallback are wired.
 - **Executors** — Ollama (`qwen3.5:9b` general/planner/reasoner, `qwen2.5-coder:7b` coding,
   `qwen3:1.7b` classifier/fallback), Claude, GPT, terminal, mocks.
   Mock mode: set `AI_FORGE_MOCK_EXECUTORS=1`. Real executors are now default (post Tier 1).
@@ -31,24 +31,28 @@ and a full workbench HTTP API served by a long-running daemon.
   `LOCAL_MODEL_CATALOG` (5 roles: classifier/planner/reasoner/coder/fallback, env-var override pattern),
   `ROLE_BY_NODE_TYPE` map, `selectModelForRole()`, `classifyIntent()` standalone primitive
   (15s timeout, 80-token limit, returns null on any failure).
-  **`classifyIntent()` is unwired.** Wiring is Tier 2b and must go through `ModelLock`.
+  `classifyIntent()` is wired as the low-confidence classifier fallback through `ModelLock`.
 - **Model lock** (`src/engine/modelLock.ts`) — serialising AsyncMutex around Ollama calls.
   Injects ~10s sleep on model switch. Do not remove — solves a real 16GB RAM constraint.
 - **Learning loop** (`src/intelligence/learningLoop.ts`) — tracks `(provider, node_type)` success/cost/latency
   in `routing_weights` table. Never reorders tier chain; only breaks ties within the paid tier.
-- **Pattern cache** (`src/memory/patternCache.ts`) — exact SHA-256 hash of `(node_type + intent + context)`.
-  No fuzzy/semantic matching yet (Tier 3a target).
+- **Caching** — exact SHA-256 `PatternCache` is Layer A; Ollama embedding-backed
+  `SemanticPatternCache` is Layer B. Route-decision hints are separately cached and advisory.
 - **Graph builder + Wizard** — real. Graph builder uses Claude for intent decomposition (requires API key),
   falls back to deterministic templates. Fallback template path ignores failure-avoidance notes
   (known gap, §4.8 of handover pack).
-- **Capabilities layer** (`src/capabilities/`) — scaffold only. Every capability returns
-  `{success: false, error: 'Not implemented'}`. Do not build on yet.
+- **Capabilities layer** — executable capability registry remains scaffold-only. Its manifest
+  approval/checkpoint taxonomy is active and used by the mature approval queue.
+- **Approval/event primitives** (`src/approvals/`, `src/events/`) — active, tested suite primitives.
+  The Workbench and project cockpit use them; they are not Track B.
+- **Project cockpit** (`tools/cockpit/projectCockpit.ts`) — merged guided local process surface.
+  Write-class guided actions record request/resolution ledger events before execution.
 - **Focus AI bridge (Spectra side)** — `tools/focus-ai-smoke.ts`, `docs/FOCUS_AI_INIT.md`,
-  `test:focus-ai` and `focus:ai:gateway` scripts. Merged PR #24. Focus repo side
-  (`prism-focus:spectra-focus-ai-init-20260627`) is unmerged — currently 34 ahead / 0 behind main,
-  needs browser validation before PR.
-- **Test suite** — `npm test` (59/60 as of Tier 2a / PR #24 — 1 pre-existing daemon e2e failure,
-  environment-dependent, not a regression), `npm run test:ai-request`, `npm run test:setup`.
+  `test:focus-ai` and `focus:ai:gateway` scripts. Real Ollama JSON is schema-constrained for
+  Focus chat and the explicit Focus instruction is surfaced in the real prompt. PR #33 also
+  gives AI requests shared exact/semantic cache lookup and confidence fallback.
+- **Test suite** — core engine suite passes 60/60 when socket binding is available (the daemon
+  e2e safely skips in restricted environments), plus focused AI request, cockpit, and routing tests.
 
 ## Track A vs Track B
 
@@ -56,7 +60,7 @@ and a full workbench HTTP API served by a long-running daemon.
 `PatternCache`, `TaskHistory`, `CheckpointManager`, `GraphBuilder`, `Wizard`, `executors/*`,
 canonical `src/types.ts`. Build here only.
 
-**Track B — experimental, inert.** `src/runtime/**`, `src/events/**`, `routing/taskClassifier.ts`,
+**Track B — experimental, inert.** `src/runtime/**`, `routing/taskClassifier.ts`,
 `routing/types.ts`, `types/contracts.ts`, `types/taskTypes.ts`, `config/modelRegistry.ts`,
 `providers/ollamaClient.ts`, `executors/localExecutor.ts`, `memory/ledgerStore.ts`, `memory/replay.ts`.
 Excluded from `tsconfig.test.json`. Unreachable from Track A's real execution path. Do not expand.
@@ -105,11 +109,10 @@ Do not run both simultaneously without an explicit port override.
 
 ## Next planned build targets
 
-- **Tier 2b** — cascade quality-gate + L1 heuristic classification + real `localTierAvailable()`.
-  Wire `classifyIntent()` through `ModelLock`. Add confidence scoring. No new dependencies.
-- **Tier 3a** — semantic cache Layer B + embedding keepalive via Ollama embeddings.
-- **Tier 3b** — L2 embedding classification + route decision cache.
-- **Tier 4** — routing telemetry + full model capability profiles.
+- Final real-browser Focus chat validation against merged Spectra `main`.
+- Full utterance-centroid L2 classification (route-decision hints are already live).
+- Provider circuit breakers, task-class cache TTLs, and warm-routing eviction policy.
+- Full routing telemetry dataset and model capability profiles.
 
 ## Relevant Beam packs
 
