@@ -63,10 +63,9 @@ PASS:
 
 PARTIAL / open:
 
-- The Spectra-side cause of empty/unstructured real chat replies is fixed in PR #30:
-  Focus instructions are surfaced and Ollama uses schema-constrained JSON. A direct
-  real `qwen3.5:9b` Focus-shaped request returned populated structured proposals.
-  Final validation from the Focus browser against merged Spectra `main` remains.
+- Real chat is fixed by PR #30. Final browser validation passed: Focus rendered
+  `ollama / qwen3.5:9b`, a structured 10-minute proposal, and Apply/Dismiss controls.
+  Apply was not clicked; the console stayed clean.
 - Stale gateway DB state can set Ollama RPM limit to `0/0`; fresh validation DB avoids this local-state blocker.
 - Focus setup text still includes stale `qwen3:9b`/older guidance in places.
 - Chat file attachments remain text-only in this branch and warn that full daemon file API support is still needed.
@@ -121,7 +120,7 @@ Before opening the Focus PR, implement a small safety/hardening slice:
 1. Add local resource/status monitor: disk free, `.ollama` size, Spectra `.demo` size, memory pressure, loaded Ollama model, top CPU process, gateway mode, gateway health, thermal warning state where available.
 2. Refresh stale setup/model copy to current stack: `qwen3.5:9b`, `qwen3:1.7b`, `qwen2.5-coder:7b`.
 3. Add lighter real-mode classifier smoke path or token/output cap for settings tests.
-4. Run final real-mode Focus browser chat validation; Spectra's executor-side fix is merged.
+4. Review the branch diff and remaining hardening, then prepare the Focus client PR.
 5. Keep attachment support explicitly text-only until full daemon file API integration is ready.
 
 ## Relevant Beam packs
