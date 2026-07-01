@@ -6,7 +6,9 @@ Draft reference contract.
 
 ## Source App
 
-EPK owns public/promotional content, publisher exports, and published snapshots.
+EPK owns public/promotional content, publisher exports, published snapshots,
+and the current implementation seed for Music/Career public/professional
+outputs.
 
 ## Target App
 
@@ -20,8 +22,9 @@ Spectra.
 
 ## Purpose
 
-Define how Spectra should read EPK data without scraping prematurely, inventing
-publisher state, or turning read operations into hidden writes.
+Define how Spectra should read EPK/Music-Career data without scraping
+prematurely, inventing publisher state, exposing private/internal career data,
+or turning read operations into hidden writes.
 
 ## Read Order
 
@@ -45,6 +48,8 @@ publisher state, or turning read operations into hidden writes.
 - Assumed authentication from `/publisher/`.
 - External posting, email sending, or GitHub publication without explicit
   approval.
+- Social, supporter, mailing-list, contact, or platform visibility into public
+  EPK outputs unless deliberately included in an approved export/publish action.
 - Beam files as runtime imports.
 
 ## Forbidden Assumptions
@@ -52,8 +57,12 @@ publisher state, or turning read operations into hidden writes.
 - Do not infer `/publisher/` is private unless real platform auth is configured.
 - Do not scrape public DOM if structured data or `window.EPKAdapter` is
   available.
-- Do not treat `mailto:` contact as a backend email service.
+- Do not assume contact behavior from older Beam docs. Current app source must
+  decide whether `/api/contact`, `mailto:`, WhatsApp fallback, or another
+  explicit path is active.
+- Do not treat any contact path as permission for hidden email sending.
 - Do not treat browser-only poster generation as a publishing backend.
+- Do not treat the public EPK page as the whole Prism Music/Career interface.
 
 ## Review And Approval Rule
 
@@ -71,8 +80,9 @@ request.
 ## Failure/Rollback Notes
 
 If structured reads fail, stop with a clear error or fall back to read-only DOM
-inspection. Do not synthesize missing event facts. For approved writes in future
-app work, require preview, checkpoint/backup, and rollback notes.
+inspection. Do not synthesize missing event facts, platform facts, supporter
+facts, or contact facts. For approved writes in future app work, require
+preview, checkpoint/backup, and rollback notes.
 
 ## Future App-Side Implementation Notes
 
@@ -80,22 +90,30 @@ app work, require preview, checkpoint/backup, and rollback notes.
   context exists.
 - Add explicit file-read support for `EPK/public/data/epk.json`.
 - Treat published snapshot reads as immutable reference reads.
-- Keep poster export and contact behavior local/export-only until a real backend
-  sprint is approved.
+- Keep contact behavior explicit and source-verified. The server-side
+  `/api/contact` path exists in current EPK source, but it is not permission for
+  hidden sends or external-write bypasses.
+- Treat EPK public outputs as outputs of the broader Music/Career domain, not as
+  the internal cockpit/dashboard.
 
 ## Validation
 
 - Confirm EPK still exposes `window.EPKAdapter` before relying on it.
 - Confirm `EPK/public/data/epk.json` parses before using repo data.
+- Confirm current contact behavior from app source before editing contact flows.
 - Confirm any write-like action maps to `integrations/approval-posture.md`.
+- Confirm social/supporter/platform data is not exposed through public EPK reads
+  or writes without an explicit approved export/publish action.
 
 ## Future prompts can omit
 
 Future prompts can omit the EPK read order, forbidden assumptions about
-publisher privacy/contact/poster publishing, and the rule that Beam is reference
-context rather than a runtime dependency.
+publisher privacy/contact/poster publishing, the rule that Beam is reference
+context rather than a runtime dependency, and the updated warning that older
+`mailto:`-only contact assumptions are stale.
 
 ## Update Rules
 
 Update this contract when EPK adapter methods change, Spectra implements an EPK
-adapter, or EPK gains a real backend/form/publish service.
+adapter, EPK contact/publish services change, or Music/Career adds explicit
+social/supporter/platform visibility adapters.

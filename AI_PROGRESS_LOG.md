@@ -8,17 +8,36 @@
 
 ## Current active handover
 
-**Status:** Beam branch `beam/career-music-domain-20260701` stages a documentation/contract update that reframes `EPK` as the current implementation seed for a broader Prism Music/Career domain. Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
+**Status:** Beam PR #24 is merged to `main` and reframes `EPK` as the current implementation seed for a broader Prism Music/Career domain. Cleanup branch `beam/music-career-doc-consistency-20260701` applies Claude's post-merge doc-consistency fixes. Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
 
-**Most recent completed work:** Beam Music/Career boundary docs, context packs, placement contract, registry row, and research notes were committed for Claude review before any app implementation.
+**Most recent completed work:** Claude reviewed the Music/Career boundary and approved with doc-only changes. The cleanup branch refreshes stale EPK contact assumptions, adds Music/Career pointers to older Beam overview docs, and tracks open Music/Career questions in `docs/progress/MUSIC_CAREER_OPEN_QUESTIONS_2026-07-01.md`.
 
 **Validation:** Repo source/Beam packs were inspected through GitHub. No app source was changed. No tests were run because this is docs/contracts/research only.
 
-**Current next priority:** Have Claude vet the Music/Career boundary and placement contract, especially repo ownership, privacy, social/supporter data ownership, and minimal implementation slice. Do not implement app-side changes until that review is complete.
+**Current next priority:** Merge the Beam doc-consistency cleanup, then implement the smallest safe app-side slice Claude recommended: EPK publisher `career.refine_epk_copy` through Spectra's existing read-only `/api/v1/ai/request`, rendered as a discardable local draft.
 
-**Known caution:** The current `EPK` repo is only an implementation seed. The online EPK page is not the whole Music/Career product. Any future repo rename or new `prism-career` repo requires explicit approval and a follow-up Beam boundary contract.
+**Known caution:** The current `EPK` repo is only an implementation seed. The online EPK page is not the whole Music/Career product. Any future repo rename or new `prism-career` repo requires explicit approval and a follow-up Beam boundary contract. Social/supporter/platform adapters are explicitly deferred.
 
 ## Recent session entries
+
+### 2026-07-01 — GPT-5.5 Thinking — Music/Career doc consistency after Claude review
+
+**Task:** Apply Claude's post-merge review findings from PR #24.
+
+**Files changed:**
+
+- `docs/contracts/EPK_CONTRACT.md` — replaced stale `mailto:`-only contact assumption with source-check/current `/api/contact` warning and Music/Career boundary pointer.
+- `integrations/epk-to-spectra.adapter-contract.md` — refreshed contact assumptions, public/private rules, and Music/Career output framing.
+- `docs/PRISM_BEAM_ROLE.md` — added Music/Career boundary pointer.
+- `docs/ECOSYSTEM_OVERVIEW.md` — added Music/Career boundary pointer and narrowed public/private cautions.
+- `docs/progress/MUSIC_CAREER_OPEN_QUESTIONS_2026-07-01.md` — tracks the five unresolved questions from the placement contract.
+- `AI_PROGRESS_LOG.md` — logs this cleanup.
+
+**Decision:** Treat Claude's verdict as accepted: boundary sound, no reversal needed, doc consistency needed before implementation.
+
+**Validation:** Confirmed PR #24 is merged. Read the exact stale docs Claude named. No app source changed. No tests run because this is docs-only.
+
+**Next suggested step:** Open/merge cleanup PR, then implement only `career.refine_epk_copy` in the existing EPK publisher via Spectra read-only AI request.
 
 ### 2026-07-01 — GPT-5.5 Thinking — Music/Career boundary staged for Claude review
 
