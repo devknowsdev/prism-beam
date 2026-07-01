@@ -14,7 +14,7 @@
 
 **Validation:** `npm run typecheck`, `test:ai-request`, `test:cockpit`, Tier 2b tests, and the 60-test engine suite passed. A real local `qwen3.5:9b` gateway request returned non-null `structuredResponse` with task and schedule proposals. Local cockpit browser and approval-endpoint smoke checks passed.
 
-**Current next priority:** Run one final real-mode Focus browser chat against merged Spectra `main`, then decide whether the Focus client branch is ready for its own PR.
+**Current next priority:** Review the remaining Focus client hardening items and branch diff, then prepare its separate PR. The real-mode bridge blocker is cleared.
 
 **Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor exists. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
 
@@ -36,17 +36,19 @@ primitives, and give `runAiRequest()` the existing cache/cascade intelligence.
 provided isolated review diffs before final promotion.
 
 **Validation:** Typecheck, focused AI/cockpit/routing tests, core engine 60/60,
-real `qwen3.5:9b` structured response, and local cockpit smoke passed.
+real `qwen3.5:9b` structured response, and local cockpit smoke passed. Final
+browser validation also passed: Focus rendered the real reply and a structured
+10-minute proposal with Apply/Dismiss review controls and no console errors.
 
 **Source/Beam mismatches:** Beam still described Tier 2b/3a/3b as unbuilt,
 classified `src/events` as inert Track B, and listed empty real-mode response
 handling as unresolved. Corrected in this housekeeping branch.
 
-**Risks / cautions:** Real gateway behavior is verified directly; a final
-end-to-end browser chat from the Focus client is still recommended.
+**Risks / cautions:** Real gateway and browser behavior are verified. Apply was
+not clicked, so the validation did not import the proposed task.
 
-**Next suggested step:** Run the real Focus browser chat check against merged
-Spectra `main`, then prepare the separate Focus client PR.
+**Next suggested step:** Review remaining Focus hardening and prepare the
+separate Focus client PR.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra mock Focus chat JSON response
 
