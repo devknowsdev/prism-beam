@@ -8,17 +8,38 @@
 
 ## Current active handover
 
-**Status:** Beam PR #24 and PR #25 are merged to `main`, reframing `EPK` as the current implementation seed for a broader Prism Music/Career domain and fixing post-review doc consistency. EPK PR #23 and PR #24 are merged to `main`, completing two app-side Music/Career slices: publisher Biography copy refinement, then offering and credit description refinement, through Spectra's read-only AI request path. Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
+**Status:** Beam PR #24 and PR #25 are merged to `main`, reframing `EPK` as the current implementation seed for a broader Prism Music/Career domain and fixing post-review doc consistency. EPK PR #23, PR #24, and PR #25 are merged to `main`, completing three app-side Music/Career slices through Spectra's read-only AI request path: publisher Biography copy refinement, offering/credit description refinement, and read-only copy consistency checking. Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
 
-**Most recent completed work:** `devknowsdev/EPK` PR #24 extended the existing `career.refine_epk_copy` helper to offering and credit description fields. It reuses Spectra's existing `/api/v1/ai/request` with `riskClass: "read-only"`, shows a visible/discardable draft suggestion, and requires explicit Apply before local editor text changes. Dynamic controls survive add, duplicate, reorder, and delete rerenders.
+**Most recent completed work:** `devknowsdev/EPK` PR #25 added `career.check_epk_copy_consistency` for read-only review of Biography, offering, and credit copy. It sends a minimized public-copy snapshot to Spectra's existing `/api/v1/ai/request` with `riskClass: "read-only"`, renders findings separately, and does not rewrite, apply, publish, export, or mutate source fields.
 
-**Validation:** For EPK PR #24, Codex reported JavaScript syntax check, focused request-shape tests, the existing EPK admin validator, `git diff --check`, and browser validation for Biography, offering, and credit refinement. Tokenless requests stopped before `fetch`; captured requests retained all four routing fields; no console errors or publish/export actions occurred. Beam updates in this branch are docs/context only; no app source changed here.
+**Validation:** For EPK PR #25, Codex reported JavaScript syntax check, focused consistency tests, the existing refinement test, the existing EPK admin validator, `git diff --check`, and browser validation against a Spectra-shaped mock. Missing-token requests stopped before `fetch`; captured requests retained all four routing fields; source fields remained unchanged; no console errors or publish/export actions occurred. Beam updates in this branch are docs/context only; no app source changed here.
 
-**Current next priority:** Decide the next tiny Music/Career slice. Safe candidates include Promo Kit copy refinement, an Audience Page route-tag helper, a reviewed Focus handoff, or a read-only copy consistency checker. Do not build social/supporter/platform adapters, a Music/Career cockpit, auto-posting/emailing, or a new repo yet.
+**Current next priority:** Decide the next tiny Music/Career slice. Safe candidates include Promo Kit copy refinement, an Audience Page route-tag helper, or a reviewed Focus handoff. Do not build social/supporter/platform adapters, a Music/Career cockpit, auto-posting/emailing, or a new repo yet.
 
 **Known caution:** The current `EPK` repo is only an implementation seed. The online EPK page is not the whole Music/Career product. Any future repo rename or new `prism-career` repo requires explicit approval and a follow-up Beam boundary contract. Social/supporter/platform adapters are explicitly deferred.
 
 ## Recent session entries
+
+### 2026-07-01 — Codex — EPK read-only copy consistency checker merged
+
+**Task:** Add a findings-only EPK publisher consistency checker across Biography, offering, and credit copy without widening the Music/Career boundary.
+
+**App PR:** `devknowsdev/EPK` PR #25 — `[codex] Add read-only EPK copy consistency checker`; merged as `e915a6955489190cf6961c434b7fca9ca21e9bbf`.
+
+**Files changed in EPK:**
+
+- `EPK/public/publisher/index.html` — adds the copy consistency control and findings panel.
+- `EPK/public/publisher/publisher-ai-consistency.js` — builds the minimized public-copy snapshot, sends the read-only Spectra request, and renders findings.
+- `EPK/public/publisher/publisher.css` — styles the findings panel.
+- `EPK/scripts/test-career-copy-consistency.mjs` — covers request shape, data minimization, missing-token fail-closed behavior, and no write/publish paths.
+
+**Request shape:** Uses `sourceApp: "EPK"`, `intent: "career.check_epk_copy_consistency"`, `riskClass: "read-only"`, and `preferredMode: "local-first"` through Spectra's existing `/api/v1/ai/request`. The payload includes only relevant public copy fields from Biography, offerings, and credits. Output is findings only.
+
+**Validation:** Codex reported JavaScript syntax, focused consistency tests, existing refinement tests, existing EPK admin validator, `git diff --check`, and browser checks. Missing-token requests stopped before `fetch`; structured findings rendered visibly and cleared cleanly; source fields remained unchanged; captured requests retained all four routing fields; no console errors or publish/export action occurred.
+
+**Decision:** The implemented app-side Music/Career surface now contains exactly three narrow helpers: Biography copy refinement, offering/credit description refinement, and read-only copy consistency checking. No automatic apply, rewrite, publish/export, social/supporter/platform code, Focus code, provider wiring, schema change, broader cockpit, or new repo was added.
+
+**Next suggested step:** Choose one more tiny review-first slice only after this Beam checkpoint is merged.
 
 ### 2026-07-01 — Codex — EPK offering and credit description refinement merged
 
@@ -37,7 +58,7 @@
 
 **Decision:** The implemented app-side Music/Career surface now contains exactly two narrow helpers: Biography copy refinement and offering/credit description refinement. No social/supporter/platform code, Focus code, new endpoint, provider wiring, schema change, broader cockpit, or new repo was added.
 
-**Next suggested step:** Choose one more tiny review-first slice only after this Beam checkpoint is merged.
+**Next suggested step:** Completed by EPK PR #25 and this Beam checkpoint.
 
 ### 2026-07-01 — GPT-5.5 Thinking / Codex / Claude — First EPK Music/Career AI slice merged
 
@@ -60,7 +81,7 @@
 
 **Decision:** This establishes the first implemented app-side Music/Career slice, but only for Biography copy refinement. Do not infer a broader Music/Career cockpit, social/supporter/platform adapter, Focus automation, or repo rename.
 
-**Next suggested step:** Update Beam context packs, then choose one narrow follow-up slice. Keep using Spectra for AI, app-local review before writes, and explicit approval for any publish/export/external write.
+**Next suggested step:** Completed by Beam context packs, EPK PR #24, and EPK PR #25.
 
 ### 2026-07-01 — GPT-5.5 Thinking — Music/Career doc consistency after Claude review
 
