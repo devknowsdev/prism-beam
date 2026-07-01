@@ -1,14 +1,16 @@
-# EPK Current Surface — Mini
+# EPK / Music-Career Current Surface — Mini
 
-**Purpose:** Tier-1 app card for low-token EPK sessions.
+**Purpose:** Tier-1 app card for low-token EPK/Music-Career sessions.
 
-**Last verified:** 2026-06-26  
-**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion plus redacted-shell, public-CTA, and publisher-control hardening. See `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md` and `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`.
-**Scope:** `EPK`. Verify source before implementation.
+**Last verified:** 2026-07-01
+**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion plus redacted-shell, public-CTA, and publisher-control hardening; Beam Music/Career boundary update branch.
+**Scope:** `EPK` as current implementation seed for Dave's broader Prism Music/Career domain. Verify source before implementation.
 
 ## Role
 
-EPK is the public music/professional presence app for Dave Knowles.
+`EPK` is the current repo and implementation seed for Dave Knowles's public/professional Music/Career surface.
+
+The online EPK page is one public/export output, not the whole product. Future work should treat EPK, press/booking packets, show-specific promo packs, public pages, and PDFs as outputs generated from or managed by a broader internal Music/Career cockpit.
 
 It currently includes:
 
@@ -20,6 +22,12 @@ It currently includes:
 - hosting-layer public/private redaction behavior,
 - a public redacted CTA shell for anonymous/non-owner users.
 
+## Product-domain direction
+
+Prism Music/Career may eventually need visibility across socials, content queues, back-catalogue reuse, supporter/mailing-list awareness, press/venue contacts, project identities, and public outputs.
+
+Do not force that whole domain into a static EPK page. Do not assume a new repo is approved. Treat the existing `EPK` repo as the current seed until a Beam boundary contract explicitly approves a rename or new `prism-career` repo.
+
 ## Public/private surface model
 
 - `EPK/functions/_middleware.js` controls public/private EPK routing.
@@ -27,6 +35,7 @@ It currently includes:
 - Anonymous users may open the public shell, but content/social/media/file/publisher surfaces should be protected or redacted.
 - `/data/epk.json` returns redacted JSON to anonymous users.
 - `/admin`, `/publisher`, `/data`, `/published`, `/downloads`, `/files`, and JSON/private surfaces should remain protected or redacted.
+- Future social/supporter/contact visibility must not leak into public pages unless deliberately exposed by an approved publish/export action.
 
 ## Public empty-shell behavior
 
@@ -42,10 +51,11 @@ It currently includes:
 - Top controls should stay labelled and grouped as `Preview`, `Publish`, and `Tools`.
 - Sidebar should keep workflow grouping: Build, Media, Tools/design/advanced, Publish.
 - Avoid returning to dense icon-only or mixed-purpose top-level controls.
+- Future Music/Career cockpit controls should separate internal visibility/review from public export/publish actions.
 
 ## AI boundary
 
-EPK should request AI services through Spectra rather than owning provider/model routing directly.
+EPK/Music-Career should request AI services through Spectra rather than owning provider/model routing directly.
 
 The contact endpoint is not an AI service. It is a server-side message relay using hosting configuration.
 
@@ -73,23 +83,28 @@ Contact delivery and owner access both require valid hosting configuration.
 - draft or refine public copy,
 - summarise professional material,
 - help prepare media/press-kit text,
-- propose updates for review,
+- suggest content-batch angles from back-catalogue material,
+- propose EPK/press/booking copy updates for review,
 - diagnose exact admin/export/contact/access regressions after inspecting source,
 - improve public CTA and publisher UX without exposing private content.
 
 ## Safety defaults
 
 - No hidden publishing.
+- No auto-posting to socials.
 - No hidden email or external write from static/browser code.
 - Server-side contact sending must stay explicit and spam-aware.
 - No private configuration values in public repo files.
 - No direct cloud-model escalation from EPK.
 - Any public-facing content changes should remain reviewable.
 - Source/content truth should be preserved carefully.
+- Social/supporter/platform data must remain internal unless explicitly exported/published.
 
 ## Relevant Beam packs
 
 - `context-packs/workspace/current-state.min.md`
+- `context-packs/career-ops-research.md`
+- `integrations/career-assistant-placement.contract.md`
 - `docs/contracts/SUITE_AI_ENGINE_BOUNDARY.md`
 - `integrations/approval-posture.md`
 - `ai-guides/AI_SESSION_LOADING_POLICY.md`
@@ -98,7 +113,7 @@ Contact delivery and owner access both require valid hosting configuration.
 
 ## Source escalation
 
-For EPK implementation, read this mini-pack first, then inspect only exact EPK files needed for the requested change.
+For EPK/Music-Career implementation, read this mini-pack first, then inspect only exact EPK files needed for the requested change.
 
 Common exact files:
 
