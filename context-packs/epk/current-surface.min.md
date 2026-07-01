@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token EPK/Music-Career sessions.
 
 **Last verified:** 2026-07-01
-**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion, redacted-shell/public-CTA/publisher-control hardening, Beam Music/Career boundary updates, EPK PR #23 (Biography refinement), EPK PR #24 (offering/credit description refinement), EPK PR #25 (read-only copy consistency checker), and EPK PR #26 (Promo Kit copy refinement).
+**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion, redacted-shell/public-CTA/publisher-control hardening, Beam Music/Career boundary updates, and EPK PR #23 through PR #27.
 **Scope:** `EPK` as current implementation seed for Dave's broader Prism Music/Career domain. Verify source before implementation.
 
 ## Role
@@ -21,7 +21,7 @@ It currently includes:
 - a server-side contact endpoint at `/api/contact`,
 - hosting-layer public/private redaction behavior,
 - a public redacted CTA shell for anonymous/non-owner users,
-- four app-side Music/Career AI slices: publisher Biography copy refinement, offering/credit description refinement, read-only copy consistency checking, and suggestion-only Promo Kit copy refinement via Spectra read-only requests.
+- five app-side Music/Career AI slices via Spectra read-only requests.
 
 ## Product-domain direction
 
@@ -31,38 +31,29 @@ Do not force that whole domain into a static EPK page. Do not assume a new repo 
 
 ## Implemented Music/Career AI slices
 
-EPK PR #23 added `career.refine_epk_copy` for Biography fields. EPK PR #24 extended the same helper to offering and credit description fields:
+1. EPK PR #23: `career.refine_epk_copy` for Biography fields.
+2. EPK PR #24: `career.refine_epk_copy` for `offerings[n].description` and `credits[n].description`.
+3. EPK PR #25: `career.check_epk_copy_consistency` for read-only findings across Biography, offerings, and credits.
+4. EPK PR #26: `career.refine_epk_promo_copy` for suggestion-only Promo Kit copy refinement.
+5. EPK PR #27: `career.suggest_epk_route_tags` for read-only Audience Page route-tag recommendations.
 
-- `EPK/public/publisher/index.html` adds `Refine copy` controls for `bio.short`, `bio.acoustic`, and `bio.full`.
-- `EPK/public/publisher/publisher-ai-refine.js` adds dynamic controls for `offerings[n].description` and `credits[n].description` and calls Spectra's existing `/api/v1/ai/request` endpoint.
-- The request uses `sourceApp: "EPK"`, `intent: "career.refine_epk_copy"`, `riskClass: "read-only"`, and `preferredMode: "local-first"`.
-- Suggestions are visible, discardable local drafts.
-- Apply requires an explicit click and uses the existing local editor/input path.
-- Add, duplicate, reorder, and delete rerenders preserve the dynamic description controls.
+Common request posture:
 
-EPK PR #25 added `career.check_epk_copy_consistency` for read-only findings across Biography, offerings, and credits:
+- Spectra endpoint: existing `/api/v1/ai/request`.
+- `sourceApp: "EPK"`.
+- `riskClass: "read-only"`.
+- `preferredMode: "local-first"`.
+- No EPK-local provider/model wiring.
+- Missing token fails closed before `fetch`; no hardcoded fallback token.
 
-- `EPK/public/publisher/index.html` adds a compact `Check copy consistency` control and findings panel.
-- `EPK/public/publisher/publisher-ai-consistency.js` sends a minimized public-copy snapshot to Spectra's existing `/api/v1/ai/request` endpoint.
-- `EPK/scripts/test-career-copy-consistency.mjs` checks request shape, data minimization, missing-token fail-closed behavior, and absence of write/publish paths.
-- The request uses `sourceApp: "EPK"`, `intent: "career.check_epk_copy_consistency"`, `riskClass: "read-only"`, and `preferredMode: "local-first"`.
-- Output is findings only. It does not rewrite, apply, publish, export, dispatch input events, or mutate source fields.
+Specific behavior:
 
-EPK PR #26 added `career.refine_epk_promo_copy` for suggestion-only Promo Kit copy refinement:
+- Biography/offering/credit refinement returns visible local draft suggestions; Apply exists only for the already-approved editable refinement fields and uses existing local editor/input paths.
+- Copy consistency returns findings only and does not rewrite, apply, dispatch input events, publish, export, or mutate source fields.
+- Promo Kit refinement returns a draft suggestion only; there is no Apply button and the generated source brief remains unchanged.
+- Route-tag helper returns clearable recommendations only; there is no Apply button, automatic tag change, route mutation, publish/export/download, or Focus action.
 
-- `EPK/public/publisher/index.html` adds `Refine promo copy` beside the generated brief actions and a discardable suggestion panel.
-- `EPK/public/publisher/publisher-ai-promo-refine.js` sends the generated Markdown promo brief to Spectra's existing `/api/v1/ai/request` endpoint.
-- `EPK/scripts/test-career-promo-refine.mjs` checks request shape, missing-token fail-closed behavior, successful mocked response, unchanged source brief, discard behavior, and absence of write/publish paths.
-- The request uses `sourceApp: "EPK"`, `intent: "career.refine_epk_promo_copy"`, `riskClass: "read-only"`, and `preferredMode: "local-first"`.
-- Output is a draft suggestion only. There is no Apply button; the generated source brief remains unchanged.
-
-For all implemented slices:
-
-- No publish/export/social/supporter/platform/Focus code was added.
-- No EPK-local provider/model wiring was added.
-- No hardcoded fallback token is shipped; missing token fails closed before `fetch`.
-
-Do not infer any broader Music/Career cockpit, social/supporter/platform adapter, or Focus automation from these slices.
+Do not infer any broader Music/Career cockpit, social/supporter/platform adapter, Focus automation, auto-posting, mailing-list integration, or new repo from these slices.
 
 ## Public/private surface model
 
@@ -73,33 +64,12 @@ Do not infer any broader Music/Career cockpit, social/supporter/platform adapter
 - `/admin`, `/publisher`, `/data`, `/published`, `/downloads`, `/files`, and JSON/private surfaces should remain protected or redacted.
 - Future social/supporter/contact visibility must not leak into public pages unless deliberately exposed by an approved publish/export action.
 
-## Public empty-shell behavior
-
-- `EPK/public/public-empty-cta.js` turns the redacted shell into a general public outreach/profile CTA.
-- The shell should be useful beyond music: portfolio, press kit, booking page, speaker profile, service page, project brief, professional/freelancer profile, or organisation/project context page.
-- The top `How to build this` button opens an on-demand wizard.
-- Wizard steps: Purpose, Identity, Proof, Audience routes, Publish safely.
-- Anonymous users should not see private content, social links, media links, file links, publisher tools, or full EPK data.
-
 ## Publisher/control posture
 
 - `EPK/public/publisher/publisher-focus-packet.js` currently simplifies publisher chrome.
 - Top controls should stay labelled and grouped as `Preview`, `Publish`, and `Tools`.
 - Sidebar should keep workflow grouping: Build, Media, Tools/design/advanced, Publish.
-- Avoid returning to dense icon-only or mixed-purpose top-level controls.
 - Future Music/Career cockpit controls should separate internal visibility/review from public export/publish actions.
-
-## AI boundary
-
-EPK/Music-Career should request AI services through Spectra rather than owning provider/model routing directly.
-
-Implemented examples:
-
-- `career.refine_epk_copy` in publisher Biography, offering description, and credit description fields calls Spectra's `/api/v1/ai/request` with `riskClass: "read-only"`, then returns a reviewable local suggestion.
-- `career.check_epk_copy_consistency` sends a minimized public-copy snapshot for read-only findings only; it does not mutate editor state.
-- `career.refine_epk_promo_copy` sends the generated Promo Kit Markdown brief for a suggestion-only draft; it does not mutate the generated source brief.
-
-The contact endpoint is not an AI service. It is a server-side message relay using hosting configuration.
 
 ## Current operational notes
 
@@ -112,43 +82,19 @@ Build output directory: EPK/public
 
 Contact delivery and owner access both require valid hosting configuration.
 
-Local Spectra-backed AI suggestions/findings require a configured local Spectra URL/token in the browser environment or localStorage. Missing token should fail closed before any request.
-
-## Current export/contact behavior
-
-- Client HTML export keeps hero CTAs and an on-page contact modal.
-- `Send message` posts to `/api/contact`; it should not open a visitor's local mail app.
-- WhatsApp is a fallback that opens a prefilled WhatsApp/Web message for confirmation.
-- PDF export hides hero CTAs and contact modal UI; PDF should show clean contact links only.
-- Export CSS is content-adaptive across modes, not tuned only for General EPK.
-
-## Expected AI use cases
-
-- refine copy for review using `career.refine_epk_copy` — implemented for `bio.short`, `bio.acoustic`, `bio.full`, `offerings[n].description`, and `credits[n].description`,
-- check public-copy consistency using `career.check_epk_copy_consistency` — implemented for Biography, offerings, and credits as findings only,
-- refine generated Promo Kit copy using `career.refine_epk_promo_copy` — implemented as suggestion-only, no Apply/source mutation,
-- draft or refine other public copy,
-- summarise professional material,
-- help prepare media/press-kit text,
-- suggest content-batch angles from back-catalogue material,
-- propose EPK/press/booking copy updates for review,
-- diagnose exact admin/export/contact/access regressions after inspecting source,
-- improve public CTA and publisher UX without exposing private content.
+Local Spectra-backed AI suggestions/findings/recommendations require a configured local Spectra URL/token in the browser environment or localStorage. Missing token should fail closed before any request.
 
 ## Safety defaults
 
 - No hidden publishing.
 - No auto-posting to socials.
 - No hidden email or external write from static/browser code.
-- Server-side contact sending must stay explicit and spam-aware.
 - No private configuration values in public repo files.
 - No hardcoded fallback AI token in public browser code.
 - No direct cloud-model escalation from EPK.
-- AI suggestions must remain reviewable local drafts unless the user explicitly applies them.
-- AI findings must remain findings only unless a future approved slice explicitly adds a local editor action.
-- Any public-facing content changes should remain reviewable.
-- Generated read-only source text must not be mutated unless a future approved slice explicitly adds an editor path.
-- Source/content truth should be preserved carefully.
+- AI suggestions must remain reviewable local drafts unless the user explicitly applies an already-approved editable-field suggestion.
+- AI findings/recommendations must remain findings/recommendations only unless a future approved slice explicitly adds a local editor action.
+- Generated read-only source text and route/page data must not be mutated unless a future approved slice explicitly adds an editor path.
 - Social/supporter/platform data must remain internal unless explicitly exported/published.
 
 ## Relevant Beam packs
@@ -163,34 +109,26 @@ Local Spectra-backed AI suggestions/findings require a configured local Spectra 
 - `docs/progress/EPK_REFINE_COPY_AI_SLICE_2026-07-01.md`
 - `docs/progress/EPK_COPY_CONSISTENCY_AI_SLICE_2026-07-01.md`
 - `docs/progress/EPK_PROMO_COPY_AI_SLICE_2026-07-01.md`
-- `docs/progress/EPK_ADMIN_EXPORT_CONTACT_2026-06-26.md`
-- `docs/progress/FOCUS_EPK_SURFACE_HARDENING_2026-06-26.md`
+- `docs/progress/EPK_ROUTE_TAG_AI_SLICE_2026-07-01.md`
 
 ## Source escalation
 
-For EPK/Music-Career implementation, read this mini-pack first, then inspect only exact EPK files needed for the requested change.
+For EPK/Music/Career implementation, read this mini-pack first, then inspect only exact EPK files needed for the requested change.
 
 Common exact files:
 
-- `EPK/functions/_middleware.js`
-- `EPK/public/_headers`
-- `EPK/public/_redirects`
-- `EPK/public/index.html`
-- `EPK/public/public-empty-cta.js`
 - `EPK/public/publisher/index.html`
 - `EPK/public/publisher/publisher-ai-refine.js`
 - `EPK/public/publisher/publisher-ai-consistency.js`
 - `EPK/public/publisher/publisher-ai-promo-refine.js`
-- `EPK/public/publisher/publisher-focus-packet.js`
-- `EPK/admin/admin.html`
-- `EPK/public/admin/admin.html`
-- `EPK/public/print.html`
-- `EPK/public/print.js`
-- `EPK/public/print.css`
-- `EPK/public/data/epk.json`
-- `functions/api/contact.js`
+- `EPK/public/publisher/publisher-ai-route-helper.js`
 - `EPK/scripts/test-career-refine-epk-copy.mjs`
 - `EPK/scripts/test-career-copy-consistency.mjs`
 - `EPK/scripts/test-career-promo-refine.mjs`
-- `EPK/scripts/prepare-cloudflare-pages.mjs`
+- `EPK/scripts/test-career-route-tag-helper.mjs`
 - `EPK/scripts/validate-epk-admin-upgrade.mjs`
+- `EPK/functions/_middleware.js`
+- `EPK/public/_headers`
+- `EPK/public/_redirects`
+- `EPK/public/print.html`
+- `functions/api/contact.js`
