@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 suite orientation for low-token AI sessions.
 
 **Last verified:** 2026-07-01
-**Verified against:** Spectra `main` after PRs #30/#33 and Focus `main` after PR #25.
+**Verified against:** Spectra `main` after PRs #30/#33, Focus `main` after PR #25, and Beam career/music boundary update branch.
 **Target budget:** 500-1,000 tokens
 **Scope:** Prism suite repo roles and current direction. Source code still overrides this pack.
 
@@ -12,11 +12,13 @@
 - `prism-beam`: AI-facing reference, context, contracts, schemas, harvest, prompt, anti-drift, and handover layer. Not runtime code.
 - `prism-spectra`: live AI cockpit, local-first model/runtime router, CLI/workbench, approval-gated execution, checkpoint/rollback, provenance, capability palette.
 - `prism-focus`: downstream planning/focus app. Should request AI services through Spectra and keep task/planner writes review-first.
-- `EPK`: downstream public music/professional app. Should request AI services through Spectra.
+- `EPK`: current repo/implementation seed for Dave's broader Prism Music/Career domain. The online EPK page is one public/export output, not the whole career interface. Should request AI services through Spectra.
 
 ## Current strategic direction
 
 Spectra is the local-first AI engine/cockpit for Prism. Beam should minimize repeated orientation and token usage by storing compact, verified context packs and research summaries. Focus should consume Spectra through a small adapter/gateway surface, not by owning model/provider routing.
+
+Prism Music/Career is now a product-domain direction, not a new approved repo yet. Treat the current `EPK` repo as the seed surface for public/professional/career outputs while Beam contracts decide whether future work remains in `EPK`, renames it, or creates a new `prism-career` repo.
 
 ## Current project state
 
@@ -26,6 +28,7 @@ Spectra is the local-first AI engine/cockpit for Prism. Beam should minimize rep
 - Focus PR #25 is merged to `main`: Spectra-first settings/chat, resource monitoring, lightweight classifier smoke tests, and review-first structured proposals are live. Real browser validation rendered an `ollama / qwen3.5:9b` reply and a 10-minute proposal behind Apply/Dismiss controls.
 - Current local model stack: `qwen3.5:9b` for general/planner/reasoner, `qwen3:1.7b` for classifier/fallback, and `qwen2.5-coder:7b` for coder.
 - Local resource safety matters on the M1 16GB target. Ollama model storage is persistent and can be large; Spectra `.demo` runtime files were tiny in validation.
+- Career/Music research and placement docs are staged in Beam to support Claude review before app implementation.
 
 ## Operating rules
 
@@ -46,9 +49,11 @@ Spectra is the local-first AI engine/cockpit for Prism. Beam should minimize rep
 - Checkpoint before risky writes.
 - Log model/provider/action provenance where relevant.
 - Refresh resource status before heavier real local model tests.
+- No auto-posting, auto-emailing, or hidden social/supporter platform writes from Music/Career features.
 
 ## Next likely work
 
+- Have Claude review the Prism Music/Career boundary and Career Assistant placement before app implementation.
 - Add automated browser smoke coverage for Focus Settings -> AI and its first reviewed helper action.
 - Resolve Focus's legacy module-header validator debt as a separate cleanup.
 - Keep Focus attachments text-only until the full daemon file API exists.
