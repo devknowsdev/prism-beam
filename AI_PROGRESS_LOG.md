@@ -8,17 +8,38 @@
 
 ## Current active handover
 
-**Status:** Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
+**Status:** Beam branch `beam/career-music-domain-20260701` stages a documentation/contract update that reframes `EPK` as the current implementation seed for a broader Prism Music/Career domain. Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
 
-**Most recent completed work:** Focus PR #25 landed Spectra-first settings/chat, resource status, lightweight classifier connection testing, current launcher/model guidance, and reviewed task/schedule proposals.
+**Most recent completed work:** Beam Music/Career boundary docs, context packs, placement contract, registry row, and research notes were committed for Claude review before any app implementation.
 
-**Validation:** All Focus JavaScript passed `node --check`; the branch was conflict-free against main. Mock and real browser flows passed. Real `qwen3.5:9b` rendered a structured proposal with Apply/Dismiss and no console errors; Apply was not clicked.
+**Validation:** Repo source/Beam packs were inspected through GitHub. No app source was changed. No tests were run because this is docs/contracts/research only.
 
-**Current next priority:** Add automated Focus browser smoke coverage, then address the legacy module-header validator debt separately.
+**Current next priority:** Have Claude vet the Music/Career boundary and placement contract, especially repo ownership, privacy, social/supporter data ownership, and minimal implementation slice. Do not implement app-side changes until that review is complete.
 
-**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat. Refresh Focus's resource monitor before heavier runs. Attachments remain text-only until the full daemon file API exists.
+**Known caution:** The current `EPK` repo is only an implementation seed. The online EPK page is not the whole Music/Career product. Any future repo rename or new `prism-career` repo requires explicit approval and a follow-up Beam boundary contract.
 
 ## Recent session entries
+
+### 2026-07-01 — GPT-5.5 Thinking — Music/Career boundary staged for Claude review
+
+**Task:** Expand Beam's EPK boundary so the online EPK is treated as one public/export output inside a broader Prism Music/Career domain, then commit the relevant research and handover material for Claude review.
+
+**Files changed:**
+
+- `docs/REPO_BOUNDARIES.md` — adds Prism Music/Career product-domain note and reframes `EPK` as current implementation seed.
+- `README.md` — adds Music/Career entry points.
+- `context-packs/workspace/current-state.min.md` and `context-packs/workspace/current-state.md` — update suite orientation.
+- `context-packs/epk/current-surface.min.md` and `context-packs/epk/current-surface.md` — reframe EPK pack as EPK/Music-Career seed surface.
+- `context-packs/career-ops-research.md` — compressed research pack.
+- `integrations/career-assistant-placement.contract.md` — placement contract.
+- `integrations/registry.md` — registers the Music/Career placement contract.
+- `docs/research/music-career/*` — research index and source research notes.
+
+**Decision:** Prism Music/Career is the parent product domain. The current `EPK` repo remains the implementation seed for now; the EPK page is one output/module, not the whole app. No new repo is approved yet.
+
+**Validation:** Checked Beam repo boundaries, approval posture, Spectra current pack, and Spectra `/api/v1/ai/request` source behavior. Current Spectra endpoint exists and accepts read-only AI requests only.
+
+**Next suggested step:** Ask Claude to review the branch before implementation. Claude should look for product-boundary mistakes, schema overcommitment, privacy leaks, social/supporter data ownership gaps, repo-sprawl risks, and a safer minimal first slice.
 
 ### 2026-07-01 — Codex — Focus Spectra AI bridge merged
 
