@@ -14,8 +14,11 @@ contract layer that keeps independent app repos aligned.
 
 ## Suite Map
 
-- `EPK` owns structured public/promotional truth.
-- `prism-focus` owns daily planning, tasks, and personal execution state.
+- `EPK` is the current repo/implementation seed for Dave's public and
+  professional Music/Career surface. The EPK page is one public/export output,
+  not the whole career product.
+- `prism-focus` owns daily planning, tasks, routines, and personal execution
+  state.
 - `prism-spectra` owns orchestration, adapters, approvals, and safe execution
   boundaries.
 - `prism-beam` owns the canonical AI-readable reference layer that keeps the
@@ -76,6 +79,7 @@ Current low-token entry packs:
 - [`context-packs/prism-spectra/current-surface.min.md`](context-packs/prism-spectra/current-surface.min.md)
 - [`context-packs/prism-focus/current-surface.min.md`](context-packs/prism-focus/current-surface.min.md)
 - [`context-packs/epk/current-surface.min.md`](context-packs/epk/current-surface.min.md)
+- [`context-packs/career-ops-research.md`](context-packs/career-ops-research.md)
 
 Model-specific prompt profiles:
 
@@ -126,6 +130,12 @@ Spectra model/harvest entry packs:
 - [`docs/research/spectra-model-runtime-audit.md`](docs/research/spectra-model-runtime-audit.md)
 - [`docs/research/spectra-workbench-ui-harvest.md`](docs/research/spectra-workbench-ui-harvest.md)
 - [`docs/research/spectra-security-approval-sandbox-audit.md`](docs/research/spectra-security-approval-sandbox-audit.md)
+
+Music/Career research and boundary entry points:
+
+- [`context-packs/career-ops-research.md`](context-packs/career-ops-research.md)
+- [`integrations/career-assistant-placement.contract.md`](integrations/career-assistant-placement.contract.md)
+- [`docs/research/music-career/README.md`](docs/research/music-career/README.md)
 
 Current setup/readiness entry point:
 
@@ -205,6 +215,7 @@ identity from Beam-001 through Beam-003.
 - [Spectra model runtime audit](docs/research/spectra-model-runtime-audit.md)
 - [Spectra workbench UI harvest](docs/research/spectra-workbench-ui-harvest.md)
 - [Spectra security/approval/sandbox audit](docs/research/spectra-security-approval-sandbox-audit.md)
+- [Music/Career research index](docs/research/music-career/README.md)
 
 ## How App Repos Should Use Beam
 
