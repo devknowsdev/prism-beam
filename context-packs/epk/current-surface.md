@@ -6,7 +6,7 @@ Current-state pack for EPK public and publisher surfaces, now interpreted as the
 
 ## Last Verified
 
-2026-07-01 against Beam EPK guide/log, prior local `EPK/EPK` README/public files, Beam Music/Career boundary updates, and `devknowsdev/EPK` PR #23 (`career.refine_epk_copy`).
+2026-07-01 against Beam EPK guide/log, prior local `EPK/EPK` README/public files, Beam Music/Career boundary updates, `devknowsdev/EPK` PR #23 (Biography refinement), and EPK PR #24 (offering/credit description refinement).
 
 ## Evidence Used
 
@@ -21,6 +21,7 @@ Current-state pack for EPK public and publisher surfaces, now interpreted as the
 - `integrations/career-assistant-placement.contract.md`
 - `integrations/epk-to-spectra.adapter-contract.md`
 - EPK PR #23: `EPK/public/publisher/index.html`, `EPK/public/publisher/publisher-ai-refine.js`, `EPK/public/publisher/publisher.css`, `EPK/scripts/test-career-refine-epk-copy.mjs`
+- EPK PR #24: `EPK/public/publisher/publisher-ai-refine.js`, `EPK/scripts/test-career-refine-epk-copy.mjs`
 
 ## Current Truths
 
@@ -39,19 +40,20 @@ Current-state pack for EPK public and publisher surfaces, now interpreted as the
 - Publishing to GitHub or public data is an external write requiring explicit user action.
 - Hosted publisher is not private until protected by platform auth such as Cloudflare Access.
 - EPK-to-Focus and EPK-to-Spectra boundaries are documented under `integrations/`.
-- First app-side Music/Career slice is implemented: `career.refine_epk_copy` for publisher Biography fields via Spectra read-only AI request.
+- Two app-side Music/Career slices are implemented: `career.refine_epk_copy` for publisher Biography fields, then offering and credit description fields, via Spectra read-only AI requests.
 
-## Implemented Music/Career AI Slice
+## Implemented Music/Career AI Slices
 
-EPK PR #23 added a narrow, review-first copy refinement flow:
+EPK PR #23 added a narrow, review-first Biography copy refinement flow. EPK PR #24 extended that existing flow to offering and credit descriptions:
 
-- Surface: publisher Biography fields only.
-- Fields: `bio.short`, `bio.acoustic`, `bio.full`.
+- Surface: publisher Biography, offering description, and credit description fields only.
+- Fields: `bio.short`, `bio.acoustic`, `bio.full`, `offerings[n].description`, `credits[n].description`.
 - Source files: `EPK/public/publisher/index.html`, `EPK/public/publisher/publisher-ai-refine.js`, `EPK/public/publisher/publisher.css`.
 - Test file: `EPK/scripts/test-career-refine-epk-copy.mjs`.
 - Spectra endpoint: existing `/api/v1/ai/request`.
 - Payload: `sourceApp: "EPK"`, `intent: "career.refine_epk_copy"`, `riskClass: "read-only"`, `preferredMode: "local-first"`.
 - UI behavior: suggestion appears separately in a read-only draft area, can be discarded, and only applies to the editor after explicit user click.
+- Dynamic behavior: event delegation and rerender decoration preserve offering/credit controls after add, duplicate, reorder, and delete operations.
 - Apply behavior: uses the existing input/local editor path; it does not publish or export.
 - Security posture: no hardcoded fallback token; missing token fails closed before `fetch`.
 - Boundary posture: no EPK-local provider/model wiring, no social/supporter/platform adapters, no Focus cadence automation, no new schema, no new repo.
@@ -84,7 +86,7 @@ Do not force this whole domain into a static public EPK page. Build/review inter
 - Do not infer Spectra should scrape the DOM when `window.EPKAdapter` exists.
 - Do not infer that social/supporter/platform visibility may be exposed publicly.
 - Do not infer a new `prism-career` repo has been approved.
-- Do not infer a broader Music/Career cockpit exists app-side just because `career.refine_epk_copy` now exists.
+- Do not infer a broader Music/Career cockpit exists app-side just because `career.refine_epk_copy` now covers five field kinds.
 - Do not infer EPK can own AI provider/model routing.
 - Do not infer AI suggestions may mutate or publish public data without explicit user action.
 
@@ -92,7 +94,7 @@ Do not force this whole domain into a static public EPK page. Build/review inter
 
 - Older prompts may mention public/admin confusion, audience pages, workflow pages, or combined site/poster templates. Treat Beam-001 logs as newer.
 - Older prompts may treat `EPK` as the whole product. Treat the 2026-07-01 Music/Career boundary update as newer product direction.
-- Older prompts may say no Music/Career implementation exists. That is now stale only for the narrow `career.refine_epk_copy` publisher Biography slice.
+- Older prompts may say no Music/Career implementation exists. That is now stale only for the narrow `career.refine_epk_copy` publisher Biography and offering/credit description slices.
 
 ## Useful Entry Points
 
@@ -125,7 +127,7 @@ Do not force this whole domain into a static public EPK page. Build/review inter
 
 ## Future prompts can omit
 
-Future prompts can omit the public deploy root, publisher route, public/private chrome split, media preview hierarchy, poster boundary, Cloudflare Access privacy caveat, first contract entry points, the decision that EPK is now a public/export output inside a broader Music/Career direction rather than the whole app concept, and the fact that the first app-side Music/Career AI slice is `career.refine_epk_copy` for publisher Biography fields only.
+Future prompts can omit the public deploy root, publisher route, public/private chrome split, media preview hierarchy, poster boundary, Cloudflare Access privacy caveat, first contract entry points, the decision that EPK is now a public/export output inside a broader Music/Career direction rather than the whole app concept, and the fact that the implemented app-side Music/Career AI slices are `career.refine_epk_copy` for publisher Biography and offering/credit description fields only.
 
 ## Update Rules
 

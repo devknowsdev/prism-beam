@@ -3,7 +3,7 @@
 **Purpose:** Tier-1 app card for low-token EPK/Music-Career sessions.
 
 **Last verified:** 2026-07-01
-**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion, redacted-shell/public-CTA/publisher-control hardening, Beam Music/Career boundary updates, and EPK PR #23 (`career.refine_epk_copy`).
+**Verified against:** `devknowsdev/EPK/main` after admin/export/contact completion, redacted-shell/public-CTA/publisher-control hardening, Beam Music/Career boundary updates, EPK PR #23 (Biography refinement), and EPK PR #24 (offering/credit description refinement).
 **Scope:** `EPK` as current implementation seed for Dave's broader Prism Music/Career domain. Verify source before implementation.
 
 ## Role
@@ -21,7 +21,7 @@ It currently includes:
 - a server-side contact endpoint at `/api/contact`,
 - hosting-layer public/private redaction behavior,
 - a public redacted CTA shell for anonymous/non-owner users,
-- the first app-side Music/Career AI slice: publisher biography copy refinement via Spectra read-only requests.
+- two app-side Music/Career AI slices: publisher Biography copy refinement and offering/credit description refinement via Spectra read-only requests.
 
 ## Product-domain direction
 
@@ -29,15 +29,16 @@ Prism Music/Career may eventually need visibility across socials, content queues
 
 Do not force that whole domain into a static EPK page. Do not assume a new repo is approved. Treat the existing `EPK` repo as the current seed until a Beam boundary contract explicitly approves a rename or new `prism-career` repo.
 
-## Implemented Music/Career AI slice
+## Implemented Music/Career AI slices
 
-EPK PR #23 added `career.refine_epk_copy` for Biography fields only:
+EPK PR #23 added `career.refine_epk_copy` for Biography fields. EPK PR #24 extended the same helper to offering and credit description fields:
 
 - `EPK/public/publisher/index.html` adds `Refine copy` controls for `bio.short`, `bio.acoustic`, and `bio.full`.
-- `EPK/public/publisher/publisher-ai-refine.js` calls Spectra's existing `/api/v1/ai/request` endpoint.
+- `EPK/public/publisher/publisher-ai-refine.js` adds dynamic controls for `offerings[n].description` and `credits[n].description` and calls Spectra's existing `/api/v1/ai/request` endpoint.
 - The request uses `sourceApp: "EPK"`, `intent: "career.refine_epk_copy"`, `riskClass: "read-only"`, and `preferredMode: "local-first"`.
 - Suggestions are visible, discardable local drafts.
 - Apply requires an explicit click and uses the existing local editor/input path.
+- Add, duplicate, reorder, and delete rerenders preserve the dynamic description controls.
 - No publish/export/social/supporter/platform/Focus code was added.
 - No EPK-local provider/model wiring was added.
 - No hardcoded fallback token is shipped; missing token fails closed before `fetch`.
@@ -73,7 +74,7 @@ Do not infer any broader Music/Career cockpit, social/supporter/platform adapter
 
 EPK/Music-Career should request AI services through Spectra rather than owning provider/model routing directly.
 
-Implemented example: `career.refine_epk_copy` in the publisher Biography section calls Spectra's `/api/v1/ai/request` with `riskClass: "read-only"`, then returns a reviewable local suggestion.
+Implemented example: `career.refine_epk_copy` in publisher Biography, offering description, and credit description fields calls Spectra's `/api/v1/ai/request` with `riskClass: "read-only"`, then returns a reviewable local suggestion.
 
 The contact endpoint is not an AI service. It is a server-side message relay using hosting configuration.
 
@@ -100,7 +101,7 @@ Local Spectra-backed AI suggestions require a configured local Spectra URL/token
 
 ## Expected AI use cases
 
-- refine Biography copy for review using `career.refine_epk_copy` — implemented for `bio.short`, `bio.acoustic`, and `bio.full`,
+- refine copy for review using `career.refine_epk_copy` — implemented for `bio.short`, `bio.acoustic`, `bio.full`, `offerings[n].description`, and `credits[n].description`,
 - draft or refine other public copy,
 - summarise professional material,
 - help prepare media/press-kit text,
