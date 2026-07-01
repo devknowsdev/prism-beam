@@ -8,17 +8,32 @@
 
 ## Current active handover
 
-**Status:** Spectra routing through Tier 3c, the guided project cockpit, real-mode Focus JSON repair, cockpit approval/ledger coherence, and shared AI-request cache/cascade execution are merged to `devknowsdev/prism-spectra:main` through PR #33. The Focus client side remains a separate `prism-focus` branch concern.
+**Status:** Spectra routing/cockpit/real-mode JSON work is merged through PR #33. The review-first Spectra AI bridge is merged to `prism-focus:main` through PR #25.
 
-**Most recent completed work:** PRs #30–#33 landed the cockpit/bridge integration and two architecture corrections. Real Ollama Focus-shaped requests now return schema-constrained structured JSON. Guided cockpit writes use `ApprovalQueue`/`PrismEventLedger`. `runAiRequest()` now shares cache, routing, confidence fallback, and route metadata with graph execution.
+**Most recent completed work:** Focus PR #25 landed Spectra-first settings/chat, resource status, lightweight classifier connection testing, current launcher/model guidance, and reviewed task/schedule proposals.
 
-**Validation:** `npm run typecheck`, `test:ai-request`, `test:cockpit`, Tier 2b tests, and the 60-test engine suite passed. A real local `qwen3.5:9b` gateway request returned non-null `structuredResponse` with task and schedule proposals. Local cockpit browser and approval-endpoint smoke checks passed.
+**Validation:** All Focus JavaScript passed `node --check`; the branch was conflict-free against main. Mock and real browser flows passed. Real `qwen3.5:9b` rendered a structured proposal with Apply/Dismiss and no console errors; Apply was not clicked.
 
-**Current next priority:** Review the remaining Focus client hardening items and branch diff, then prepare its separate PR. The real-mode bridge blocker is cleared.
+**Current next priority:** Add automated Focus browser smoke coverage, then address the legacy module-header validator debt separately.
 
-**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat even when disk temp files are tiny. Ollama model storage is persistent and currently the main disk footprint. Keep real-mode validation short on M1 16GB until a status monitor exists. For cockpit work, do not add free-form shell input, hidden writes, or browser-based control of externally owned processes.
+**Known caution:** Local real-model runs can use several GB of RAM/GPU and heat. Refresh Focus's resource monitor before heavier runs. Attachments remain text-only until the full daemon file API exists.
 
 ## Recent session entries
+
+### 2026-07-01 — Codex — Focus Spectra AI bridge merged
+
+**Outcome:** Focus PR #25 merged the Spectra-first assistant, current setup
+guidance, resource monitor, classifier smoke path, and review-first proposals.
+
+**Validation:** JavaScript syntax and diff checks passed. Mock and real browser
+flows passed; the real flow rendered a structured 10-minute proposal through
+`ollama / qwen3.5:9b` with no console errors. Apply was not clicked.
+
+**Known baseline:** The architecture validator still reports ten legacy files
+without required module headers. Focus has no npm build/test scripts.
+
+**Next suggested step:** Add focused browser automation, then clean up the
+module-header validator baseline separately.
 
 ### 2026-07-01 — Codex — Spectra cockpit/Focus architecture corrections merged
 
@@ -47,8 +62,7 @@ handling as unresolved. Corrected in this housekeeping branch.
 **Risks / cautions:** Real gateway and browser behavior are verified. Apply was
 not clicked, so the validation did not import the proposed task.
 
-**Next suggested step:** Review remaining Focus hardening and prepare the
-separate Focus client PR.
+**Next suggested step:** Completed by Focus PR #25.
 
 ### 2026-06-29 — GPT-5.5 Thinking — Spectra mock Focus chat JSON response
 
