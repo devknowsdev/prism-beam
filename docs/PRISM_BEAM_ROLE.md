@@ -12,9 +12,12 @@ checklists, and project memory.
 | Repo | Role |
 |---|---|
 | `prism-beam` | AI-readable reference, training, harvest, contract, schema, prompt, and anti-drift layer. |
-| `EPK` | Structured public/promotional truth, public EPK site, publisher tooling, snapshots, and promo surfaces. |
+| `EPK` | Current implementation seed for Dave's public/professional Music-Career surface: structured public/career truth, public EPK outputs, publisher tooling, snapshots, and promo surfaces. The EPK page is one output, not the whole app concept. |
 | `prism-focus` | Daily planning, tasks, routines, personal execution state, and low-overwhelm user workflows. |
 | `prism-spectra` | Local-first orchestration, adapters, approvals, sidecars, workbench, and safe execution boundaries. |
+
+For the canonical Music/Career boundary, read `docs/REPO_BOUNDARIES.md` before
+assuming the narrower historical EPK framing.
 
 ## Beam material policy
 
@@ -34,6 +37,7 @@ Beam.
 ## Related files
 
 - [`README.md`](../README.md)
+- [`docs/REPO_BOUNDARIES.md`](REPO_BOUNDARIES.md)
 - [`ai-guides/START_HERE.md`](../ai-guides/START_HERE.md)
 - [`docs/COORDINATION.md`](COORDINATION.md)
 - [`docs/BEAM_EXTRACTION_INDEX.md`](BEAM_EXTRACTION_INDEX.md)
